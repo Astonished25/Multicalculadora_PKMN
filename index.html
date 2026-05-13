@@ -2278,21 +2278,21 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
   let bpMod = 4096;
 
-  if (p.habA === 'fairy-aura' && mvT === 'fairy') bpMod = Math.round(bpMod * 5461 / 4096);
-  if (p.habA === 'dark-aura' && mvT === 'dark') bpMod = Math.round(bpMod * 5461 / 4096);
+  if (p.habA === 'fairy-aura' && mvT === 'fairy') bpMod = Math.floor(bpMod * 5461 / 4096);
+  if (p.habA === 'dark-aura' && mvT === 'dark') bpMod = Math.floor(bpMod * 5461 / 4096);
 
   if (p.campo === 'electric' && mvName === 'rising-voltage') rawBP *= 2;
   if (p.campo === 'psychic' && mvName === 'expanding-force') rawBP = 120;
-  if (p.campo === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(mvName)) bpMod = Math.round(bpMod * 0.5);
+  if (p.campo === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(mvName)) bpMod = Math.floor(bpMod * 0.5);
 
   if ((p.campo === 'electric' && mvT === 'electric') ||
       (p.campo === 'grassy' && mvT === 'grass') ||
       (p.campo === 'psychic' && mvT === 'psychic')) {
-    bpMod = Math.round(bpMod * 1.3);
+    bpMod = Math.floor(bpMod * 1.3);
   }
 
-  if (p.habA === 'technician' && rawBP <= 60) bpMod = Math.round(bpMod * 1.5);
-  if (p.habA === 'sharpness' && CUT_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.5);
+  if (p.habA === 'technician' && rawBP <= 60) bpMod = Math.floor(bpMod * 1.5);
+  if (p.habA === 'sharpness' && CUT_MOVES.has(mvName)) bpMod = Math.floor(bpMod * 1.5);
 
   let finalBP = Math.max(1, Math.floor((rawBP * bpMod) / 4096 + 0.5));
 
@@ -2313,15 +2313,15 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     d = Math.floor(d * typeMult(mvT, defTs, defTera));
 
     let finalMod = 4096;
-    if (p.hh) finalMod = Math.round(finalMod * 1.5);
-    if (p.compie !== 1) finalMod = Math.round(finalMod * 0.75);
-    if (p.campo === 'misty' && mvT === 'dragon') finalMod = Math.round(finalMod * 0.5);
+    if (p.hh) finalMod = Math.floor(finalMod * 1.5);
+    if (p.compie !== 1) finalMod = Math.floor(finalMod * 0.75);
+    if (p.campo === 'misty' && mvT === 'dragon') finalMod = Math.floor(finalMod * 0.5);
 
-    if (p.pantalla === 'reflect' && !sp && !p.crit) finalMod = Math.round(finalMod * 2732 / 4096);
-    if (p.pantalla === 'ls' && sp && !p.crit) finalMod = Math.round(finalMod * 2732 / 4096);
+    if (p.pantalla === 'reflect' && !sp && !p.crit) finalMod = Math.floor(finalMod * 2732 / 4096);
+    if (p.pantalla === 'ls' && sp && !p.crit) finalMod = Math.floor(finalMod * 2732 / 4096);
 
-    if (p.habD === 'multiscale') finalMod = Math.round(finalMod * 0.5);
-    if (p.habD === 'fluffy' && !sp) finalMod = Math.round(finalMod * 0.5);
+    if (p.habD === 'multiscale') finalMod = Math.floor(finalMod * 0.5);
+    if (p.habD === 'fluffy' && !sp) finalMod = Math.floor(finalMod * 0.5);
 
     d = Math.floor((d * finalMod) / 4096);
     results.push(Math.max(1, d));
