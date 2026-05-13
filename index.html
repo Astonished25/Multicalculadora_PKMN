@@ -243,7 +243,35 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
     </div>
 
     <hr>
-
+    <div class="g2">
+      <div class="fg">
+        <div class="fl">Objeto</div>
+        <select id="obj-a">
+          <option value="1|any">N/A</option>
+          <option value="1.2|any">Obj. Pot. Tipo (1.2x)</option>
+          <option value="1.5|p">Choice Band (1.5x Fis)</option>
+          <option value="1.5|s">Choice Specs (1.5x Esp)</option>
+          <option value="1.1|s">Wise Glasses (1.1x Esp)</option>
+          <option value="1.2|se">Expert Belt (1.2x SE)</option>
+          <option value="1.3|any">Life Orb (1.3x)</option>
+          <option value="1.1|p">Punching Glove (1.1x)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <div class="fl">Habilidad</div>
+        <select id="hab-a">
+          <option value="none">N/A</option>
+          <option value="sword-beads">Sword/Beads of Ruin (Def Rival x0.75)</option>
+          <option value="sniper">Sniper (Crit x2.25)</option>
+          <option value="tinted">Tinted Lens</option>
+          <option value="technician">Technician (BP≤60 x1.5)</option>
+          <option value="sharpness">Sharpness (Corte x1.5)</option>
+          <option value="huge-power">Huge Power (Atk x2)</option>
+          <option value="strong-jaw">Strong Jaw (Mordida x1.5)</option>
+          <option value="iron-fist">Iron Fist (Puño x1.2)</option>
+        </select>
+      </div>
+    </div>
     <div class="fg">
       <div class="fl">Stat Ataque Efectivo</div>
       <div class="sbox">
@@ -276,21 +304,14 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       <select id="clima"><option value="none">N/A</option><option value="sun">Sol</option><option value="rain">Lluvia</option><option value="sand">Arena</option><option value="snow">Nieve</option></select>
     </div>
     <div class="fg"><div class="fl">Campo</div>
-      <select id="campo"><option value="none">N/A</option><option value="electric">Electrico</option><option value="grassy">Hierba</option><option value="psychic">Psiquico</option><option value="misty">Magico</option></select>
+      <select id="campo"><option value="none">N/A</option><option value="electric">Electrico</option><option value="grassy">Hierba</option><option value="psychic">Psiquico</option><option value="misty">Niebla</option></select>
     </div>
   </div>
   <div class="g2">
     <div class="fg"><div class="fl">Pantalla</div>
       <select id="pantalla"><option value="none">N/A</option><option value="reflect">Reflejo (Fis)</option><option value="ls">Pantalla Luz (Esp)</option></select>
     </div>
-    <div class="fg"><div class="fl">Habilidades Ruina</div>
-        <select id="ru-all">
-          <option value="none">NA</option>
-          <option value="beads-sword">Beads / Sword (Def Rival x0.75)</option>
-          <option value="vessel-tablets">Vessel / Tablets (Atk Tuyo x0.75)</option>
-        </select>
-    </div>
-    </div>
+  </div>
     <div class="g2">
       <div class="fg"><div class="fl">Compiescolta (Aliado)</div>
         <select id="compie">
@@ -306,64 +327,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       </select>
     </div>
     </div>
-  <div class="g2">
-    <div class="fg"><div class="fl">Obj. Atacante</div>
-      <select id="obj-a">
-        <option value="1|any">N/A</option>
-        <option value="1.2|any">Obj. Pot. Tipo (120% tipo)</option>
-        <option value="1.5|p">Choice Band (150% Fisico)</option>
-        <option value="1.5|s">Choice Specs (150% Especial)</option>
-        <option value="1.1|s">Wise Glasses (110% Especial)</option>
-        <option value="1.2|se">Expert Belt (120% super-ef)</option>
-        <option value="1.3|any">Life Orb (130%)</option>
-        <option value="1.1|p">Punching Glove (110% puño)</option>
-      </select>
-    </div>
-    <div class="fg"><div class="fl">Obj. Defensor</div>
-      <select id="obj-d">
-        <option value="1|any">N/A</option>
-        <option value="1.5|spd">Assault Vest (x1.5 SpD)</option>
-        <option value="1.5|both">Eviolite (x1.5 Def+SpD)</option>
-        <option value="0.5|any">Berry Disminuidora (50% daño)</option>
-      </select>
-    </div>
-  </div>
-  <div class="g2">
-    <div class="fg"><div class="fl">Hab. Atacante</div>
-      <select id="hab-a">
-        <option value="none">N/A</option>
-        <option value="sniper">Sniper (crit x2)</option>
-        <option value="tinted">Tinted Lens (nef→x1)</option>
-        <option value="technician">Technician (BP≤60 x1.5)</option>
-        <option value="flare-boost">Flare Boost (quem SpA x1.5)</option>
-        <option value="toxic-boost">Toxic Boost (env Atk x1.5)</option>
-        <option value="steely-spirit">Steely Spirit (Steel x1.5)</option>
-        <option value="sheer-force">Sheer Force (x1.5)</option>
-        <option value="analytic">Analytic (x1.3)</option>
-        <option value="punk-rock">Punk Rock (sonido x1.3)</option>
-        <option value="water-bubble-atk">Water Bubble (Water x2)</option>
-        <option value="solar-power">Solar Power (sol SpA x1.5)</option>
-        <option value="iron-fist">Iron Fist (puño x1.2)</option>
-        <option value="strong-jaw">Strong Jaw (mordida x1.5)</option>
-        <option value="huge-power">Huge/Pure Power (Atk x2)</option>
-        <option value="pixilate">Pixilate (normal→Fairy x1.2)</option>
-        <option value="mega-launcher">Mega Launcher (pulso x1.5)</option>
-        <option value="sharpness">Sharpness (corte x1.5)</option>
-        <option value="mira-kora">Mira/Kora (sol AtkFis x1.5)</option>
-      </select>
-    </div>
-    <div class="fg"><div class="fl">Hab. Defensor</div>
-      <select id="hab-d">
-        <option value="none">N/A</option>
-        <option value="multiscale">Multiscale/Shadow Shield (x0.5)</option>
-        <option value="fluffy">Fluffy (Contacto x0.5 / Fuego x2)</option>
-        <option value="punk-rock-def">Punk Rock (sonido x0.5)</option>
-        <option value="water-bubble-def">Water Bubble (Fire x0.5)</option>
-        <option value="ice-scales">Ice Scales (Esp x0.5)</option>
-        <option value="solid-rock">Solid Rock/Prism/Filter (ef: x2→x1.5, x4→x3)</option>
-      </select>
-    </div>
-  </div>
   <div class="g2">
     <div>
       <div class="cr"><input type="checkbox" id="chk-hh"><span>Helping Hand x1.5</span></div>
@@ -421,6 +384,28 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       <div class="sr"><label>SP Def (0-32)</label><input type="range" id="def-devs" min="0" max="32" step="1" value="0"><span class="sv" id="def-dev">0</span></div>
       <div class="sr"><label>Boost</label><input type="range" id="def-boost" min="-6" max="6" step="1" value="0"><span class="sv" id="def-bo">0</span></div>
     </div>
+    <div class="g2">
+  <div class="fg">
+      <div class="fl">Objeto</div>
+      <select id="obj-d">
+        <option value="1|any">N/A</option>
+        <option value="1.5|spd">Assault Vest (SpD x1.5)</option>
+        <option value="1.5|both">Eviolite (x1.5 Def/SpD)</option>
+        <option value="0.5|any">Baya Disminuidora (x0.5)</option>
+      </select>
+    </div>
+    <div class="fg">
+      <div class="fl">Habilidad</div>
+      <select id="hab-d">
+        <option value="none">N/A</option>
+        <option value="vessel-tablets">Vessel/Tablets (Atk Rival x0.75)</option>
+        <option value="multiscale">Multiscale (x0.5)</option>
+        <option value="fluffy">Fluffy (Fis x0.5 / Fuego x2)</option>
+        <option value="ice-scales">Ice Scales (Esp x0.5)</option>
+        <option value="solid-rock">Solid Rock (SE x0.75)</option>
+      </select>
+    </div>
+  </div>
     <div class="fg">
       <div class="fl">Naturaleza Defensa</div>
       <select id="def-nat"><option value="1">Neutral</option><option value="1.1">+ Def/SpD</option><option value="0.9">- Def/SpD</option></select>
@@ -2289,15 +2274,19 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
   const mvName = mvSel?.name || '';
   let rawBP = parseInt(document.getElementById('bp').value) || 80;
 
-  let bpMod = 4096;
+  if (p.campo === 'electric' && mvName === 'rising-voltage') rawBP *= 2;
+  if (p.campo === 'psychic' && mvName === 'expanding-force') rawBP = 120;
 
-  if (p.spread) bpMod = Math.round(bpMod * 0.75); 
+  let bpMod = 4096;
+  if (p.campo === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(mvName)) bpMod = Math.round(bpMod * 0.5);
+  if ((p.campo === 'electric' && mvT === 'electric') || (p.campo === 'grassy' && mvT === 'grass') || (p.campo === 'psychic' && mvT === 'psychic')) {
+    bpMod = Math.round(bpMod * 1.3);
+  }
 
   const objA_val = document.getElementById('obj-a').value;
   const {mult: oAM, cond: oAC} = parseObj(objA_val);
-  if (oAC === 'special-bp' && sp) bpMod = Math.round(bpMod * 1.1); 
-  if (oAC === 'punch' && PUNCH_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.1); 
-
+  if (oAC === 'special-bp' && sp) bpMod = Math.round(bpMod * 1.1);
+  if (oAC === 'punch' && PUNCH_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.1);
   if (p.habA === 'technician' && rawBP <= 60) bpMod = Math.round(bpMod * 1.5);
   if (p.habA === 'sharpness' && CUT_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.5);
 
@@ -2307,38 +2296,31 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
   const results = [];
   for (let i = 0; i < 16; i++) {
-
     let d = Math.floor(baseDamage * (85 + i) / 100);
 
-    if (p.clima === 'sun') d = Math.floor(d * (mvT === 'fire' ? 1.5 : mvT === 'water' ? 0.5 : 1));
-    if (p.clima === 'rain') d = Math.floor(d * (mvT === 'water' ? 1.5 : mvT === 'fire' ? 0.5 : 1));
-
+    if (p.spread) d = Math.floor((d * 3072) / 4096);
+    if (p.clima === 'sun') d = Math.floor(d * (mvT==='fire'?1.5:mvT==='water'?0.5:1));
+    if (p.clima === 'rain') d = Math.floor(d * (mvT==='water'?1.5:mvT==='fire'?0.5:1));
     if (p.crit) d = Math.floor(d * (p.habA === 'sniper' ? 2.25 : 1.5));
-    let stab = stabMult(mvT, atkTs, atkTera);
-    if (stab !== 1) d = Math.floor(d * stab);
 
-    let tm = typeMult(mvT, defTs, defTera);
-    d = Math.floor(d * tm);
+    d = Math.floor(d * stabMult(mvT, atkTs, atkTera));
+    d = Math.floor(d * typeMult(mvT, defTs, defTera));
+    if (p.burn && !sp) d = Math.floor(d * 0.5);
 
     let finalMod = 4096;
-
-    if (p.hh) finalMod = Math.round(finalMod * 1.5); 
-    if (p.burn && !sp) finalMod = Math.round(finalMod * 0.5);
+    if (p.hh) finalMod = Math.round(finalMod * 1.5);
+    if (p.compie !== 1) finalMod = Math.round(finalMod * 0.75);
+    if (p.campo === 'misty' && mvT === 'dragon') finalMod = Math.round(finalMod * 0.5);
 
     if (p.pantalla === 'reflect' && !sp && !p.crit) finalMod = Math.round(finalMod * 2732 / 4096);
     if (p.pantalla === 'ls' && sp && !p.crit) finalMod = Math.round(finalMod * 2732 / 4096);
 
-    if (p.compie !== 1) finalMod = Math.round(finalMod * 0.75);
-
     if (p.habD === 'multiscale') finalMod = Math.round(finalMod * 0.5);
-    if (p.habD === 'solid-rock' && tm > 1) finalMod = Math.round(finalMod * 0.75);
     if (p.habD === 'fluffy' && !sp) finalMod = Math.round(finalMod * 0.5);
-    if (p.habD === 'fluffy' && mvT === 'fire') finalMod = Math.round(finalMod * 2);
-    if (p.habD === 'ice-scales' && sp) finalMod = Math.round(finalMod * 0.5);
+    if (p.habD === 'solid-rock' && typeMult(mvT, defTs, defTera) > 1) finalMod = Math.round(finalMod * 0.75);
 
     const objD_val = document.getElementById('obj-d').value;
-    const {mult: oDM, cond: oDC} = parseObj(objD_val);
-    if (oDC === 'any' && oDM === 0.5 && isFirstHit) finalMod = Math.round(finalMod * 0.5);
+    if (parseObj(objD_val).mult === 0.5 && isFirstHit) finalMod = Math.round(finalMod * 0.5);
 
     d = Math.floor((d * finalMod) / 4096);
     results.push(Math.max(1, d));
@@ -2456,10 +2438,8 @@ function getAtkStat(eidx) {
 
   let stat = Math.floor(evStat(eidx, base, lvl, nat, false) * bm(b));
 
-
-  const ruin = document.getElementById('ru-all').value;
-  if (ruin === 'vessel-tablets') stat = Math.floor(stat * 0.75);
-
+  if (document.getElementById('hab-a').value === 'huge-power' && !isSp) stat *= 2;
+  if (document.getElementById('hab-d').value === 'vessel-tablets') stat = Math.floor(stat * 0.75);
 
   const objA = document.getElementById('obj-a').value;
   if (objA === "1.5|p" && !isSp) stat = Math.floor(stat * 1.5);
@@ -2485,9 +2465,12 @@ function getDefStat(idx) {
 
   let stat = Math.floor(evStat(idx, base, lvl, nat, false) * bm(b));
 
+  if (document.getElementById('hab-a').value === 'sword-beads') stat = Math.floor(stat * 0.75);
 
-  const ruin = document.getElementById('ru-all').value;
-  if (ruin === 'beads-sword') stat = Math.floor(stat * 0.75);
+  const objDv = document.getElementById('obj-d').value;
+  const {mult: objDM, cond: objDC} = parseObj(objDv);
+  if (objDC === 'spd' && isSp) stat = Math.floor(stat * objDM);
+  if (objDC === 'both') stat = Math.floor(stat * objDM);
 
   return Math.max(1, stat);
 }
@@ -2635,7 +2618,7 @@ document.getElementById('def-search').removeAttribute('readonly');
 document.getElementById('bp').addEventListener('input', () => { bpOvr=true; document.getElementById('bp-note').textContent='manual'; updateResult(); });
 ['atk-evs','atk-boost','atk-nat','atk-lvl'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{updateAtkStat();updateResult();}));
 ['def-hevs','def-devs','def-boost','def-nat','def-lvl'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{updateDefStats();updateResult();}));
-['clima','campo','pantalla','obj-a','obj-d','ru-all','compie','hab-a','hab-d','atk-tera','def-tera','num-hits'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
+['clima','campo','pantalla','obj-a','obj-d','compie','hab-a','hab-d','atk-tera','def-tera','num-hits'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
 ['chk-hh','chk-crit','chk-spread','chk-burn','chk-poison'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
 
 
