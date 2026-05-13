@@ -15,11 +15,17 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15px;overflow-x:hidden}
 .hdr{background:var(--bg2);border-bottom:1px solid var(--bd);padding:9px 18px;display:grid;grid-template-columns: 1fr auto 1fr;align-items:center;position:sticky;top:0;z-index:100}
-/* TOP SECTION — 3 columnas, altura fija = viewport menos header */
-.wrap{display:grid;grid-template-columns:280px 1fr 280px;gap:1px;background:var(--bd);height:calc(100vh - 48px)}
+
+.wrap {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 1px;
+  background: var(--bd);
+  min-height: calc(100vh - 48px);
+}
 .col{background:var(--bg2);padding:14px;overflow-y:auto;height:100%}
 .mid{background:var(--bg);padding:14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;height:100%}
-/* MATRIX SECTION — full width, debajo del wrap */
+
 .mx-section{width:100%;background:var(--bg);border-top:2px solid var(--bd);padding:14px;display:none}
 .mx-section.visible{display:block}
 .mx-section-hdr{font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:12px}
@@ -28,7 +34,7 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
 .sec-title{font-family:var(--ti);font-size:9px;letter-spacing:2px;color:var(--a);text-transform:uppercase;border-bottom:1px solid var(--bd);padding-bottom:5px;margin-bottom:10px}
 .fl{font-family:var(--mo);font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
 .fg{margin-bottom:11px}
-/* SELECT NATIVO CON BÚSQUEDA */
+
 .search-select-wrap{position:relative}
 .search-input{width:100%;background:var(--bg3);border:1px solid var(--bd);color:var(--t);font-family:var(--mo);font-size:12px;padding:6px 8px;border-radius:3px;outline:none;transition:border-color .15s}
 .search-input:focus{border-color:var(--a)}
@@ -41,7 +47,7 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
 .dd-item .dd-name{font-size:12px}
 .dd-item .dd-types{display:flex;gap:3px}
 .dd-empty{padding:8px 10px;font-family:var(--mo);font-size:11px;color:var(--t2)}
-/* SELECTS NORMALES */
+
 select{width:100%;background:var(--bg3);border:1px solid var(--bd);color:var(--t);font-family:var(--mo);font-size:12px;padding:5px 7px;border-radius:3px;outline:none}
 select:focus{border-color:var(--a)}
 select option{background:var(--bg3)}
@@ -58,17 +64,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .sbox-v{color:var(--a);font-weight:bold;font-size:16px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 hr{border:none;border-top:1px solid var(--bd);margin:9px 0}
-/* TIPOS */
+
 .type-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
 .tbadge{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-family:var(--mo);text-transform:uppercase;letter-spacing:1px;font-weight:600;border:1px solid transparent}
-/* POKEMON INFO */
+
 .pk-card{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--bd);border-radius:4px;padding:8px;margin-bottom:10px}
 .pk-card img{width:72px;height:56px;object-fit:contain;image-rendering:pixelated;flex-shrink:0}
 .pk-card-name{font-family:var(--fm);font-weight:700;font-size:15px;text-transform:capitalize}
 .stat-mini{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
 .stat-chip{font-family:var(--mo);font-size:9px;background:var(--bg);border:1px solid var(--bd);border-radius:2px;padding:1px 5px}
 .stat-chip b{color:var(--a)}
-/* MOVIMIENTOS */
+
 .mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;max-height:200px;overflow-y:auto;margin-top:5px}
 .mv-btn{background:var(--bg3);border:1px solid var(--bd);border-radius:3px;padding:5px 7px;cursor:pointer;font-family:var(--mo);font-size:10px;text-transform:capitalize;transition:border-color .1s,background .1s;text-align:left;color:var(--t);display:flex;flex-direction:column;gap:2px}
 .mv-btn:hover{border-color:var(--a);color:var(--a)}
@@ -76,7 +82,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:9px 0}
 .mv-btn .mv-name{font-size:10px}
 .mv-btn .mv-meta{font-size:9px;color:var(--t2)}
 .mv-btn.sel .mv-meta{color:var(--a2)}
-/* RESULTADO */
+
 .res-box{background:var(--bg2);border:1px solid var(--bd);border-radius:5px;padding:10px 14px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .res-lbl{font-family:var(--mo);font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
@@ -88,7 +94,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:9px 0}
 .legend{display:flex;gap:10px;flex-wrap:wrap}
 .ld{display:flex;align-items:center;gap:5px;font-family:var(--mo);font-size:10px}
 .ld-dot{width:11px;height:11px;border-radius:2px;flex-shrink:0}
-/* MATRIZ TABLE STYLES */
+
 table.mx{border-collapse:collapse;font-family:var(--mo);font-size:9px;white-space:nowrap}
 table.mx th{background:var(--bg3);color:var(--t2);font-size:9px;padding:3px 5px;border:1px solid var(--bd);text-align:center}
 table.mx th.sc{position:sticky;left:0;z-index:3;background:var(--bg3)}
@@ -110,7 +116,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 .mcat{display:inline-block;padding:1px 5px;border-radius:2px;font-family:var(--mo);font-size:9px;text-transform:uppercase}
 .mc-ph{background:#3a1200;color:#ff6d00}.mc-sp{background:#180c38;color:#9c6dff}.mc-st{background:#081c10;color:#00e676}
 
-/* --- NUEVOS ESTILOS PARA TEMAS Y RESET --- */
 .theme-selector { display: flex; gap: 8px; margin-top: 5px; }
 .theme-check { position: relative; width: 18px; height: 18px; cursor: pointer; }
 .theme-check input { display: none; }
@@ -120,18 +125,16 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 }
 .theme-check input:checked + span { transform: scale(1.2); border-color: var(--a); box-shadow: 0 0 8px var(--a); }
 
-/* Colores de las burbujas de tema */
-.t-gen1 span { background: linear-gradient(135deg, #e8f5e9 50%, #ff1744 50%); } /* Verde claro / Rojo */
-.t-gen2 span { background: linear-gradient(135deg, #e0e0e0 50%, #d4af37 50%); } /* Plateado / Oro */
-.t-gen3 span { background: linear-gradient(135deg, #0050a0 50%, #ff1744 50%); } /* Azul / Rojo */
-.t-gen4 span { background: linear-gradient(135deg, #00bcd4 50%, #cfcfcf 50%); } /* Diamante / Perla */
-.t-gen5 span { background: linear-gradient(135deg, #ffffff 50%, #333333 50%); } /* Blanco / Negro */
-.t-gen6 span { background: linear-gradient(135deg, #ffc1cc 50%, #444444 50%); } /* Rosado / Gris */
-.t-gen7 span { background: linear-gradient(135deg, #0c1445 50%, #fff9c4 50%); } /* Azul noche / Amarillo */
-.t-gen8 span { background: linear-gradient(135deg, #00f2ff 50%, #ff00ff 50%); } /* Cyan / Magenta */
-.t-gen9 span { background: linear-gradient(135deg, #ff2400 50%, #800080 50%); } /* Escarlata / Purpura */
+.t-gen1 span { background: linear-gradient(135deg, #e8f5e9 50%, #ff1744 50%); }
+.t-gen2 span { background: linear-gradient(135deg, #e0e0e0 50%, #d4af37 50%); }
+.t-gen3 span { background: linear-gradient(135deg, #0050a0 50%, #ff1744 50%); } 
+.t-gen4 span { background: linear-gradient(135deg, #00bcd4 50%, #cfcfcf 50%); } 
+.t-gen5 span { background: linear-gradient(135deg, #ffffff 50%, #333333 50%); }
+.t-gen6 span { background: linear-gradient(135deg, #ffc1cc 50%, #444444 50%); } 
+.t-gen7 span { background: linear-gradient(135deg, #0c1445 50%, #fff9c4 50%); } 
+.t-gen8 span { background: linear-gradient(135deg, #00f2ff 50%, #ff00ff 50%); } 
+.t-gen9 span { background: linear-gradient(135deg, #ff2400 50%, #800080 50%); }
 
-/* Botón Reset del centro del Header */
 .reset-top-btn {
   background: var(--bg3); border: 1px solid var(--r); color: var(--r);
   font-family: var(--mo); font-size: 10px; padding: 6px 15px;
@@ -139,9 +142,32 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 }
 .reset-top-btn:hover { background: var(--r); color: white; }
 
-/* Contenedor para que el nombre del cálculo no se mueva */
 .hdr-left { display: flex; flex-direction: column; }
 .hdr-right { text-align: right; }
+@media (max-width: 1000px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .col, .mid {
+    height: auto;
+    overflow-y: visible;
+  }
+  .hdr {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+  .hdr-left, .hdr-mid, .hdr-right {
+    text-align: center;
+    justify-content: center;
+  }
+  .theme-selector {
+    justify-content: center;
+    margin-bottom: 5px;
+  }
+}
+  
 </style>
 </head>
 <body>
@@ -150,7 +176,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   <div class="hdr-left">
     <div class="hdr-t">CHAMPIONS DAMAGE CALC v1.0</div>
     <div class="theme-selector">
-      <label class="theme-check t-gen1" title="Gen 1: Rojo/Verde"><input type="radio" name="theme" onclick="changeTheme('gen1')"><span></span></label>
+      <label class="theme-check t-gen1" title="Gen 1: Rojo/Verde"><input type="radio" name="theme" onclick="changeTheme('gen1')" cheked><span></span></label>
       <label class="theme-check t-gen2" title="Gen 2: Oro/Plata"><input type="radio" name="theme" onclick="changeTheme('gen2')"><span></span></label>
       <label class="theme-check t-gen3" title="Gen 3: Rubí/Zafiro"><input type="radio" name="theme" onclick="changeTheme('gen3')"><span></span></label>
       <label class="theme-check t-gen4" title="Gen 4: Diamante/Perla"><input type="radio" name="theme" onclick="changeTheme('gen4')"><span></span></label>
@@ -158,7 +184,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       <label class="theme-check t-gen6" title="Gen 6: X/Y"><input type="radio" name="theme" onclick="changeTheme('gen6')"><span></span></label>
       <label class="theme-check t-gen7" title="Gen 7: Sol/Luna"><input type="radio" name="theme" onclick="changeTheme('gen7')"><span></span></label>
       <label class="theme-check t-gen8" title="Gen 8: Espada/Escudo"><input type="radio" name="theme" onclick="changeTheme('gen8')"><span></span></label>
-      <label class="theme-check t-gen9" title="Gen 9: Escarlata/Púrpura"><input type="radio" name="theme" onclick="changeTheme('gen9')" checked><span></span></label>
+      <label class="theme-check t-gen9" title="Gen 9: Escarlata/Púrpura"><input type="radio" name="theme" onclick="changeTheme('gen9')"><span></span></label>
     </div>
   </div>
 
@@ -173,7 +199,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 
 <div class="wrap">
 
-<!-- ====== IZQUIERDA: ATACANTE ====== -->
 <div class="col">
   <div class="sec-title">Pokemon Atacante</div>
 
@@ -243,7 +268,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   </div>
 </div>
 
-<!-- ====== CENTRO ====== -->
 <div class="mid">
   <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px">DATOS COMBATE</div>
 
@@ -361,9 +385,8 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 
   <button class="btn" onclick="calcMatrix()">&#9889; CALCULAR MATRIZ 33x33</button>
 
-</div><!-- /mid -->
+</div>
 
-<!-- ====== DERECHA: DEFENSOR ====== -->
 <div class="col">
   <div class="sec-title">Pokemon Defensor</div>
 
@@ -414,9 +437,8 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 </div>
 
 </div>
-</div><!-- /wrap -->
+</div>
 
-<!-- ====== SECCIÓN MATRIZ (full width, aparece al calcular) ====== -->
 <div class="mx-section" id="mx-section">
   <div class="mx-section-hdr">
     <span>MATRIZ 33×33</span>
@@ -453,16 +475,12 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 </div>
 
 <script>
-// ============================================================
-// DATOS EMBEBIDOS — stats base, tipos, movimientos
-// ============================================================
+
 const EVS=[0,4,12,20,28,36,44,52,60,68,76,84,92,100,108,116,124,132,140,148,156,164,172,180,188,196,204,212,220,228,236,244,252];
 const TPC={normal:'#9E9DA0',fire:'#E62829',water:'#0099FF',grass:'#1A9C3E',electric:'#FBD100',ice:'#42D8FF',fighting:'#FF8000',poison:'#9141CB',ground:'#9B7653',flying:'#81B9EF',psychic:'#EF4179',bug:'#92A119',rock:'#AFA981',ghost:'#70559B',dragon:'#0B6AC8',dark:'#49392F',steel:'#60A1B8',fairy:'#EF70EF'};
 const ALLTY=Object.keys(TPC);
 const TC={normal:{rock:.5,ghost:0,steel:.5},fire:{fire:.5,water:.5,grass:2,ice:2,bug:2,rock:.5,dragon:.5,steel:2},water:{fire:2,water:.5,grass:.5,ground:2,rock:2,dragon:.5},electric:{water:2,electric:.5,grass:.5,ground:0,flying:2,dragon:.5},grass:{fire:.5,water:2,grass:.5,poison:.5,ground:2,flying:.5,bug:.5,rock:2,dragon:.5,steel:.5},ice:{water:.5,grass:2,ice:.5,ground:2,flying:2,dragon:2,steel:.5},fighting:{normal:2,ice:2,poison:.5,flying:.5,psychic:.5,bug:.5,rock:2,ghost:0,dark:2,steel:2,fairy:.5},poison:{grass:2,poison:.5,ground:.5,rock:.5,ghost:.5,steel:0,fairy:2},ground:{fire:2,electric:2,grass:.5,poison:2,flying:0,bug:.5,rock:2,steel:2},flying:{electric:.5,grass:2,fighting:2,bug:2,rock:.5,steel:.5},psychic:{fighting:2,poison:2,psychic:.5,dark:0,steel:.5},bug:{fire:.5,grass:2,fighting:.5,flying:.5,psychic:2,ghost:.5,dark:2,steel:.5,fairy:.5},rock:{fire:2,ice:2,fighting:.5,ground:.5,flying:2,bug:2,steel:.5},ghost:{normal:0,psychic:2,ghost:2,dark:.5},dragon:{dragon:2,steel:.5,fairy:0},dark:{fighting:.5,psychic:2,ghost:2,dark:.5,fairy:.5},steel:{fire:.5,water:.5,electric:.5,ice:2,rock:2,steel:.5,fairy:2},fairy:{fire:.5,fighting:2,poison:.5,dragon:2,dark:2,steel:.5}};
 
-// BASE DE DATOS POKEMON (hp,atk,def,spa,spd,spe, types[], sprite_id)
-// Formato: [hp,atk,def,spa,spd,spe,[tipos],id_numerico]
 const PKDB = {
   "bulbasaur":[45,49,49,65,65,1,["grass","poison"],1],
   "ivysaur":[60,62,63,80,80,1,["grass","poison"],2],
@@ -1710,7 +1728,6 @@ const PKDB = {
   "falinks-mega": [65, 135, 135, 70, 65, 100, ["fighting"], 870]
 };
 
-// MOVIMIENTOS: [bp, tipo, categoria] (p=physical, s=special, t=status)
 const MVDB = {
   "pound":[40,"normal","p"],"karate-chop":[50,"fighting","p"],"double-slap":[15,"normal","p"],
   "comet-punch":[18,"normal","p"],"mega-punch":[80,"normal","p"],"pay-day":[40,"normal","p"],
@@ -1996,15 +2013,9 @@ const MVDB = {
   "psychic-noise":[75,"psychic","s"],"upper-hand":[65,"fighting","p"],"malignant-chain":[100,"poison","s"]
 };
 
-// ============================================================
-// APP STATE
-// ============================================================
 let atkPoke=null, defPoke=null, mvSel=null, bpOvr=false;
 const pkNames=Object.keys(PKDB).sort();
 
-// ============================================================
-// DROPDOWN HELPER
-// ============================================================
 function buildDropdown(ddId, inputId, items, renderItem, onSelect) {
   const dd = document.getElementById(ddId);
   const inp = document.getElementById(inputId);
@@ -2036,7 +2047,7 @@ function buildDropdown(ddId, inputId, items, renderItem, onSelect) {
     const filtered = q.length > 0
       ? items.filter(n => n.replace(/-/g,' ').includes(q))
       : items;
-    show(filtered.slice(0,80));
+    show(filtered);
   });
 
   inp.addEventListener('input', () => {
@@ -2046,7 +2057,7 @@ function buildDropdown(ddId, inputId, items, renderItem, onSelect) {
       ? items
       : items.filter(n => n.replace(/-/g,' ').startsWith(q))
           .concat(items.filter(n => !n.replace(/-/g,' ').startsWith(q) && n.replace(/-/g,' ').includes(q)));
-    show(filtered.slice(0,80));
+    show(filtered);
   });
 
   inp.addEventListener('keydown', e => {
@@ -2062,20 +2073,15 @@ function buildDropdown(ddId, inputId, items, renderItem, onSelect) {
   });
 }
 
-// ============================================================
-// RENDER HELPERS
-// ============================================================
 function spriteUrl(id, name) {
   if (!name) {
-    // Respaldo por si se olvida pasar el nombre
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
   }
-  // Limpiamos el nombre para el formato de Showdown
-  // Ejemplo: "Charizard-Mega-X" -> "charizard-megax"
+
   const cleanName = name.toLowerCase()
-    .replace(/\s+/g, '')        // Quita espacios
-    .replace(/-mega-([xy])/g, '-mega$1') // "mega-x" -> "megax"
-    .replace(/[^a-z0-9-]/g, ''); // Quita caracteres raros
+    .replace(/\s+/g, '')     
+    .replace(/-mega-([xy])/g, '-mega$1') 
+    .replace(/[^a-z0-9-]/g, ''); 
 
   return `https://play.pokemonshowdown.com/sprites/dex/${cleanName}.png`;
 }
@@ -2093,7 +2099,6 @@ function fillTera(selId, types) {
   ALLTY.forEach(t => {
     const o = document.createElement('option');
     o.value = t; o.textContent = t.charAt(0).toUpperCase()+t.slice(1);
-    // Never pre-select — always default to N/A
     sel.appendChild(o);
   });
 }
@@ -2102,9 +2107,6 @@ function statChip(label, val, color='var(--a)') {
   return `<span class="stat-chip">${label} <b style="color:${color}">${val}</b></span>`;
 }
 
-// ============================================================
-// LOAD POKEMON
-// ============================================================
 function loadPoke(side, name) {
   const d = PKDB[name];
   if (!d) return;
@@ -2121,7 +2123,6 @@ function loadPoke(side, name) {
       statChip('SpA',spa,'var(--a2)')+statChip('SpD',spd)+statChip('Spe',spe,'var(--y)');
     fillTera('atk-tera', types);
     document.getElementById('atk-card').style.display = 'block';
-    // reset move
     mvSel = null; bpOvr = false;
     document.getElementById('mv-detail').style.display = 'none';
     loadMovesForPoke(name, types);
@@ -2142,14 +2143,10 @@ function loadPoke(side, name) {
   }
 }
 
-// ============================================================
-// MOVIMIENTOS
-// ============================================================
 function loadMovesForPoke(pokeName, types) {
-  // Usamos todos los movimientos de MVDB y mostramos primero los relevantes
-  // (que hacen STAB o tienen tipo del pokemon)
+
   const allMvNames = Object.keys(MVDB).sort();
-  // Ordenar: primero los de tipo igual al pokemon, luego resto
+
   const stab = allMvNames.filter(m => types.includes(MVDB[m][1]));
   const rest = allMvNames.filter(m => !types.includes(MVDB[m][1]));
   const sorted = [...stab, ...rest];
@@ -2206,7 +2203,7 @@ function selectMv(name) {
     `<span class="tbadge" style="background:${tc}22;color:${tc};border-color:${tc}44">${type}</span>` +
     `<span class="mcat ${catCls}">${catLabel}</span>`;
   document.getElementById('mv-detail').style.display = 'block';
-  // refresh grid to show selected
+
   const q = document.getElementById('mv-search').value.toLowerCase().replace(/-/g,' ');
   const allSorted = Object.keys(MVDB).sort();
   const stab = atkPoke ? allSorted.filter(m => atkPoke.types.includes(MVDB[m][1])) : [];
@@ -2214,15 +2211,12 @@ function selectMv(name) {
   const sorted = [...stab, ...rest];
   const filtered = q ? sorted.filter(m => m.replace(/-/g,' ').includes(q)) : sorted;
   renderMvGrid(filtered, q);
-  // stat labels
+
   document.getElementById('atk-slbl').textContent = cat==='s'?'SpA':'Atk';
   document.getElementById('def-slbl').textContent = cat==='s'?'SpD':'Def';
   updateAtkStat(); updateDefStats(); updateResult();
 }
 
-// ============================================================
-// STAT CALC
-// ============================================================
 function evStat(spIdx, base, lvl, nat, isHP) {
   const evs = EVS[Math.min(spIdx,32)] || 0;
   const iv = 31;
@@ -2266,18 +2260,12 @@ function updateDefStats() {
   document.getElementById('def-slbl').textContent = isSp?'SpD':'Def';
 }
 
-// ============================================================
-// SETS DE MOVIMIENTOS POR HABILIDAD
-// ============================================================
 const PUNCH_MOVES = new Set(["headlong-rush","surging-strikes","double-iron-bash","sky-uppercut","wicked-blow","hammer-arm","ice-hammer","mega-punch","bullet-punch","focus-punch","comet-punch","dynamic-punch","drain-punch","fire-punch","rage-fist","ice-punch","power-up-punch","jet-punch","dizzy-punch","meteor-mash","shadow-punch","thunder-punch","plasma-fists","mach-punch"]);
 const BITE_MOVES  = new Set(["fishious-rend","ice-fang","fire-fang","thunder-fang","poison-fang","hyper-fang","bite","jaw-lock","psychic-fangs","crunch"]);
 const PULSE_MOVES = new Set(["aura-sphere","water-pulse","heal-pulse","terrain-pulse","dragon-pulse","origin-pulse","dark-pulse"]);
 const SOUND_MOVES = new Set(["snarl","uproar","overdrive","sparkling-aria","round","relic-song","torch-song","alluring-voice","chatter","eerie-spell","echoed-voice","boomburst","clangorous-soulblaze","clanging-scales","psychic-noise","snore","disarming-voice","hyper-voice","bug-buzz"]);
 const CUT_MOVES   = new Set(["air-cutter","razor-shell","cut","fury-cutter","solar-blade","slash","bitter-blade","sacred-sword","mighty-cleave","kowtow-cleave","aerial-ace","stone-axe","razor-leaf","leaf-blade","population-bomb","psycho-cut","psyblade","secret-sword","aqua-cutter","air-slash","ceaseless-edge","behemoth-blade","tachyon-cutter","night-slash","x-scissor","cross-poison","shadow-claw"]);
 
-// ============================================================
-// DAMAGE FORMULA
-// ============================================================
 function typeMult(atkT, defTs, defTera) {
   const ts = (defTera&&defTera!=='none') ? [defTera] : defTs;
   let m = 1;
@@ -2291,7 +2279,6 @@ function stabMult(atkT, atkTs, atkTera) {
   return atkTs.includes(atkT) ? 1.5 : 1.0;
 }
 
-// Parse object value: "1.3|any" → {mult:1.3, cond:'any'}
 function parseObj(val) {
   const [m, c] = val.split('|');
   return {mult: parseFloat(m), cond: c||'any'};
@@ -2302,68 +2289,53 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
   const mvName = mvSel?.name || '';
   let rawBP = parseInt(document.getElementById('bp').value) || 80;
 
-  // 1. MODIFICADORES DE POTENCIA BASE (BP)
-  // En Pokémon, el Spread (0.75x) se aplica AQUÍ, no al final.
   let bpMod = 4096;
 
-  if (p.spread) bpMod = Math.round(bpMod * 0.75); // Spread Mod
+  if (p.spread) bpMod = Math.round(bpMod * 0.75); 
 
   const objA_val = document.getElementById('obj-a').value;
   const {mult: oAM, cond: oAC} = parseObj(objA_val);
-  if (oAC === 'special-bp' && sp) bpMod = Math.round(bpMod * 1.1); // Wise Glasses
-  if (oAC === 'punch' && PUNCH_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.1); // Punching Glove
+  if (oAC === 'special-bp' && sp) bpMod = Math.round(bpMod * 1.1); 
+  if (oAC === 'punch' && PUNCH_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.1); 
 
   if (p.habA === 'technician' && rawBP <= 60) bpMod = Math.round(bpMod * 1.5);
   if (p.habA === 'sharpness' && CUT_MOVES.has(mvName)) bpMod = Math.round(bpMod * 1.5);
 
-  // Aplicar modificadores a BP y redondear (PokeRound)
   let finalBP = Math.max(1, Math.floor((rawBP * bpMod) / 4096 + 0.5));
 
-  // 2. DAÑO BASE
-  // floor(floor(floor(2 * Lvl / 5 + 2) * BP * Atk / Def) / 50) + 2
   let baseDamage = Math.floor(Math.floor(Math.floor(2 * p.lvl / 5 + 2) * finalBP * atk / def) / 50) + 2;
 
   const results = [];
   for (let i = 0; i < 16; i++) {
-    // 3. RNG (85% a 100%)
+
     let d = Math.floor(baseDamage * (85 + i) / 100);
 
-    // 4. CLIMA
     if (p.clima === 'sun') d = Math.floor(d * (mvT === 'fire' ? 1.5 : mvT === 'water' ? 0.5 : 1));
     if (p.clima === 'rain') d = Math.floor(d * (mvT === 'water' ? 1.5 : mvT === 'fire' ? 0.5 : 1));
 
-    // 5. CRÍTICO
     if (p.crit) d = Math.floor(d * (p.habA === 'sniper' ? 2.25 : 1.5));
-
-    // 6. STAB
     let stab = stabMult(mvT, atkTs, atkTera);
     if (stab !== 1) d = Math.floor(d * stab);
 
-    // 7. EFECTIVIDAD DE TIPOS
     let tm = typeMult(mvT, defTs, defTera);
     d = Math.floor(d * tm);
 
-    // 8. MODIFICADORES FINALES (Helping Hand, Pantallas, Compiescolta)
     let finalMod = 4096;
 
-    if (p.hh) finalMod = Math.round(finalMod * 1.5); // Helping Hand
-    if (p.burn && !sp) finalMod = Math.round(finalMod * 0.5); // Quemado
+    if (p.hh) finalMod = Math.round(finalMod * 1.5); 
+    if (p.burn && !sp) finalMod = Math.round(finalMod * 0.5);
 
-    // Pantallas en Dobles (VGC)
     if (p.pantalla === 'reflect' && !sp && !p.crit) finalMod = Math.round(finalMod * 2732 / 4096);
     if (p.pantalla === 'ls' && sp && !p.crit) finalMod = Math.round(finalMod * 2732 / 4096);
 
-    // Compiescolta (Friend Guard) x0.75
     if (p.compie !== 1) finalMod = Math.round(finalMod * 0.75);
 
-    // Habilidades de reducción
     if (p.habD === 'multiscale') finalMod = Math.round(finalMod * 0.5);
     if (p.habD === 'solid-rock' && tm > 1) finalMod = Math.round(finalMod * 0.75);
     if (p.habD === 'fluffy' && !sp) finalMod = Math.round(finalMod * 0.5);
     if (p.habD === 'fluffy' && mvT === 'fire') finalMod = Math.round(finalMod * 2);
     if (p.habD === 'ice-scales' && sp) finalMod = Math.round(finalMod * 0.5);
 
-    // Baya (Solo primer hit del combate)
     const objD_val = document.getElementById('obj-d').value;
     const {mult: oDM, cond: oDC} = parseObj(objD_val);
     if (oDC === 'any' && oDM === 0.5 && isFirstHit) finalMod = Math.round(finalMod * 0.5);
@@ -2374,18 +2346,6 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
   return results;
 }
 
-// Verdict correcto
-// Para multi-hit: cada golpe tiene RNG independiente (85-100).
-// dmgArr[i] = daño con rng=85+i (i=0..15).
-// El daño total mín = mn*hits, máx = mx*hits.
-// "OHKO seguro" solo si MN*hits >= HP (todos los rolls matan).
-// "OHKO % " = porcentaje de combinaciones donde la suma >= HP.
-// Para simplificar (igual que el repo de referencia): 
-//   se compara el daño de UN golpe × hits vs HP para dar porcentaje.
-//   (aprox válida, coincide con calculadoras estándar para 2-hit).
-// --- NUEVA LÓGICA DE MULTIHIT CON CONVOLUCIÓN ---
-
-// Calcula todas las sumas posibles de daño para N golpes independientes
 function getMultiHitDist(singleHitArr, hits) {
   let dist = { 0: 1 };
   for (let i = 0; i < hits; i++) {
@@ -2412,15 +2372,14 @@ function verdict(dmgNoBerry, dmgWithBerry, hp, hitsPerTurn) {
   };
 
   let cumulativeDist = { 0: 1 };
-  let berryAlreadyUsed = false; // Estado para rastrear si la baya se consumió
+  let berryAlreadyUsed = false; 
 
   for (let t = 1; t <= 10; t++) {
     let turnDist = { 0: 1 };
 
-    // Daño de este turno (hitsPerTurn golpes)
     for (let h = 0; h < hitsPerTurn; h++) {
       let nextHitDist = {};
-      // Solo el primer hit de todo el combate usa dmgWithBerry
+
       let currentHitRolls = (!berryAlreadyUsed) ? dmgWithBerry : dmgNoBerry;
 
       for (let prevDmg in turnDist) {
@@ -2430,10 +2389,9 @@ function verdict(dmgNoBerry, dmgWithBerry, hp, hitsPerTurn) {
         }
       }
       turnDist = nextHitDist;
-      berryAlreadyUsed = true; // Se consume tras el primer impacto del combate
+      berryAlreadyUsed = true; 
     }
 
-    // Combinar con turnos anteriores
     let nextCumulative = {};
     for (let cumDmg in cumulativeDist) {
       for (let tDmg in turnDist) {
@@ -2443,7 +2401,7 @@ function verdict(dmgNoBerry, dmgWithBerry, hp, hitsPerTurn) {
     }
     cumulativeDist = nextCumulative;
 
-    // Evaluación estadística
+
     let koCombos = 0;
     let totalCombos = Math.pow(16, hitsPerTurn * t);
     let minD = Infinity, maxD = 0;
@@ -2457,7 +2415,7 @@ function verdict(dmgNoBerry, dmgWithBerry, hp, hitsPerTurn) {
 
     if (maxD >= hp) {
       const pct = (koCombos / totalCombos) * 100;
-      const isSure = minD >= hp; // Solo seguro si el daño MÍNIMO supera el HP
+      const isSure = minD >= hp; 
 
       return {
         label: isSure ? `${nkoLabel(t)} seguro` : `${pct.toFixed(1)}% ${nkoLabel(t)}`,
@@ -2483,8 +2441,7 @@ function readP() {
     habA:   document.getElementById('hab-a').value,
     habD:   document.getElementById('hab-d').value,
     compie: parseFloat(document.getElementById('compie').value)
-    // Se eliminaron ruA y ruD de aquí porque ahora se calculan
-    // directamente en las stats de Atk y Def usando 'ru-all'.
+
   };
 }
 
@@ -2499,11 +2456,11 @@ function getAtkStat(eidx) {
 
   let stat = Math.floor(evStat(eidx, base, lvl, nat, false) * bm(b));
 
-  // Nuevo: Ruinas Vessel/Tablets afectan al Atacante
+
   const ruin = document.getElementById('ru-all').value;
   if (ruin === 'vessel-tablets') stat = Math.floor(stat * 0.75);
 
-  // Objetos Choice
+
   const objA = document.getElementById('obj-a').value;
   if (objA === "1.5|p" && !isSp) stat = Math.floor(stat * 1.5);
   if (objA === "1.5|s" && isSp) stat = Math.floor(stat * 1.5);
@@ -2528,16 +2485,13 @@ function getDefStat(idx) {
 
   let stat = Math.floor(evStat(idx, base, lvl, nat, false) * bm(b));
 
-  // Nuevo: Ruinas Beads/Sword afectan al Defensor
+
   const ruin = document.getElementById('ru-all').value;
   if (ruin === 'beads-sword') stat = Math.floor(stat * 0.75);
 
   return Math.max(1, stat);
 }
 
-// ============================================================
-// RESULT & MATRIX
-// ============================================================
 function updateResult() {
   if (!atkPoke || !defPoke || !mvSel) return;
   const p = readP();
@@ -2552,13 +2506,13 @@ function updateResult() {
   const mvT  = mvSel.type;
   const hits = parseInt(document.getElementById('num-hits').value)||1;
 
-  // Calculamos ambos escenarios para el veredicto exacto
+
   const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
   const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
 
   const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
 
-  // Rango visual: Primer golpe (posible Baya) + Resto de golpes (Sin Baya)
+
   const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
   const mx = arrWithBerry[15] + (arrNoBerry[15] * (hits - 1));
 
@@ -2609,18 +2563,16 @@ function calcMatrix() {
     h+='</tr></thead><tbody>';
 
     for (let di=0;di<N;di++) {
-      const def = getDefStat(di); // DEF específica para esta fila
+      const def = getDefStat(di);
       h+=`<tr><th class="sc"><div style="color:var(--a);font-weight:700">${di}</div><div style="font-size:8px;color:var(--t2)">${def}</div></th>`;
       for (let hi=0;hi<N;hi++) {
-        const hp = getHP(hi); // HP específica para esta columna
+        const hp = getHP(hi); 
 
-        // Calculamos los daños con las estadísticas locales de la celda
         const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
         const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
 
         const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
 
-        // Daño min/max para el detalle al hacer click
         const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
         const mx = arrWithBerry[15] + (arrNoBerry[15] * (hits - 1));
 
@@ -2651,7 +2603,6 @@ function showCellDetail(hi, di, resultLabel, dmgRange, pctRange) {
 
   detailBox.style.display = 'block';
 
-  // Formato solicitado: SP (EVs)
   document.getElementById('det-evs').innerHTML =
     `HP: <b style="color:var(--g)">${hi} SP</b> (${hpEV} EVs)<br>` +
     `${isSp ? 'SpD' : 'Def'}: <b style="color:var(--a)">${di} SP</b> (${defEV} EVs)`;
@@ -2666,20 +2617,18 @@ function showCellDetail(hi, di, resultLabel, dmgRange, pctRange) {
 
   detailBox.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
-// ============================================================
-// INIT — dropdowns
-// ============================================================
+
 function pkRenderItem(name) {
   const d = PKDB[name];
   const [hp,atk,def,spa,spd,spe,types,sprId] = d;
-  // CAMBIO AQUÍ: pasamos sprId y name
+
   return `<img src="${spriteUrl(sprId, name)}" loading="lazy" alt=""><div class="dd-info"><div class="dd-name">${name}</div><div class="dd-types">${typeBadges(types)}</div></div>`;
 }
 
 buildDropdown('atk-dd','atk-search', pkNames, pkRenderItem, name => loadPoke('atk', name));
 buildDropdown('def-dd','def-search', pkNames, pkRenderItem, name => loadPoke('def', name));
 
-// Quitar readonly para poder escribir libremente
+
 document.getElementById('atk-search').removeAttribute('readonly');
 document.getElementById('def-search').removeAttribute('readonly');
 
@@ -2690,43 +2639,42 @@ document.getElementById('bp').addEventListener('input', () => { bpOvr=true; docu
 ['chk-hh','chk-crit','chk-spread','chk-burn','chk-poison'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
 
 
-// Función para cambiar Temas
 function changeTheme(theme) {
   const root = document.documentElement;
   const themes = {
-    'gen1': { // Verde claro con Rojo
+    'gen1': { 
       '--bg': '#e8f5e9', '--bg2': '#c8e6c9', '--bg3': '#a5d6a7', '--bd': '#81c784',
       '--a': '#ff1744', '--t': '#1b5e20', '--t2': '#2e7d32'
     },
-    'gen2': { // Plateado con Oro
+    'gen2': { 
       '--bg': '#e0e0e0', '--bg2': '#f5f5f5', '--bg3': '#eeeeee', '--bd': '#bdbdbd',
       '--a': '#d4af37', '--t': '#212121', '--t2': '#616161'
     },
-    'gen3': { // Azul con Rojo
+    'gen3': { 
       '--bg': '#003366', '--bg2': '#004080', '--bg3': '#0050a0', '--bd': '#0066cc',
       '--a': '#ff1744', '--t': '#ffffff', '--t2': '#b3e5fc'
     },
-    'gen4': { // Minimalista Diamante/Perla: Azul medianoche con acentos cian/plata
+    'gen4': { 
       '--bg': '#0f172a', '--bg2': '#1e293b', '--bg3': '#334155', '--bd': '#475569',
       '--a': '#38bdf8', '--t': '#f1f5f9', '--t2': '#94a3b8'
     },
-    'gen5': { // Blanco con bordes negros
+    'gen5': { 
       '--bg': '#ffffff', '--bg2': '#f0f0f0', '--bg3': '#e0e0e0', '--bd': '#333333',
       '--a': '#212121', '--t': '#212121', '--t2': '#757575'
     },
-    'gen6': { // Rosado con Gris Oscuro
+    'gen6': { 
       '--bg': '#ffc1cc', '--bg2': '#f8bbd0', '--bg3': '#f48fb1', '--bd': '#ad1457',
       '--a': '#444444', '--t': '#333333', '--t2': '#880e4f'
     },
-    'gen7': { // Azul Noche con Amarillo
+    'gen7': { 
       '--bg': '#0c1445', '--bg2': '#1a237e', '--bg3': '#283593', '--bd': '#3949ab',
       '--a': '#fff9c4', '--t': '#f0f0f0', '--t2': '#c5cae9'
     },
-    'gen8': { // Minimalista Espada/Escudo: Gris industrial con acentos cian y magenta suaves
+    'gen8': { 
       '--bg': '#18181b', '--bg2': '#27272a', '--bg3': '#3f3f46', '--bd': '#52525b',
       '--a': '#22d3ee', '--t': '#fafafa', '--t2': '#fb7185'
     },
-    'gen9': { // Minimalista Escarlata/Púrpura: Berenjena profundo con acento naranja terracota
+    'gen9': { 
       '--bg': '#1a0d26', '--bg2': '#2d1b40', '--bg3': '#402a59', '--bd': '#593d8c',
       '--a': '#f97316', '--t': '#f5f3ff', '--t2': '#a78bfa'
     }
@@ -2740,18 +2688,15 @@ function changeTheme(theme) {
   }
 }
 
-// Función de Reseteo Total
 function resetCalc() {
   if(confirm("¿Estás seguro de que deseas limpiar todos los datos?")) {
     location.reload();
   }
 }
 
-// Asegúrate de que los multiplicadores de ruina lean el nuevo ID único si lo cambiaste
-// Si unificaste las ruinas en un solo select llamado 'ru-all', recuerda actualizar
-// getAtkStat y getDefStat como vimos antes.
 
 document.getElementById('load-status').textContent = `${pkNames.length} Pokemon · ${Object.keys(MVDB).length} movimientos`;
+changeTheme('gen1');
 </script>
 </body>
 </html>
