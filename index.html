@@ -32,7 +32,7 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
   background: var(--bg);
   border-top: 2px solid var(--bd);
   padding: 14px;
-  display: block; 
+  display: block;
 }
 .mx-section.visible{display:block}
 .mx-section-hdr{font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:12px}
@@ -54,7 +54,7 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
   background-color: var(--bg3) !important;
   border: 1px solid var(--bd);
   border-top: none;
-  z-index: 2500 !important;              
+  z-index: 2500 !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   border-radius: 0 0 4px 4px;
 }
@@ -73,7 +73,7 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
   font-size: 12px;
   border-bottom: 1px solid var(--bd);
   text-transform: capitalize;
-  background-color: var(--bg3) !important; 
+  background-color: var(--bg3) !important;
   transition: background-color 0.15s ease;
 }
 
@@ -89,19 +89,18 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
   background: var(--bd);
   border-radius: 3px;
 }
-
 #obj-a, #obj-d {
-  display: block;                       
-  width: 100%;                        
-  height: 30px;                       
-  box-sizing: border-box;              
-  margin: 4px 0 0 0;                 
+  display: block;
+  width: 100%;
+  height: 30px;
+  box-sizing: border-box;
+  margin: 4px 0 0 0;
 
-  background: var(--bg2);              
-  color: var(--t);                     
-  border: 1px solid var(--bd);         
-  border-radius: 4px;                
-  padding: 0 8px;                    
+  background: var(--bg2);
+  color: var(--t);
+  border: 1px solid var(--bd);
+  border-radius: 4px;
+  padding: 0 8px;
 
   font-family: inherit;
   font-size: inherit;
@@ -109,11 +108,13 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
   transition: border-color 0.2s, background-color 0.2s;
 }
 
+/* EFECTO CUANDO EL CAMPO ESTÁ ACTIVO O EN FOCO */
 #obj-a:focus, #obj-d:focus {
   border-color: var(--a);
   background: var(--bg3);
 }
 
+/* CUANDO EL OBJETO SE BLOQUEA POR SER UNA MEGA EVOLUCIÓN o FORMA ALTERNA */
 #obj-a:disabled, #obj-d:disabled {
   background: var(--bg3);
   color: var(--t2);
@@ -214,7 +215,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 12px;
-  height: 245px; 
+  height: 245px;
   margin-bottom: 15px;
 }
 
@@ -235,9 +236,9 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 }
 
 .move-slot.active {
-  border: 2px solid var(--a) !important;     
-  background: var(--bg3) !important;         
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);   
+  border: 2px solid var(--a) !important;
+  background: var(--bg3) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 .move-slot.active .slot-label {
@@ -269,7 +270,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   height: 100%;
   border: 1px solid var(--bd);
   border-radius: 6px;
-  background: var(--bg3); 
+  background: var(--bg3);
   padding: 6px;
   box-sizing: border-box;
 }
@@ -289,7 +290,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 .t-gen2 span { background: linear-gradient(135deg, #f4f0e6 50%, #c59b27 50%); }
 .t-gen3 span { background: linear-gradient(135deg, #111c2e 50%, #ff4466 50%); }
 .t-gen4 span { background: linear-gradient(135deg, #171d28 50%, #38bdf8 50%); }
-.t-gen5 span { background: linear-gradient(135deg, #f6f5f0 50%, #1a1a1a 50%); } 
+.t-gen5 span { background: linear-gradient(135deg, #f6f5f0 50%, #1a1a1a 50%); }
 .t-gen6 span { background: linear-gradient(135deg, #24181f 50%, #ff6699 50%); }
 .t-gen7 span { background: linear-gradient(135deg, #101428 50%, #fff9c4 50%); }
 .t-gen8 span { background: linear-gradient(135deg, #131a2b 50%, #22d3ee 50%); }
@@ -657,9 +658,9 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 <script src="script_res/pokemon_moves.js"></script> <script src="script_res/nature_data.js"></script>
 <script src="script_res/item_data.js"></script>
 <script>
-var attackerMovesSet = [null, null, null, null]; 
-var activeMoveSlotIdx = 0;                    
-var currentPokeMoves = []; 
+var attackerMovesSet = [null, null, null, null];
+var activeMoveSlotIdx = 0;
+var currentPokeMoves = [];
 const EVS=[0,4,12,20,28,36,44,52,60,68,76,84,92,100,108,116,124,132,140,148,156,164,172,180,188,196,204,212,220,228,236,244,252];
 const TPC={normal:'#9E9DA0',fire:'#E62829',water:'#0099FF',grass:'#1A9C3E',electric:'#FBD100',ice:'#42D8FF',fighting:'#FF8000',poison:'#9141CB',ground:'#9B7653',flying:'#81B9EF',psychic:'#EF4179',bug:'#92A119',rock:'#AFA981',ghost:'#70559B',dragon:'#0B6AC8',dark:'#49392F',steel:'#60A1B8',fairy:'#EF70EF'};
 const ALLTY=Object.keys(TPC);
@@ -728,7 +729,6 @@ function setActiveMoveSlot(idx) {
     updateResult();
   }
 }
-
 
 function setupItemDropdown(side) {
   const isAtk = side === 'atk';
@@ -881,7 +881,6 @@ function spriteUrl(id, name) {
 function swapAtkDef() {
   if (!atkPoke || !defPoke) return;
 
-  // 1. Respaldamos todos los valores actuales del Atacante
   const atkName = atkPoke.name;
   const atkLvl = document.getElementById('atk-lvl').value;
   const atkTera = document.getElementById('atk-tera').value;
@@ -979,7 +978,7 @@ function loadPoke(side, name, isFormChange = false) {
       const slotInput = document.getElementById(`mv-slot-${i}`);
       const slotMeta = document.getElementById(`mv-slot-meta-${i}`);
       if (slotInput) slotInput.value = '';
-      if (slotMeta) slotMeta.innerHTML = ''; 
+      if (slotMeta) slotMeta.innerHTML = '';
     }
     if (typeof setActiveMoveSlot === 'function') setActiveMoveSlot(0);
     const filterInput = document.getElementById('move-pool-filter');
@@ -1047,8 +1046,8 @@ function loadPoke(side, name, isFormChange = false) {
   }
 
   if (lockItem) {
-    objSelect.value = lockItem; 
-    objSelect.disabled = true;  
+    objSelect.value = lockItem;
+    objSelect.disabled = true;
   } else {
     if (objSelect.disabled) {
       objSelect.value = '';
@@ -1287,22 +1286,64 @@ function chainMods(mods) {
 
   return M;
 }
+
 var gen = 9;
 
 function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera, p, isFirstHit) {
+
+    if (!mvSel) return new Array(16).fill(0);
+
     const mvName = mvSel?.name || '';
     const isPhysical = mvSel?.cat === 'p';
     const isSpecial = mvSel?.cat === 's';
 
     const itemA = document.getElementById('obj-a')?.value || 'none';
     const itemD = document.getElementById('obj-d')?.value || 'none';
-    const safeMvT = (mvT || 'normal').toLowerCase();
+
+    let safeMvT = (mvT || 'normal').toLowerCase();
 
     if (itemD === 'Air Balloon' && safeMvT === 'ground' && mvName !== 'Thousand Arrows') {
         return new Array(16).fill(0);
     }
 
     let rawBP = parseInt(document.getElementById('bp').value) || 80;
+
+    if (mvName === 'Weather Ball') {
+        if (p.clima === "sun" || p.habA === "mega sol" || p.habA === "mega-sol") {
+            safeMvT = "fire";
+            rawBP = 100;
+        } else if (p.clima === "rain") {
+            safeMvT = "water";
+            rawBP = 100;
+        } else if (p.clima === "sand") {
+            safeMvT = "rock";
+            rawBP = 100;
+        } else if (p.clima === "snow") {
+            safeMvT = "ice";
+            rawBP = 100;
+        } else {
+            safeMvT = "normal";
+            rawBP = 50;
+        }
+    }
+    else if (mvName === "Terrain Pulse") {
+        if (p.campo === "electric") {
+            safeMvT = "electric";
+            rawBP = 100;
+        } else if (p.campo === "grassy") {
+            safeMvT = "grass";
+            rawBP = 100;
+        } else if (p.campo === "psychic") {
+            safeMvT = "psychic";
+            rawBP = 100;
+        } else if (p.campo === "misty") {
+            safeMvT = "fairy";
+            rawBP = 100;
+        } else {
+            safeMvT = "normal";
+            rawBP = 50;
+        }
+    }
 
     if (mvName === 'Low Kick' || mvName === 'Grass Knot') {
         const w = defPoke ? defPoke.weight : 0;
@@ -1322,106 +1363,107 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
     let bpMods = [];
 
-    if ((p.habA === 'fairy aura' || p.habD === 'fairy aura') && safeMvT === 'fairy') bpMods.push(0x1548); 
-    if ((p.habA === 'dark aura' || p.habD === 'dark aura') && safeMvT === 'dark') bpMods.push(0x1548);
+    if ((p.habA === 'fairy aura' || p.habA === 'fairy-aura' || p.habD === 'fairy aura' || p.habD === 'fairy-aura') && safeMvT === 'fairy') bpMods.push(0x1548);
+    if ((p.habA === 'dark aura' || p.habA === 'dark-aura' || p.habD === 'dark aura' || p.habD === 'dark-aura') && safeMvT === 'dark') bpMods.push(0x1548);
     if (p.hh) bpMods.push(0x1800);
-
     let isDoublePower = false;
-  
-      if (mvName === "Facade" && (p.burn || p.poison)) {
-          isDoublePower = true;
-      }
-      else if (mvName === "Brine") {
-  
-          isDoublePower = false;
-      }
-      else if (["Venoshock", "Barb Barrage"].includes(mvName)) {
-  
-          isDoublePower = false;
-      }
-      else if (["Retaliate", "Fusion Bolt", "Fusion Flare", "Lash Out"].includes(mvName)) {
-  
-          isDoublePower = false;
-      }
-  
-      if (isDoublePower) {
-          bpMods.push(0x2000);
-      }
 
-    if (p.habA === 'sand force' && p.clima === 'sand' && ['rock', 'ground', 'steel'].includes(safeMvT)) bpMods.push(0x14CD); 
+    if (mvName === "Facade" && (p.burn || p.poison)) {
+        isDoublePower = true;
+    }
+    else if (mvName === "Brine") {
+        isDoublePower = false;
+    }
+    else if (["Venoshock", "Barb Barrage"].includes(mvName)) {
+        isDoublePower = false;
+    }
+    else if (["Retaliate", "Fusion Bolt", "Fusion Flare", "Lash Out"].includes(mvName)) {
+        isDoublePower = false;
+    }
 
-    const mvData = MVDB[mvName] || {};
+    if (isDoublePower) {
+        bpMods.push(0x2000);
+    }
 
-    if (p.habA === 'sheer force' && mvData.hasSecondaryEffect) bpMods.push(0x14CD); 
+    if (p.habA === 'sand force' && p.clima === 'sand' && ['rock', 'ground', 'steel'].includes(safeMvT)) bpMods.push(0x14CD);
+
+    const mvData = (typeof MVDB !== 'undefined' && MVDB) ? (MVDB[mvName] || mvSel || {}) : (mvSel || {});
+
+    if (p.habA === 'sheer force' && mvData.hasSecondaryEffect) bpMods.push(0x14CD);
     if (p.habA === 'tough claws' && (mvData.makesContact || isPhysical)) bpMods.push(0x14CD);
-    if (p.habA === 'reckless' && (mvData.hasRecoil || ['Double-Edge', 'Brave Bird', 'Flare Blitz', 'Head Smash', 'Wood Hammer', 'Wave Crash'].includes(mvName))) bpMods.push(0x1333); // Audaz x1.2
-    if (p.habA === 'iron fist' && (mvData.isPunch || ['Bullet Punch', 'Drain Punch', 'Fire Punch', 'Ice Punch', 'Thunder Punch', 'Mach Punch'].includes(mvName))) bpMods.push(0x1333); // Puño Férreo x1.2
-    if (p.habA === 'strong jaw' && (mvData.isBite || ['Crunch', 'Bite', 'Psychic Fangs', 'Ice Fang', 'Fire Fang', 'Thunder Fang'].includes(mvName))) bpMods.push(0x1800); // Mandíbula Fuerte x1.5
-    if (p.habA === 'mega launcher' && (mvData.isPulse || ['Dragon Pulse', 'Water Pulse', 'Dark Pulse', 'Aura Sphere'].includes(mvName))) bpMods.push(0x1800); // Megadisparador x1.5
-    if (p.habA === 'sharpness' && (mvData.isSlice || ['Leaf Blade', 'Sacred Sword', 'Aqua Cutter', 'Psycho Cut', 'Night Slash', 'X-Scissor'].includes(mvName))) bpMods.push(0x1555); // Agudeza x1.5
-    if (p.habA === 'punk rock' && (mvData.isSound || ['Hyper Voice', 'Overdrive', 'Boomburst', 'Bug Buzz', 'Snarl', 'Torch Song'].includes(mvName))) bpMods.push(0x14CD); // Punk Rock Atacante x1.3
+    if (p.habA === 'reckless' && (mvData.hasRecoil || ['Double-Edge', 'Brave Bird', 'Flare Blitz', 'Head Smash', 'Wood Hammer', 'Wave Crash'].includes(mvName))) bpMods.push(0x1333);
+    if (p.habA === 'iron fist' && (mvData.isPunch || ['Bullet Punch', 'Drain Punch', 'Fire Punch', 'Ice Punch', 'Thunder Punch', 'Mach Punch'].includes(mvName))) bpMods.push(0x1333);
+    if (p.habA === 'strong jaw' && (mvData.isBite || ['Crunch', 'Bite', 'Psychic Fangs', 'Ice Fang', 'Fire Fang', 'Thunder Fang'].includes(mvName))) bpMods.push(0x1800);
+    if (p.habA === 'mega launcher' && (mvData.isPulse || ['Dragon Pulse', 'Water Pulse', 'Dark Pulse', 'Aura Sphere'].includes(mvName))) bpMods.push(0x1800);
+    if (p.habA === 'sharpness' && (mvData.isSlice || ['Leaf Blade', 'Sacred Sword', 'Aqua Cutter', 'Psycho Cut', 'Night Slash', 'X-Scissor'].includes(mvName))) bpMods.push(0x1555);
+    if (p.habA === 'punk rock' && (mvData.isSound || ['Hyper Voice', 'Overdrive', 'Boomburst', 'Bug Buzz', 'Snarl', 'Torch Song'].includes(mvName))) bpMods.push(0x14CD);
 
     const mvT_Capitalized = safeMvT.charAt(0).toUpperCase() + safeMvT.slice(1);
-    if (typeof getItemBoostType === 'function' && getItemBoostType(itemA) === mvT_Capitalized) bpMods.push(0x1333); 
-    if (typeof getItemDualTypeBoost === 'function' && getItemDualTypeBoost(itemA, atkPoke?.name).includes(mvT_Capitalized)) bpMods.push(0x1333); 
-    if (itemA === 'Muscle Band' && isPhysical) bpMods.push(0x1199); 
-    if (itemA === 'Wise Glasses' && isSpecial) bpMods.push(0x1199);  
-    if (itemA === 'Punching Glove' && (mvData.isPunch || isPhysical)) bpMods.push(0x119A); 
+    if (typeof getItemBoostType === 'function' && getItemBoostType(itemA) === mvT_Capitalized) bpMods.push(0x1333);
+    if (typeof getItemDualTypeBoost === 'function' && getItemDualTypeBoost(itemA, atkPoke?.name).includes(mvT_Capitalized)) bpMods.push(0x1333);
+
+    if (itemA === 'Muscle Band' && isPhysical) bpMods.push(0x1199);
+    if (itemA === 'Wise Glasses' && isSpecial) bpMods.push(0x1199);
+    if (itemA === 'Punching Glove' && (mvData.isPunch || isPhysical)) bpMods.push(0x119A);
     if (itemA === `${mvT_Capitalized} Gem`) bpMods.push(0x14CD);
 
     let intermediateBP = Math.max(1, Math.round((rawBP * chainMods(bpMods)) / 0x1000));
     if (p.habA === 'technician' && intermediateBP <= 60) {
-        bpMods.push(0x1800); 
+        bpMods.push(0x1800);
     }
 
     let finalBP = Math.max(1, Math.round((rawBP * chainMods(bpMods)) / 0x1000));
     if (p.campo === 'electric' && mvName === 'Rising Voltage') finalBP *= 2;
     if (p.campo === 'psychic' && mvName === 'Expanding Force') finalBP = 120;
--
+
     let dmgStep = Math.floor(Math.floor(Math.floor(2 * p.lvl / 5 + 2) * finalBP * atk) / def);
     let baseDamage = Math.floor(dmgStep / 50) + 2;
 
     const results = [];
     const tMult = typeMult(safeMvT, defTs, defTera);
 
-  
     for (let i = 0; i < 16; i++) {
         let d = Math.floor(baseDamage * (85 + i) / 100);
 
-        if (p.spread && MVDB[mvName]?.isSpread) d = Math.round((d * 0x0C00) / 0x1000);
+        if (p.spread && mvSel && mvSel.isSpread) d = Math.round((d * 0x0C00) / 0x1000);
 
-        if (p.clima === 'sun') {
-            if (safeMvT === 'fire') d = Math.round((d * 0x1800) / 0x1000); 
-            else if (safeMvT === 'water') d = Math.round((d * 0x0800) / 0x1000); 
+        if (p.clima === 'sun' || p.habA === 'mega sol' || p.habA === 'mega-sol') {
+            if (safeMvT === 'fire' || mvName === 'Hydro Steam') d = Math.round((d * 0x1800) / 0x1000);
+            else if (safeMvT === 'water' && p.clima === 'sun') d = Math.round((d * 0x0800) / 0x1000);
         }
         if (p.clima === 'rain') {
-            if (safeMvT === 'water') d = Math.round((d * 0x1800) / 0x1000); 
-            else if (safeMvT === 'fire') d = Math.round((d * 0x0800) / 0x1000); 
+            if (safeMvT === 'water') d = Math.round((d * 0x1800) / 0x1000);
+            else if (safeMvT === 'fire') d = Math.round((d * 0x0800) / 0x1000);
         }
 
-        if (p.crit) d = Math.floor(d * (p.habA === 'sniper' ? 2.25 : 1.5)); 
+        if (p.crit) d = Math.floor(d * (p.habA === 'sniper' ? 2.25 : 1.5));
 
-        d = Math.floor(d * (atkTs.includes(safeMvT) ? 1.5 : 1)); 
+        // ADAPTABILITY (ADAPTABLE): Eleva el STAB a x2.0 si se cumple la condición, de lo contrario aplica el x1.5 regular
+        const hasSTAB = atkTs.includes(safeMvT);
+        if (hasSTAB) {
+            d = Math.floor(d * (p.habA === 'adaptability' ? 2.0 : 1.5));
+        }
+
         d = Math.floor(d * tMult);
 
         let finalMods = [];
-        if (p.burn && isPhysical && p.habA !== 'guts' && mvName !== 'Facade') finalMods.push(0x0800); 
+        if (p.burn && isPhysical && p.habA !== 'guts' && mvName !== 'Facade') finalMods.push(0x0800);
         if (p.pantalla === 'reflect' && isPhysical && !p.crit) finalMods.push(0x0AAC);
-        if (p.pantalla === 'ls' && isSpecial && !p.crit) finalMods.push(0x0AAC); 
-        if (p.compie !== 1) finalMods.push(0x0C00); 
+        if (p.pantalla === 'ls' && isSpecial && !p.crit) finalMods.push(0x0AAC);
+        if (p.compie !== 1) finalMods.push(0x0C00);
 
         if (itemA === 'Life Orb') finalMods.push(0x14CC);
-        if (itemA === 'Expert Belt' && tMult > 1) finalMods.push(0x1333); 
+        if (itemA === 'Expert Belt' && tMult > 1) finalMods.push(0x1333);
 
-        if (p.habA === 'tinted lens' && tMult < 1) finalMods.push(0x2000); 
-        if (['solid-rock', 'filter', 'prism-armor'].includes(p.habD) && tMult > 1) finalMods.push(0xC00); 
+        if (p.habA === 'tinted lens' && tMult < 1) finalMods.push(0x2000);
+        if (['solid-rock', 'filter', 'prism-armor'].includes(p.habD) && tMult > 1) finalMods.push(0xC00);
         if (isFirstHit && ['multiscale', 'shadow-shield'].includes(p.habD)) finalMods.push(0x800);
-        if (p.habD === 'ice scales' && isSpecial) finalMods.push(0x800); 
-        if (p.habD === 'punk rock' && ['Hyper Voice', 'Overdrive', 'Boomburst', 'Bug Buzz', 'Snarl', 'Torch Song'].includes(mvName)) finalMods.push(0x800); 
-        
+        if (p.habD === 'ice scales' && isSpecial) finalMods.push(0x800);
+        if (p.habD === 'punk rock' && ['Hyper Voice', 'Overdrive', 'Boomburst', 'Bug Buzz', 'Snarl', 'Torch Song'].includes(mvName)) finalMods.push(0x800);
+
         if (p.habD === 'fluffy') {
-            if (safeMvT === 'fire') finalMods.push(0x2000); 
-            if (isPhysical || mvData.makesContact) finalMods.push(0x800); 
+            if (safeMvT === 'fire') finalMods.push(0x2000);
+            if (isPhysical || mvData.makesContact) finalMods.push(0x800);
         }
 
         if (isFirstHit && typeof getBerryResistType === 'function' && getBerryResistType(itemD) === mvT_Capitalized && (tMult > 1 || safeMvT === 'normal')) {
@@ -1430,7 +1472,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
         let finalM = chainMods(finalMods);
         d = Math.round((d * finalM) / 0x1000);
-        results.push(Math.max(1, d)); 
+        results.push(Math.max(1, d));
     }
     return results;
 }
@@ -1521,7 +1563,7 @@ function readP() {
     lvl:      parseInt(document.getElementById('atk-lvl').value) || 50,
     clima:    document.getElementById('clima').value,
     campo:    document.getElementById('campo').value,
-    pantalla: document.getElementById('pantalla').value, 
+    pantalla: document.getElementById('pantalla').value,
     spread:   document.getElementById('chk-spread').checked,
     crit:     document.getElementById('chk-crit').checked,
     burn:     document.getElementById('chk-burn').checked,
@@ -1549,13 +1591,16 @@ function getAtkStat(eidx) {
   const _abilityA = document.getElementById('hab-a').value;
   const _isBurned = document.getElementById('chk-burn').checked;
   const _isPoisoned = document.getElementById('chk-poison').checked;
+  const _clima = document.getElementById('clima').value;
 
 
   if (document.getElementById('hab-a').value === 'huge power' && !isSp) stat *= 2;
   if (_abilityA === 'guts' && (_isBurned || _isPoisoned) && !isSp) stat = Math.floor(stat * 1.5);
   if (_abilityA === 'toxic boost' && _isPoisoned && !isSp) stat = Math.floor(stat * 1.5);
   if (_abilityA === 'flare boost' && _isBurned && isSp) stat = Math.floor(stat * 1.5);
-  if (document.getElementById('hab-d').value === 'vessel-tablets') stat = Math.floor(stat * 0.75);
+  if (_abilityA === 'solar power' && _clima === 'sun' && isSp) {
+    stat = Math.floor(stat * 1.5);
+  }
 
   const itemA = document.getElementById('obj-a').value;
   if (itemA === 'Choice Band' && !isSp) stat = Math.floor(stat * 1.5);
@@ -1609,7 +1654,7 @@ document.getElementById('def-form-select').addEventListener('change', (e) => {
 
 function fillAbilities(selectId, abilities) {
   const sel = document.getElementById(selectId);
-  sel.innerHTML = '<option value="none">N/A</option>'; 
+  sel.innerHTML = '<option value="none">N/A</option>';
 
   if (!abilities || !Array.isArray(abilities)) return;
 
@@ -1630,6 +1675,13 @@ function fillAbilities(selectId, abilities) {
 
 function updateResult() {
   if (!atkPoke || !defPoke || !mvSel) return;
+  const habAEl = document.getElementById('hab-a');
+  if (habAEl && (habAEl.value === 'mega sol')) {
+    const climaSelect = document.getElementById('clima');
+    if (climaSelect) {
+      climaSelect.value = 'sun';
+    }
+  }
 
   if (mvSel.cat === 't') {
     document.getElementById('r-min').textContent = '0';
@@ -1657,6 +1709,7 @@ function updateResult() {
 
   const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
   const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
+
 
   const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
 
@@ -1720,7 +1773,7 @@ function updateLiveMatrix() {
         const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
 
         const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
-        const totalSP = hi + di; 
+        const totalSP = hi + di;
 
         const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
         const mx = arrWithBerry[15] + (arrNoBerry[15] * (hits - 1));
@@ -1776,7 +1829,7 @@ function pkRenderItem(name) {
   const d = PKDB[name];
   if (!d) return name;
 
-  const types = d[7]; 
+  const types = d[7];
   const sprId = d[8];
 
   return `<img src="${spriteUrl(sprId, name)}" loading="lazy" alt="">
@@ -1807,11 +1860,11 @@ function changeTheme(theme) {
       '--bg': '#0d130e', '--bg2': '#141f17', '--bg3': '#1c2e21', '--bd': '#2e4a36',
       '--a': '#ff3355', '--t': '#e1ebe3', '--t2': '#7fa387'
     },
-    'gen2': { 
+    'gen2': {
       '--bg': '#f4f0e6', '--bg2': '#eae4d8', '--bg3': '#dfd7c6', '--bd': '#bfae93',
       '--a': '#c59b27', '--t': '#2c2a29', '--t2': '#66615c'
     },
-    'gen3': { 
+    'gen3': {
       '--bg': '#0a111c', '--bg2': '#111c2e', '--bg3': '#18273f', '--bd': '#293e5e',
       '--a': '#ff4466', '--t': '#e6f0fa', '--t2': '#8fa3c2'
     },
