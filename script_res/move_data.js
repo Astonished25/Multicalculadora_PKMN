@@ -1,4 +1,4 @@
-var MOVES_RBY = {
+const MVDB = {
     'Struggle': {
         bp: 50,
         type: 'Normal',
@@ -24,18 +24,20 @@ var MOVES_RBY = {
         makesContact: true,
     },
     'Blizzard': {
-        bp: 120,
+        bp: 110,
         type: 'Ice',
         category: 'Special',
         hasSecondaryEffect: true,
-        isSpread: true
+        isSpread: true,
+        isWind: true,
     },
     'Body Slam': {
         bp: 85,
         type: 'Normal',
         category: 'Physical',
         makesContact: true,
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        miniDoubleBP: true,
     },
     'Bubble Beam': {
         bp: 65,
@@ -50,13 +52,13 @@ var MOVES_RBY = {
         makesContact: true,
     },
     'Crabhammer': {
-        bp: 90,
+        bp: 100,
         type: 'Water',
         category: 'Physical',
         makesContact: true,
     },
     'Dig': {
-        bp: 100,
+        bp: 80,
         type: 'Ground',
         category: 'Physical',
         makesContact: true,
@@ -69,11 +71,11 @@ var MOVES_RBY = {
         hitRange: 2
     },
     'Double-Edge': {
-        bp: 100,
+        bp: 120,
         type: 'Normal',
         category: 'Physical',
         makesContact: true,
-        recoilHP: [1, 4],
+        recoilHP: [1, 3],
     },
     'Drill Peck': {
         bp: 80,
@@ -86,17 +88,16 @@ var MOVES_RBY = {
         type: 'Ground',
         category: 'Physical',
         isSpread: true,
-        isGen3Spread: true,
     },
     'Explosion': {
-        bp: 170,
+        bp: 250,
         type: 'Normal',
         category: 'Physical',
         isSpread: true,
         isGen3Spread: true,
     },
     'Fire Blast': {
-        bp: 120,
+        bp: 110,
         type: 'Fire',
         category: 'Special',
         hasSecondaryEffect: true
@@ -110,25 +111,25 @@ var MOVES_RBY = {
         isPunch: true
     },
     'Fire Spin': {
-        bp: 15,
+        bp: 35,
         type: 'Fire',
         category: 'Special',
     },
     'Flamethrower': {
-        bp: 95,
+        bp: 90,
         type: 'Fire',
         category: 'Special',
         hasSecondaryEffect: true
     },
     'High Jump Kick': {
-        bp: 85,
+        bp: 130,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
         hasCrash: true
     },
     'Hydro Pump': {
-        bp: 120,
+        bp: 110,
         type: 'Water',
         category: 'Special'
     },
@@ -138,7 +139,7 @@ var MOVES_RBY = {
         category: 'Special'
     },
     'Ice Beam': {
-        bp: 95,
+        bp: 90,
         type: 'Ice',
         category: 'Special',
         hasSecondaryEffect: true
@@ -165,7 +166,7 @@ var MOVES_RBY = {
         category: 'Special'
     },
     'Pin Missile': {
-        bp: 14,
+        bp: 25,
         type: 'Bug',
         category: 'Physical',
         hitRange: [2, 5],
@@ -189,6 +190,7 @@ var MOVES_RBY = {
         type: 'Grass',
         category: 'Physical',
         isSpread: true,
+        isSlice: true,
     },
     'Rock Slide': {
         bp: 75,
@@ -204,7 +206,7 @@ var MOVES_RBY = {
         makesContact: true
     },
     'Self-Destruct': {
-        bp: 130,
+        bp: 200,
         type: 'Normal',
         category: 'Physical',
         isSpread: true,
@@ -214,13 +216,15 @@ var MOVES_RBY = {
         bp: 140,
         type: 'Flying',
         category: 'Physical',
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        zp: 200
     },
     'Slash': {
         bp: 70,
         type: 'Normal',
         category: 'Physical',
         makesContact: true,
+        isSlice: true,
     },
     'Sludge': {
         bp: 65,
@@ -236,19 +240,19 @@ var MOVES_RBY = {
         recoilHP: [1, 4],
     },
     'Surf': {
-        bp: 95,
+        bp: 90,
         type: 'Water',
         category: 'Special',
         isSpread: true
     },
     'Tackle': {
-        bp: 35,
+        bp: 40,
         type: 'Normal',
         category: 'Physical',
         makesContact: true
     },
     'Thunder': {
-        bp: 120,
+        bp: 110,
         type: 'Electric',
         category: 'Special',
         hasSecondaryEffect: true
@@ -262,7 +266,7 @@ var MOVES_RBY = {
         isPunch: true
     },
     'Thunderbolt': {
-        bp: 95,
+        bp: 90,
         type: 'Electric',
         category: 'Special',
         hasSecondaryEffect: true
@@ -324,7 +328,7 @@ var MOVES_RBY = {
         category: 'Status'
     },
     'Growth': {
-        type: 'Normal',
+        type: 'Grass',
         category: 'Status'
     },
     'Stun Spore': {
@@ -453,7 +457,7 @@ var MOVES_RBY = {
     },
     'Karate Chop': {
         bp: 50,
-        type: 'Normal',
+        type: 'Fighting',
         category: 'Physical',
         makesContact: true,
     },
@@ -514,16 +518,18 @@ var MOVES_RBY = {
         bp: 50,
         type: 'Normal',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Gust': {
         bp: 40,
-        type: 'Normal',
+        type: 'Flying',
         category: 'Special',
         canDouble: true,
+        isWind: true,
     },
     'Wing Attack': {
-        bp: 35, 
+        bp: 60,
         type: 'Flying',
         category: 'Physical',
         makesContact: true,
@@ -535,7 +541,7 @@ var MOVES_RBY = {
         makesContact: true,
     },
     'Vine Whip': {
-        bp: 35,
+        bp: 45,
         type: 'Grass',
         category: 'Physical',
         makesContact: true,
@@ -562,7 +568,7 @@ var MOVES_RBY = {
         hasSecondaryEffect: true
     },
     'Sand Attack': {
-        type: 'Normal',
+        type: 'Ground',
         category: 'Status',
     },
     'Horn Attack': {
@@ -601,7 +607,7 @@ var MOVES_RBY = {
     },
     'Bite': {
         bp: 60,
-        type: 'Normal', 
+        type: 'Normal',
         category: 'Physical',
         makesContact: true,
         hasSecondaryEffect: true,
@@ -670,7 +676,7 @@ var MOVES_RBY = {
         category: 'Status',
     },
     'Petal Dance': {
-        bp: 70,
+        bp: 120,
         type: 'Grass',
         category: 'Special',
         makesContact: true,
@@ -737,12 +743,6 @@ var MOVES_RBY = {
         type: 'Normal',
         category: 'Status',
     },
-    //'Bide': {
-    //    bp: 1,
-    //    type: 'Normal',
-    //    category: 'Physical',
-    //    makesContact: true,
-    //},
     'Metronome': {
         type: 'Normal',
         category: 'Status',
@@ -758,14 +758,14 @@ var MOVES_RBY = {
         isBullet: true,
     },
     'Lick': {
-        bp: 20,
+        bp: 30,
         type: 'Ghost',
         category: 'Physical',
         makesContact: true,
         hasSecondaryEffect: true
     },
     'Smog': {
-        bp: 20,
+        bp: 30,
         type: 'Poison',
         category: 'Special',
         hasSecondaryEffect: true
@@ -783,7 +783,7 @@ var MOVES_RBY = {
         isSpread: true,
     },
     'Skull Bash': {
-        bp: 100,
+        bp: 130,
         type: 'Normal',
         category: 'Physical',
         makesContact: true,
@@ -820,7 +820,7 @@ var MOVES_RBY = {
         isBullet: true,
     },
     'Leech Life': {
-        bp: 20,
+        bp: 80,
         type: 'Bug',
         category: 'Physical',
         makesContact: true,
@@ -828,7 +828,7 @@ var MOVES_RBY = {
         drainHP: [1, 2]
     },
     'Bubble': {
-        bp: 20,
+        bp: 40,
         type: 'Water',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -846,11 +846,6 @@ var MOVES_RBY = {
         type: 'Normal',
         category: 'Status',
     },
-    //'Psywave': {
-    //    bp: 1,
-    //    type: 'Psychic',
-    //    category: 'Special',
-    //},
     'Splash': {
         type: 'Normal',
         category: 'Status',
@@ -893,20 +888,20 @@ var MOVES_RBY = {
         makesContact: true,
     },
     'Jump Kick': {
-        bp: 70,
+        bp: 100,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
         hasCrash: true
     },
     'Thrash': {
-        bp: 90,
+        bp: 120,
         type: 'Normal',
         category: 'Physical',
         makesContact: true
     },
     'Low Kick': {
-        bp: 50,
+        bp: 1,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
@@ -920,38 +915,23 @@ var MOVES_RBY = {
         hasSecondaryEffect: true
     },
     'Fly': {
-        bp: 70,
+        bp: 90,
         type: 'Flying',
         category: 'Physical',
         makesContact: true,
     },
-};
-
-var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
-    //Past move changes
-    '(No Move)': { type: 'Typeless', },
-    'Karate Chop': { type: 'Fighting', },
-    'Gust': { type: 'Flying', },
-    'Sand Attack': { type: 'Ground', },
-    'Bite': { type: 'Dark', },
-    'Wing Attack': { bp: 60, },
-    'Dig': { bp: 60, },
-    'Double-Edge': { bp: 120 },
-    'Explosion': { bp: 250 },
-    'Self-Destruct': { bp: 200 },
-
-    //GSC moves
     'Aeroblast': {
         bp: 100,
         type: 'Flying',
-        category: 'Special'
+        category: 'Special',
+        isWind: true,
     },
     'Ancient Power': {
         bp: 60,
         type: 'Rock',
         category: 'Special',
         hasSecondaryEffect: true,
-        makesContact: true,
+        makesContact: false,
     },
     'Cross Chop': {
         bp: 100,
@@ -986,6 +966,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         bp: 60,
         type: 'Dark',
         category: 'Physical',
+        makesContact: true,
     },
     'Flail': {
         bp: 1,
@@ -1009,7 +990,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         zp: 160
     },
     'Giga Drain': {
-        bp: 60,
+        bp: 75,
         type: 'Grass',
         category: 'Special',
         isHealing: true,
@@ -1028,82 +1009,82 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         category: 'Special'
     },
     'Hidden Power Bug': {
-        bp: 70,
+        bp: 60,
         type: 'Bug',
         category: 'Special'
     },
     'Hidden Power Dark': {
-        bp: 70,
+        bp: 60,
         type: 'Dark',
         category: 'Special'
     },
     'Hidden Power Dragon': {
-        bp: 70,
+        bp: 60,
         type: 'Dragon',
         category: 'Special'
     },
     'Hidden Power Electric': {
-        bp: 70,
+        bp: 60,
         type: 'Electric',
         category: 'Special'
     },
     'Hidden Power Fighting': {
-        bp: 70,
+        bp: 60,
         type: 'Fighting',
         category: 'Special'
     },
     'Hidden Power Fire': {
-        bp: 70,
+        bp: 60,
         type: 'Fire',
         category: 'Special'
     },
     'Hidden Power Flying': {
-        bp: 70,
+        bp: 60,
         type: 'Flying',
         category: 'Special'
     },
     'Hidden Power Ghost': {
-        bp: 70,
+        bp: 60,
         type: 'Ghost',
         category: 'Special'
     },
     'Hidden Power Grass': {
-        bp: 70,
+        bp: 60,
         type: 'Grass',
         category: 'Special'
     },
     'Hidden Power Ground': {
-        bp: 70,
+        bp: 60,
         type: 'Ground',
         category: 'Special'
     },
     'Hidden Power Ice': {
-        bp: 70,
+        bp: 60,
         type: 'Ice',
         category: 'Special'
     },
     'Hidden Power Poison': {
-        bp: 70,
+        bp: 60,
         type: 'Poison',
         category: 'Special'
     },
     'Hidden Power Psychic': {
-        bp: 70,
+        bp: 60,
         type: 'Psychic',
         category: 'Special'
     },
     'Hidden Power Rock': {
-        bp: 70,
+        bp: 60,
         type: 'Rock',
         category: 'Special'
     },
     'Hidden Power Steel': {
-        bp: 70,
+        bp: 60,
         type: 'Steel',
         category: 'Special'
     },
     'Hidden Power Water': {
-        bp: 70,
+        bp: 60,
         type: 'Water',
         category: 'Special'
     },
@@ -1112,7 +1093,8 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         type: 'Ice',
         category: 'Special',
         hasSecondaryEffect: true,
-        isSpread: true
+        isSpread: true,
+        isWind: true,
     },
     'Iron Tail': {
         bp: 100,
@@ -1143,9 +1125,10 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         canDouble: true,
     },
     'Rapid Spin': {
-        bp: 20,
+        bp: 50,
         type: 'Normal',
         category: 'Physical',
+        hasSecondaryEffect: true,
         makesContact: true
     },
     'Return': {
@@ -1185,7 +1168,8 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
     'Solar Beam': {
         bp: 120,
         type: 'Grass',
-        category: 'Special'
+        category: 'Special',
+        zp: 200
     },
     'Steel Wing': {
         bp: 70,
@@ -1201,7 +1185,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         makesContact: true
     },
     'Zap Cannon': {
-        bp: 100,
+        bp: 120,
         type: 'Electric',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -1216,7 +1200,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         category: 'Status'
     },
     'Curse': {
-        type: '???',
+        type: 'Ghost',
         category: 'Status',
         costHP: [1, 2, 'roundDown']
     },
@@ -1272,7 +1256,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         category: 'Status'
     },
     'Charm': {
-        type: 'Normal',
+        type: 'Fairy',
         category: 'Status'
     },
     'Swagger': {
@@ -1320,7 +1304,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         //isHealing: true,
     },
     'Moonlight': {
-        type: 'Normal',
+        type: 'Fairy',
         category: 'Status',
         //isHealing: true,
     },
@@ -1357,7 +1341,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         category: 'Status',
     },
     'Sweet Kiss': {
-        type: 'Normal',
+        type: 'Fairy',
         category: 'Status',
     },
     'Lock-On': {
@@ -1382,7 +1366,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         zp: 120,
     },
     'Snore': {
-        bp: 40,
+        bp: 50,
         type: 'Normal',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -1409,14 +1393,14 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         isBullet: true,
     },
     'Bone Rush': {
-        bp: 25,
+        bp: 30,
         type: 'Ground',
         category: 'Physical',
         hitRange: [2, 5],
         zp: 140
     },
     'Outrage': {
-        bp: 90,
+        bp: 120,
         type: 'Dragon',
         category: 'Physical',
         makesContact: true
@@ -1441,24 +1425,13 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         hasSecondaryEffect: true
     },
     'Fury Cutter': {
-        bp: 10,
+        bp: 40,
         type: 'Bug',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
-    //'Present': {
-    //    bp: 1,
-    //    type: 'Normal',
-    //    category: 'Physical',
-    //},
-    //'Magnitude': {
-    //    bp: 1,
-    //    type: 'Ground',
-    //    category: 'Physical',
-    //    isSpread: true,
-    //    isGen3Spread: true,
-    //    zp: 140
-    //},
+
     'Dragon Breath': {
         bp: 60,
         type: 'Dragon',
@@ -1470,7 +1443,8 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         type: 'Steel',
         category: 'Physical',
         makesContact: true,
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        isSlice: true,
     },
     'Vital Throw': {
         bp: 70,
@@ -1485,6 +1459,7 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         hasSecondaryEffect: true,
         isSpread: true,
         canDouble: true,
+        isWind: true,
     },
     'Mirror Coat': {
         bp: 1,
@@ -1493,47 +1468,44 @@ var MOVES_GSC = $.extend(true, {}, MOVES_RBY, {
         usesOppMoves: true,
     },
     'Future Sight': {
-        bp: 80,
+        bp: 120,
         type: 'Psychic',
         category: 'Special',
     },
     'Rock Smash': {
-        bp: 20,
+        bp: 40,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
         hasSecondaryEffect: true,
     },
     'Whirlpool': {
-        bp: 15,
+        bp: 35,
         type: 'Water',
         category: 'Special',
     },
     'Beat Up': {
-        bp: 10,
+        bp: 14,
         type: 'Dark',
         category: 'Physical',
         hitRange: [1, 6],
     },
-});
 
-var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
-    //Past move changes
-    'Low Kick': { bp: 1, },
-    'Double-Edge': { recoilHP: [1, 3], },
-
-    //RSEFRLG moves
     'Aerial Ace': {
         bp: 60,
         type: 'Flying',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Air Cutter': {
-        bp: 55,
+        bp: 60,
         type: 'Flying',
         category: 'Special',
-        isSpread: true
+        isSpread: true,
+        isSlice: true,
+        isWind: true,
+
     },
     'Blast Burn':{
         bp: 150,
@@ -1562,7 +1534,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         ignoresScreens: true,
     },
     'Doom Desire': {
-        bp: 120,
+        bp: 140,
         type: 'Steel',
         category: 'Special'
     },
@@ -1584,13 +1556,14 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         type: 'Psychic',
         category: 'Special',
         hasSecondaryEffect: true,
-        miniDoubleBP: true,
+        miniDoubleBP: false,
     },
     'Facade': {
         bp: 70,
         type: 'Normal',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        ignoresBurn: true,
     },
     'Fake Out': {
         bp: 40,
@@ -1598,6 +1571,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         category: 'Physical',
         hasSecondaryEffect: true,
         isPriority: true,
+        makesContact: true,
     },
     'Focus Punch': {
         bp: 150,
@@ -1607,32 +1581,34 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         isPunch: true
     },
     'Heat Wave': {
-        bp: 100,
+        bp: 95,
         type: 'Fire',
         category: 'Special',
         hasSecondaryEffect: true,
-        isSpread: true
+        isSpread: true,
+        isWind: true,
     },
     'Knock Off': {
-        bp: 20,
+        bp: 65,
         type: 'Dark',
         category: 'Physical',
         makesContact: true
     },
     'Leaf Blade': {
-        bp: 70,
+        bp: 90,
         type: 'Grass',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Luster Purge': {
-        bp: 70,
+        bp: 95,
         type: 'Psychic',
         category: 'Special',
         hasSecondaryEffect: true
     },
     'Meteor Mash': {
-        bp: 100,
+        bp: 90,
         type: 'Steel',
         category: 'Physical',
         makesContact: true,
@@ -1640,7 +1616,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         isPunch: true
     },
     'Muddy Water': {
-        bp: 95,
+        bp: 90,
         type: 'Water',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -1653,10 +1629,10 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         hasSecondaryEffect: true
     },
     'Overheat': {
-        bp: 140,
+        bp: 130,
         type: 'Fire',
         category: 'Special',
-        makesContact: true,
+        makesContact: false,
         statChange: ['special attack', -2, 'user'],
     },
     'Poison Fang': {
@@ -1685,10 +1661,11 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         type: 'Rock',
         category: 'Physical',
         hitRange: [2, 5],
+        isBullet: true,
         zp: 140
     },
     'Rock Tomb': {
-        bp: 50,
+        bp: 60,
         type: 'Rock',
         category: 'Physical',
         hasSecondaryEffect: true
@@ -1723,7 +1700,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
-        statChange: ['attack', -1, 'user'], //also lowers defense, but isn't relevant to anything in the calculations
+        statChange: ['attack', -1, 'user'],
     },
     'Volt Tackle': {
         bp: 120,
@@ -1755,7 +1732,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         zp: 160
     },
     'Dive': {
-        bp: 60,
+        bp: 80,
         type: 'Water',
         category: 'Physical',
         makesContact: true,
@@ -1929,7 +1906,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         category: 'Status'
     },
     'Sand Tomb': {
-        bp: 15,
+        bp: 35,
         type: 'Ground',
         category: 'Physical',
     },
@@ -1968,18 +1945,14 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         category: 'Status',
     },
     'Uproar': {
-        bp: 50,
+        bp: 90,
         type: 'Normal',
         category: 'Special',
         isSound: true,
     },
-    //'Spit Up': {
-    //    bp: 1,
-    //    type: 'Normal',
-    //    category: 'Special',
-    //},
+
     'Smelling Salts': {
-        bp: 60,
+        bp: 70,
         type: 'Normal',
         category: 'Physical',
         makesContact: true
@@ -1998,7 +1971,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         hitRange: [2, 5],
     },
     'Mist Ball': {
-        bp: 70,
+        bp: 95,
         type: 'Psychic',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -2017,7 +1990,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         category: 'Physical',
         makesContact: true,
         hasSecondaryEffect: true,
-        miniDoubleBP: true,
+        miniDoubleBP: false,
     },
     'Hyper Voice': {
         bp: 90,
@@ -2030,7 +2003,8 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         bp: 75,
         type: 'Normal',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Astonish': {
         bp: 30,
@@ -2038,7 +2012,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         category: 'Physical',
         makesContact: true,
         hasSecondaryEffect: true,
-        miniDoubleBP: true,
+        miniDoubleBP: false,
     },
     'Silver Wind': {
         bp: 60,
@@ -2054,7 +2028,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         zp: 180
     },
     'Bullet Seed': {
-        bp: 10,
+        bp: 25,
         type: 'Grass',
         category: 'Physical',
         hitRange: [2, 5],
@@ -2062,7 +2036,7 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         zp: 140
     },
     'Icicle Spear': {
-        bp: 10,
+        bp: 25,
         type: 'Ice',
         category: 'Physical',
         hitRange: [2, 5],
@@ -2076,44 +2050,23 @@ var MOVES_ADV = $.extend(true, {}, MOVES_GSC, {
         hasSecondaryEffect: true
     },
     'Covet': {
-        bp: 40,
+        bp: 60,
         type: 'Normal',
         category: 'Physical',
+        makesContact: true,
     },
     'Magical Leaf': {
         bp: 60,
         type: 'Grass',
         category: 'Special',
     },
-});
 
-var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
-    //Past move changes
-    'Fly': { bp: 90, },
-    'High Jump Kick': { bp: 100 },
-    'Jump Kick': { bp: 85, },
-    'Leaf Blade': { bp: 90 },
-    'Outrage': { bp: 120, },
-    'Rock Smash': { bp: 40, },
-    'Zap Cannon': { bp: 120 },
-    'Dive': { bp: 80 },
-    'Dig': { bp: 80, },
-    'Petal Dance': { bp: 90, },
-    'Astonish': { miniDoubleBP: false, },
-    'Extrasensory': { miniDoubleBP: false, },
-    'Needle Arm': { miniDoubleBP: false, },
-    'Feint Attack': { makesContact: true },
-    'Fake Out': { makesContact: true },
-    'Covet': { makesContact: true },
-    'Overheat': { makesContact: false },
-    'Ancient Power': { makesContact: false },
-
-    //DPPt moves
     'Air Slash': {
         bp: 75,
         type: 'Flying',
         category: 'Special',
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        isSlice: true,
     },
     'Aqua Jet': {
         bp: 40,
@@ -2129,14 +2082,14 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         makesContact: true
     },
     'Assurance': {
-        bp: 50,
+        bp: 60,
         type: 'Dark',
         category: 'Physical',
         makesContact: true,
         canDouble: true
     },
     'Aura Sphere': {
-        bp: 90,
+        bp: 80,
         type: 'Fighting',
         category: 'Special',
         isBullet: true,
@@ -2189,7 +2142,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         hasSecondaryEffect: true
     },
     'Chatter': {
-        bp: 60,
+        bp: 65,
         type: 'Flying',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -2206,7 +2159,8 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         type: 'Poison',
         category: 'Physical',
         makesContact: true,
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        isSlice: true,
     },
     'Dark Pulse': {
         bp: 80,
@@ -2230,13 +2184,13 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         hitRange: 2
     },
     'Draco Meteor': {
-        bp: 140,
+        bp: 130,
         type: 'Dragon',
         category: 'Special',
         statChange: ['special attack', -2, 'user'],
     },
     'Dragon Pulse': {
-        bp: 90,
+        bp: 85,
         type: 'Dragon',
         category: 'Special',
         isPulse: true
@@ -2246,10 +2200,11 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         type: 'Dragon',
         category: 'Physical',
         makesContact: true,
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        miniDoubleBP: true,
     },
     'Drain Punch': {
-        bp: 60,
+        bp: 75,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
@@ -2264,7 +2219,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         hasSecondaryEffect: true
     },
     'Energy Ball': {
-        bp: 80,
+        bp: 90,
         type: 'Grass',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -2379,7 +2334,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         category: 'Special'
     },
     'Last Resort': {
-        bp: 130,
+        bp: 140,
         type: 'Normal',
         category: 'Physical',
         makesContact: true
@@ -2392,13 +2347,13 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         isSpread: true
     },
     'Leaf Storm': {
-        bp: 140,
+        bp: 130,
         type: 'Grass',
         category: 'Special',
         statChange: ['special attack', -2, 'user'],
     },
     'Magma Storm': {
-        bp: 120,
+        bp: 100,
         type: 'Fire',
         category: 'Special'
     },
@@ -2419,7 +2374,8 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         bp: 70,
         type: 'Dark',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Payback': {
         bp: 50,
@@ -2442,7 +2398,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         hasSecondaryEffect: true
     },
     'Power Gem': {
-        bp: 70,
+        bp: 80,
         type: 'Rock',
         category: 'Special'
     },
@@ -2455,7 +2411,8 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
     'Psycho Cut': {
         bp: 70,
         type: 'Psychic',
-        category: 'Physical'
+        category: 'Physical',
+        isSlice: true,
     },
     'Punishment': {
         bp: 60,
@@ -2487,13 +2444,15 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         bp: 70,
         type: 'Ghost',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Shadow Force': {
         bp: 120,
         type: 'Ghost',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        miniDoubleBP: false,
     },
     'Shadow Sneak': {
         bp: 40,
@@ -2513,7 +2472,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         category: 'Physical'
     },
     'Sucker Punch': {
-        bp: 80,
+        bp: 70,
         type: 'Dark',
         category: 'Physical',
         makesContact: true,
@@ -2540,7 +2499,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         isPriority: true,
     },
     'Wake-Up Slap': {
-        bp: 60,
+        bp: 70,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true
@@ -2556,7 +2515,8 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         bp: 80,
         type: 'Bug',
         category: 'Physical',
-        makesContact: true
+        makesContact: true,
+        isSlice: true,
     },
     'Zen Headbutt': {
         bp: 80,
@@ -2715,7 +2675,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         //isHealing: true,
     },
     'Feint': {
-        bp: 50,
+        bp: 30,
         type: 'Normal',
         category: 'Physical',
         isPriority: true,
@@ -2770,35 +2730,7 @@ var MOVES_DPP = $.extend(true, {}, MOVES_ADV, {
         category: 'Special',
         hasSecondaryEffect: true
     },
-});
 
-var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
-    //Past move changes
-    'Fire Spin': { bp: 35 },
-    'Sand Tomb': { bp: 35 },
-    'Bullet Seed': { bp: 25, },
-    'Doom Desire': { bp: 140 },
-    'Drain Punch': { bp: 75 },
-    'Feint': { bp: 30, },
-    'Giga Drain': { bp: 75 },
-    'High Jump Kick': { bp: 130 },
-    'Jump Kick': { bp: 100 },
-    'Last Resort': { bp: 140 },
-    'Petal Dance': { bp: 120, },
-    'Tackle': { bp: 50 },
-    'Thrash': { bp: 120, },
-    'Fury Cutter': { bp: 20, },
-    'Future Sight': { bp: 100, },
-    'Whirlpool': { bp: 35, },
-    'Uproar': { bp: 90, },
-    'Icicle Spear': { bp: 25, },
-    'Covet': { bp: 60, },
-    'Beat Up': {
-        bp: 14, //average fully evolved atk. stat is ~90. 90/10 + 5 = 14. c�llate tu boca i'm lazy
-    },
-    'Curse': { type: 'Ghost', },
-
-    //BWB2W2 moves
     'Electroweb': {
         bp: 55,
         type: "Electric",
@@ -2903,7 +2835,7 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         hasSecondaryEffect: true
     },
     'Frost Breath': {
-        bp: 40,
+        bp: 60,
         type: 'Ice',
         category: 'Special',
         alwaysCrit: true
@@ -2921,7 +2853,7 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         canDouble: true,
     },
     'Gear Grind': {
-        bp: 50,
+        bp: 60,
         type: 'Steel',
         category: 'Physical',
         hitRange: 2,
@@ -2947,10 +2879,11 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         type: 'Steel',
         category: 'Physical',
         makesContact: true,
-        zp: 160
+        zp: 160,
+        miniDoubleBP: true,
     },
     'Hex': {
-        bp: 50,
+        bp: 65,
         type: 'Ghost',
         category: 'Special',
         zp: 160
@@ -2964,10 +2897,11 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         drainHP: [1, 2]
     },
     'Hurricane': {
-        bp: 120,
+        bp: 110,
         type: 'Flying',
         category: 'Special',
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        isWind: true,
     },
     'Ice Burn': {
         bp: 140,
@@ -2982,7 +2916,7 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         hasSecondaryEffect: true
     },
     'Incinerate': {
-        bp: 30,
+        bp: 60,
         type: 'Fire',
         category: 'Special',
         isSpread: true
@@ -2994,14 +2928,14 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         hasSecondaryEffect: true
     },
     'Low Sweep': {
-        bp: 60,
+        bp: 65,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
         hasSecondaryEffect: true
     },
     'Night Daze': {
-        bp: 85,
+        bp: 90,
         type: 'Dark',
         category: 'Special',
         hasSecondaryEffect: true
@@ -3023,7 +2957,8 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         type: 'Water',
         category: 'Physical',
         makesContact: true,
-        hasSecondaryEffect: true
+        hasSecondaryEffect: true,
+        isSlice: true,
     },
     'Relic Song': {
         bp: 75,
@@ -3045,7 +2980,8 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
-        ignoresDefenseBoosts: true
+        ignoresDefenseBoosts: true,
+        isSlice: true,
     },
     'Scald': {
         bp: 80,
@@ -3100,21 +3036,21 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         zp: 160
     },
     'Storm Throw': {
-        bp: 40,
+        bp: 60,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
         alwaysCrit: true
     },
     'Struggle Bug': {
-        bp: 30,
+        bp: 50,
         type: "Bug",
         category: "Special",
         isSpread: true,
         hasSecondaryEffect: true
     },
     'Synchronoise': {
-        bp: 70,
+        bp: 120,
         type: 'Psychic',
         category: 'Special',
         isSpread: true
@@ -3147,19 +3083,19 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         recoilHP: [1, 4],
     },
     'Fire Pledge': {
-        bp: 50,
+        bp: 80,
         type: 'Fire',
         category: 'Special',
         isPledge: true
     },
     'Grass Pledge': {
-        bp: 50,
+        bp: 80,
         type: 'Grass',
         category: 'Special',
         isPledge: true
     },
     'Water Pledge': {
-        bp: 50,
+        bp: 80,
         type: 'Water',
         category: 'Special',
         isPledge: true
@@ -3169,6 +3105,7 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         type: 'Fire',
         category: 'Physical',
         makesContact: true,
+        miniDoubleBP: true,
         zp: 160
     },
     'Final Gambit': {
@@ -3178,7 +3115,7 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         zp: 180
     },
     'Techno Blast': {
-        bp: 85,
+        bp: 120,
         type: 'Normal',
         category: 'Special',
     },
@@ -3335,86 +3272,7 @@ var MOVES_BW = $.extend(true, {}, MOVES_DPP, {
         miniDoubleBP: true,
         hasSecondaryEffect: true
     },
-});
 
-var MOVES_XY = $.extend(true, {}, MOVES_BW, {
-    //Past move changes
-    'Air Cutter': { bp: 60 },
-    'Assurance': { bp: 60 },
-    'Aura Sphere': { bp: 80 },
-    'Blizzard': { bp: 110 },
-    'Chatter': { bp: 65 },
-    'Crabhammer': { bp: 100 },
-    'Draco Meteor': { bp: 130 },
-    'Dragon Pulse': { bp: 85 },
-    'Energy Ball': { bp: 90 },
-    'Fire Blast': { bp: 110 },
-    'Flamethrower': { bp: 90 },
-    'Frost Breath': { bp: 60 },
-    'Future Sight': { bp: 120 },
-    'Heat Wave': { bp: 95 },
-    'Hex': { bp: 65 },
-    'Hidden Power Bug': { bp: 60 },
-    'Hidden Power Dark': { bp: 60 },
-    'Hidden Power Dragon': { bp: 60 },
-    'Hidden Power Electric': { bp: 60 },
-    'Hidden Power Fighting': { bp: 60 },
-    'Hidden Power Fire': { bp: 60 },
-    'Hidden Power Flying': { bp: 60 },
-    'Hidden Power Ghost': { bp: 60 },
-    'Hidden Power Grass': { bp: 60 },
-    'Hidden Power Ground': { bp: 60 },
-    'Hidden Power Ice': { bp: 60 },
-    'Hidden Power Poison': { bp: 60 },
-    'Hidden Power Psychic': { bp: 60 },
-    'Hidden Power Rock': { bp: 60 },
-    'Hidden Power Steel': { bp: 60 },
-    'Hidden Power Water': { bp: 60 },
-    'Hurricane': { bp: 110 },
-    'Hydro Pump': { bp: 110 },
-    'Ice Beam': { bp: 90 },
-    'Incinerate': { bp: 60 },
-    'Knock Off': { bp: 65 },
-    'Leaf Storm': { bp: 130 },
-    'Low Sweep': { bp: 65 },
-    'Magma Storm': { bp: 100 },
-    'Meteor Mash': { bp: 90 },
-    'Muddy Water': { bp: 90 },
-    'Overheat': { bp: 130 },
-    'Pin Missile': { bp: 25 },
-    'Power Gem': { bp: 80 },
-    'Rock Tomb': { bp: 60 },
-    'Storm Throw': { bp: 60 },
-    'Struggle Bug': { bp: 50 },
-    'Surf': { bp: 90 },
-    'Synchronoise': { bp: 120 },
-    'Thief': { bp: 60 },
-    'Thunder': { bp: 110 },
-    'Thunderbolt': { bp: 90 },
-    'Wake-Up Slap': { bp: 70 },
-    'Fire Pledge': { bp: 80 },
-    'Grass Pledge': { bp: 80 },
-    'Water Pledge': { bp: 80 },
-    'Techno Blast': { bp: 120, },
-    'Fury Cutter': { bp: 40, },
-    'Future Sight': { bp: 120, },
-    'Vine Whip': { bp: 45, },
-    'Lick': { bp: 30, },
-    'Smog': { bp: 30, },
-    'Skull Bash': { bp: 130, },
-    'Snore': { bp: 50 },
-    'Bubble': { bp: 40, },
-    'Smelling Salts': { bp: 70, },
-    'Charm': { type: 'Fairy', },
-    'Moonlight': { type: 'Fairy', },
-    'Sweet Kiss': { type: 'Fairy', },
-    'Body Slam': { miniDoubleBP: true, },
-    'Dragon Rush': { miniDoubleBP: true },
-    'Shadow Force': { miniDoubleBP: true },
-    'Heat Crash': { miniDoubleBP: true },
-    'Facade': { ignoresBurn: true },
-
-    //XY moves
     'Boomburst': {
         bp: 140,
         type: 'Normal',
@@ -3444,7 +3302,7 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         drainHP: [3, 4]
     },
     'Flying Press': {
-        bp: 80,
+        bp: 100,
         type: 'Fighting',
         category: 'Physical',
         makesContact: true,
@@ -3482,7 +3340,7 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         type: 'Ghost',
         category: 'Physical',
         makesContact: true,
-        miniDoubleBP: true,
+        miniDoubleBP: false,
     },
     'Play Rough': {
         bp: 90,
@@ -3503,7 +3361,7 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
     'Water Shuriken': {
         bp: 15,
         type: 'Water',
-        category: 'Physical',
+        category: 'Special',
         hitRange: [2, 5],
         isPriority: true,
     },
@@ -3515,13 +3373,13 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         isSpread: true,
     },
     'Mystical Fire': {
-        bp: 65,
+        bp: 75,
         type: 'Fire',
         category: 'Special',
         hasSecondaryEffect: true,
     },
     'Parabolic Charge': {
-        bp: 50,
+        bp: 65,
         type: 'Electric',
         category: 'Special',
         isSpread: true,
@@ -3532,7 +3390,8 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         bp: 90,
         type: 'Grass',
         category: 'Physical',
-        isSpread: true
+        isSpread: true,
+        isWind: true,
     },
     'Mat Block': {
         type: 'Fighting',
@@ -3661,7 +3520,7 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         category: 'Special',
     },
     'Fell Stinger': {
-        bp: 30,
+        bp: 50,
         type: 'Bug',
         category: 'Physical',
         makesContact: true
@@ -3670,6 +3529,7 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         bp: 40,
         type: 'Fairy',
         category: 'Special',
+        isWind: true,
     },
     'Hold Back': {
         bp: 40,
@@ -3696,7 +3556,6 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         bp: 80
     },
 
-    //ORAS moves
     'Origin Pulse': {
         bp: 110,
         type: 'Water',
@@ -3722,39 +3581,13 @@ var MOVES_XY = $.extend(true, {}, MOVES_BW, {
         bp: 100
     },
 
-    //Unreleased moves (Thousand Waves and Thousand Arrows not listed because they were usable from Gen 7 onward)
     'Light of Ruin': {
         bp: 140,
         type: 'Fairy',
         category: 'Special',
         recoilHP: [1, 2],
     },
-});
 
-var ZMOVES_LOOKUP = {
-    'Normal':'Breakneck Blitz','Fire':'Inferno Overdrive','Water':'Hydro Vortex',
-    'Electric':'Gigavolt Havoc','Grass':'Bloom Doom','Ghost':'Never-Ending Nightmare',
-    'Dark':'Black Hole Eclipse','Psychic':'Shattered Psyche','Fighting':'All-Out Pummeling',
-    'Steel':'Corkscrew Crash','Ice':'Subzero Slammer','Ground':'Tectonic Rage',
-    'Rock':'Continental Crush','Bug':'Savage Spin-Out','Fairy':'Twinkle Tackle',
-    'Flying':'Supersonic Skystrike','Dragon':'Devastating Drake','Poison':'Acid Downpour'};
-
-var MOVES_SM = $.extend(true, {}, MOVES_XY, {
-    //Past move changes
-    'Leech Life': { bp: 80, },
-    'Mystical Fire': { bp: 75 },
-    'Sucker Punch': { bp: 70, },
-    'Flying Press': { bp: 100, },
-    'Parabolic Charge': { bp: 65 },
-    'Fell Stinger': { bp: 50, },
-    'Tackle': { bp: 40 },
-    'Phantom Force': { miniDoubleBP: false, },
-    'Shadow Force': { miniDoubleBP: false, },
-    'Heavy Slam': { miniDoubleBP: true, },
-    'Rock Blast': { isBullet: true, },
-    'Water Shuriken': { category: 'Special', },
-
-    //SM moves
     'Zing Zap': {
         category: 'Physical',
         type: 'Electric',
@@ -3777,7 +3610,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         category: 'Physical',
         type: 'Ghost',
         makesContact: true,
-        bp: 90,
+        bp: 60,
     },
     'Prismatic Laser': {
         category: 'Special',
@@ -3896,7 +3729,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         category: 'Physical',
         type: 'Dragon',
         makesContact: true,
-        bp: 90,
+        bp: 100,
     },
     'Clanging Scales': {
         category: 'Special',
@@ -3908,14 +3741,14 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
     'Beak Blast': {
         category: 'Physical',
         type: 'Flying',
-        bp: 100,
+        bp: 120,
         isBullet: true,
     },
     'Trop Kick': {
         category: 'Physical',
         type: 'Grass',
         makesContact: true,
-        bp: 70,
+        bp: 85,
         hasSecondaryEffect: true,
     },
     'Core Enforcer': {
@@ -3928,7 +3761,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
     'Revelation Dance':{
         category: 'Special',
         type: 'Normal',
-        bp: 90,
+        bp: 100,
     },
     'Smart Strike':{
         category: 'Physical',
@@ -3940,7 +3773,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         category: 'Physical',
         type: 'Normal',
         makesContact: true,
-        bp: 90,
+        bp: 120,
         zp: 185,
     },
     'Burn Up': {
@@ -3959,7 +3792,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         category: 'Physical',
         type: 'Fire',
         makesContact: true,
-        bp: 80,
+        bp: 90,
         hasSecondaryEffect: true,
         statChange: ['defense', -1, 'target'],
     },
@@ -3975,7 +3808,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         type: 'Steel',
         makesContact: true,
         hasSecondaryEffect: true,
-        bp: 80,
+        bp: 90,
     },
     'Pollen Puff': {
         category: 'Special',
@@ -3995,6 +3828,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         type: 'Grass',
         makesContact: true,
         bp: 125,
+        isSlice: true,
     },
     'High Horsepower': {
         category: 'Physical',
@@ -4013,7 +3847,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         category: 'Physical',
         type: 'Bug',
         makesContact: true,
-        bp: 90,
+        bp: 100,
         isPriority: true,
     },
     'Sparkling Aria': {
@@ -4034,7 +3868,7 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
     'Spirit Shackle': {
         category: 'Physical',
         type: 'Ghost',
-        bp: 80,
+        bp: 90,
         hasSecondaryEffect: true,
     },
     "Nature's Madness":{
@@ -4194,7 +4028,6 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         category: 'Physical',
     },
 
-    //USUM moves
     'Mind Blown': {
         bp: 150,
         type: 'Fire',
@@ -4256,35 +4089,6 @@ var MOVES_SM = $.extend(true, {}, MOVES_XY, {
         hasSecondaryEffect: true,
         //is actually an omniboost, but Parental Bond can't use Z-moves, so it's not relevant to calculations
     },
-});
-
-var MOVES_LGPE = {}; 
-
-['(No Move)',
-    'Pound', 'Karate Chop', 'Double Slap', 'Comet Punch', 'Mega Punch', 'Pay Day', 'Fire Punch', 'Ice Punch', 'Thunder Punch', 'Scratch', 'Vise Grip', 'Guillotine',
-    'Razor Wind', 'Swords Dance', 'Cut', 'Gust', 'Wing Attack', 'Whirlwind', 'Fly', 'Bind', 'Slam', 'Vine Whip', 'Stomp', 'Double Kick', 'Mega Kick', 'Jump Kick',
-    'Rolling Kick', 'Sand Attack', 'Headbutt', 'Horn Attack', 'Fury Attack', 'Horn Drill', 'Tackle', 'Body Slam', 'Wrap', 'Take Down', 'Thrash', 'Double-Edge',
-    'Tail Whip', 'Poison Sting', 'Twineedle', 'Pin Missile', 'Leer', 'Bite', 'Growl', 'Roar', 'Sing', 'Supersonic', 'Sonic Boom', 'Disable', 'Acid', 'Ember',
-    'Flamethrower', 'Mist', 'Water Gun', 'Hydro Pump', 'Surf', 'Ice Beam', 'Blizzard', 'Psybeam', 'Bubble Beam', 'Aurora Beam', 'Hyper Beam', 'Peck', 'Drill Peck',
-    'Submission', 'Low Kick', 'Counter', 'Seismic Toss', 'Strength', 'Absorb', 'Mega Drain', 'Leech Seed', 'Growth', 'Razor Leaf', 'Solar Beam', 'Poison Powder',
-    'Stun Spore', 'Sleep Powder', 'Petal Dance', 'String Shot', 'Dragon Rage', 'Fire Spin', 'Thunder Shock', 'Thunderbolt', 'Thunder Wave', 'Thunder', 'Rock Throw',
-    'Earthquake', 'Fissure', 'Dig', 'Toxic', 'Confusion', 'Psychic', 'Hypnosis', 'Meditate', 'Agility', 'Quick Attack', 'Rage', 'Teleport', 'Night Shade', 'Mimic',
-    'Screech', 'Double Team', 'Recover', 'Harden', 'Minimize', 'Smokescreen', 'Confuse Ray', 'Withdraw', 'Defense Curl', 'Barrier', 'Light Screen', 'Haze', 'Reflect',
-    'Focus Energy', 'Bide', 'Metronome', 'Mirror Move', 'Self-Destruct', 'Egg Bomb', 'Lick', 'Smog', 'Sludge', 'Bone Club', 'Fire Blast', 'Waterfall', 'Clamp',
-    'Swift', 'Skull Bash', 'Spike Cannon', 'Constrict', 'Amnesia', 'Kinesis', 'Soft-Boiled', 'High Jump Kick', 'Glare', 'Dream Eater', 'Poison Gas', 'Barrage',
-    'Leech Life', 'Lovely Kiss', 'Sky Attack', 'Transform', 'Bubble', 'Dizzy Punch', 'Spore', 'Flash', 'Psywave', 'Splash', 'Acid Armor', 'Crabhammer', 'Explosion',
-    'Fury Swipes', 'Bonemerang', 'Rest', 'Rock Slide', 'Hyper Fang', 'Sharpen', 'Conversion', 'Tri Attack', 'Super Fang', 'Slash', 'Substitute', 'Struggle', 'Protect',
-    'Sludge Bomb', 'Outrage', 'Megahorn', 'Encore', 'Iron Tail', 'Crunch', 'Mirror Coat', 'Shadow Ball', 'Fake Out', 'Heat Wave', 'Will-O-Wisp', 'Facade', 'Taunt',
-    'Helping Hand', 'Superpower', 'Brick Break', 'Yawn', 'Bulk Up', 'Calm Mind', 'Roost', 'Feint', 'U-turn', 'Sucker Punch', 'Flare Blitz', 'Poison Jab', 'Dark Pulse',
-    'Air Slash', 'X-Scissor', 'Bug Buzz', 'Dragon Pulse', 'Nasty Plot', 'Ice Shard', 'Flash Cannon', 'Power Whip', 'Stealth Rock', 'Aqua Jet', 'Quiver Dance', 'Foul Play',
-    'Clear Smog', 'Scald', 'Shell Smash', 'Dragon Tail', 'Drill Run', 'Play Rough', 'Moonblast', 'Dazzling Gleam', 'Celebrate',
-].forEach(e => MOVES_LGPE[e] = MOVES_SM[e]);
-
-MOVES_LGPE = $.extend(true, {}, MOVES_LGPE, {
-    'Absorb': { bp: 40 },
-    'Mega Drain': { bp: 75 },
-    'Solar Beam': { bp: 200 },
-    'Sky Attack': { bp: 200 },
 
     'Zippy Zap': {
         bp: 80,
@@ -4370,17 +4174,7 @@ MOVES_LGPE = $.extend(true, {}, MOVES_LGPE, {
         hasSecondaryEffect: true,
         isPunch: true,
     },
-});
 
-var MOVES_SS = $.extend(true, {}, MOVES_SM, {
-    //Past move changes
-    'Multi-Attack': { bp: 120 },
-    'Rapid Spin': {
-        bp: 50,
-        hasSecondaryEffect: true,
-    },
-
-    //LGPE moves
     'Double Iron Bash': {
         bp: 60,
         type: 'Steel',
@@ -4391,14 +4185,13 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         hasSecondaryEffect: true,
     },
 
-    //SwSh moves
     'Dynamax Cannon': {
         bp: 100,
         type: 'Dragon',
         category: 'Special',
     },
     'Snipe Shot': {
-        bp: 80,
+        bp: 85,
         type: 'Water',
         category: 'Special',
     },
@@ -4416,14 +4209,14 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         hitRange: [1, 2]
     },
     'Bolt Beak': {
-        bp: 85,
+        bp: 80,
         type: 'Electric',
         category: 'Physical',
         makesContact: true,
         canDouble: true
     },
     'Fishious Rend': {
-        bp: 85,
+        bp: 80,
         type: 'Water',
         category: 'Physical',
         isBite: true,
@@ -4444,7 +4237,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
     },
     'Snap Trap': {
         bp: 35,
-        type: 'Grass',
+        type: 'Steel',
         category: 'Physical',
         makesContact: true,
     },
@@ -4460,6 +4253,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         type: 'Steel',
         category: 'Physical',
         makesContact: true,
+        isSlice: true,
     },
     'Behemoth Bash': {
         bp: 100,
@@ -4495,14 +4289,14 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         isSpread: true
     },
     'Apple Acid': {
-        bp: 80,
+        bp: 90,
         type: 'Grass',
         category: 'Special',
         hasSecondaryEffect: true,
         statChange: ['special defense', -2, 'target'],
     },
     'Grav Apple': {
-        bp: 80,
+        bp: 90,
         type: 'Grass',
         category: 'Physical',
         hasSecondaryEffect: true,
@@ -4584,164 +4378,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         type: 'Normal',
         category: 'Status',
     },
-    'Max Strike': {
-        type: 'Normal'
-    },
-    'Max Flare': {
-        type: 'Fire'
-    },
-    'Max Hailstorm': {
-        type: 'Ice'
-    },
-    'Max Geyser': {
-        type: 'Water'
-    },
-    'Max Lightning': {
-        type: 'Electric'
-    },
-    'Max Knuckle': {
-        type: 'Fighting'
-    },
-    'Max Overgrowth': {
-        type: 'Grass'
-    },
-    'Max Mindstorm': {
-        type: 'Psychic'
-    },
-    'Max Flutterby': {
-        type: 'Bug'
-    },
-    'Max Ooze': {
-        type: 'Poison'
-    },
-    'Max Airstream': {
-        type: 'Flying'
-    },
-    'Max Wyrmwind': {
-        type: 'Dragon'
-    },
-    'Max Rockfall': {
-        type: 'Rock'
-    },
-    'Max Quake': {
-        type: 'Ground'
-    },
-    'Max Steelspike': {
-        type: 'Steel'
-    },
-    'Max Starfall': {
-        type: 'Fairy'
-    },
-    'Max Phantasm': {
-        type: 'Ghost'
-    },
-    'Max Darkness': {
-        type: 'Dark'
-    },
-    'G-Max Wildfire': {
-        type: 'Fire'
-    },
-    'G-Max Befuddle': {
-        type: 'Bug'
-    },
-    'G-Max Volt Crash': {
-        type: 'Electric'
-    },
-    'G-Max Gold Rush': {
-        type: 'Normal'
-    },
-    'G-Max Chi Strike': {
-        type: 'Fighting'
-    },
-    'G-Max Terror': {
-        type: 'Ghost'
-    },
-    'G-Max Foam Burst': {
-        type: 'Water'
-    },
-    'G-Max Resonance': {
-        type: 'Ice'
-    },
-    'G-Max Cuddle': {
-        type: 'Normal'
-    },
-    'G-Max Replenish': {
-        type: 'Normal'
-    },
-    'G-Max Malodor': {
-        type: 'Poison'
-    },
-    'G-Max Meltdown': {
-        type: 'Steel'
-    },
-    'G-Max Wind Rage': {
-        type: 'Flying'
-    },
-    'G-Max Gravitas': {
-        type: 'Psychic'
-    },
-    'G-Max Stonesurge': {
-        type: 'Water'
-    },
-    'G-Max Volcalith': {
-        type: 'Rock'
-    },
-    'G-Max Tartness': {
-        type: 'Grass'
-    },
-    'G-Max Sweetness': {
-        type: 'Grass'
-    },
-    'G-Max Sandblast': {
-        type: 'Ground'
-    },
-    'G-Max Stun Shock': {
-        type: 'Electric'
-    },
-    'G-Max Centinferno': {
-        type: 'Fire'
-    },
-    'G-Max Smite': {
-        type: 'Fairy'
-    },
-    'G-Max Snooze': {
-        type: 'Dark'
-    },
-    'G-Max Finale': {
-        type: 'Fairy'
-    },
-    'G-Max Steelsurge': {
-        type: 'Steel'
-    },
-    'G-Max Depletion': {
-        type: 'Dragon'
-    },
 
-    //Isle of Armor moves
-    'G-Max Vine Lash': {
-        type: 'Grass'
-    },
-    'G-Max Cannonade': {
-        type: 'Water'
-    },
-    'G-Max Drum Solo': {
-        type: 'Grass',
-        bp: 160,
-    },
-    'G-Max Fireball': {
-        type: 'Fire',
-        bp: 160,
-    },
-    'G-Max Hydrosnipe': {
-        type: 'Water',
-        bp: 160,
-    },
-    'G-Max One Blow': {
-        type: 'Dark'
-    },
-    'G-Max Rapid Flow': {
-        type: 'Water'
-    },
     'Burning Jealousy': {
         bp: 70,
         type: 'Fire',
@@ -4768,7 +4405,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         makesContact: true
     },
     'Grassy Glide': {
-        bp: 70,
+        bp: 55,
         type: 'Grass',
         category: 'Physical',
         makesContact: true
@@ -4856,7 +4493,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         hitRange: [1, 3]
     },
     'Wicked Blow': {
-        bp: 80,
+        bp: 75,
         type: 'Dark',
         category: 'Physical',
         makesContact: true,
@@ -4879,7 +4516,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
 
     //Crown Tundra moves
     'Astral Barrage': {
-        bp: 120,
+        bp: 110,
         type: 'Ghost',
         category: 'Special',
         isSpread: true
@@ -4910,7 +4547,7 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         hasSecondaryEffect: true,
     },
     'Glacial Lance': {
-        bp: 130,
+        bp: 120,
         type: 'Ice',
         category: 'Physical',
         isSpread: true
@@ -4928,162 +4565,17 @@ var MOVES_SS = $.extend(true, {}, MOVES_SM, {
         hasSecondaryEffect: true,
         statChange: ['defense', -1, 'target'],
     },
-});
 
-var MAXMOVES_LOOKUP = {
-    'Normal': 'Max Strike', 'Fire': 'Max Flare', 'Water': 'Max Geyser',
-    'Electric': 'Max Lightning', 'Grass': 'Max Overgrowth', 'Ghost': 'Max Phantasm',
-    'Dark': 'Max Darkness', 'Psychic': 'Max Mindstorm', 'Fighting': 'Max Knuckle',
-    'Steel': 'Max Steelspike', 'Ice': 'Max Hailstorm', 'Ground': 'Max Quake',
-    'Rock': 'Max Rockfall', 'Bug': 'Max Flutterby', 'Fairy': 'Max Starfall',
-    'Flying': 'Max Airstream', 'Dragon': 'Max Wyrmwind', 'Poison': 'Max Ooze'
-};
-
-var G_MAXMOVES_TYPE = {
-    'Charizard': 'Fire',
-    'Butterfree': 'Bug',
-    'Pikachu': 'Electric',
-    'Meowth': 'Normal',
-    'Machamp': 'Fighting',
-    'Gengar': 'Ghost',
-    'Kingler': 'Water',
-    'Lapras': 'Ice',
-    'Eevee': 'Normal',
-    'Snorlax': 'Normal',
-    'Garbodor': 'Poison',
-    'Melmetal': 'Steel',
-    'Corviknight': 'Flying',
-    'Orbeetle': 'Psychic',
-    'Drednaw': 'Water',
-    'Coalossal': 'Rock',
-    'Flapple': 'Grass',
-    'Appletun': 'Grass',
-    'Sandaconda': 'Ground',
-    'Toxtricity': 'Electric',
-    'Centiskorch': 'Fire',
-    'Hatterene': 'Fairy',
-    'Grimmsnarl': 'Dark',
-    'Alcremie': 'Fairy',
-    'Copperajah': 'Steel',
-    'Duraludon': 'Dragon',
-    'Venusaur': 'Grass',
-    'Blastoise': 'Water',
-    'Rillaboom': 'Grass',
-    'Cinderace': 'Fire',
-    'Inteleon': 'Water',
-    'Urshifu-Single Strike': 'Dark',
-    'Urshifu-Rapid Strike': 'Water',
-};
-
-var G_MAXMOVES_LOOKUP = {
-    'Charizard': 'G-Max Wildfire',
-    'Butterfree': 'G-Max Befuddle',
-    'Pikachu': 'G-Max Volt Crash',
-    'Meowth': 'G-Max Gold Rush',
-    'Machamp': 'G-Max Chi Strike',
-    'Gengar': 'G-Max Terror',
-    'Kingler': 'G-Max Foam Burst',
-    'Lapras': 'G-Max Resonance',
-    'Eevee': 'G-Max Cuddle',
-    'Snorlax': 'G-Max Replenish',
-    'Garbodor': 'G-Max Malodor',
-    'Melmetal': 'G-Max Meltdown',
-    'Corviknight': 'G-Max Wind Rage',
-    'Orbeetle': 'G-Max Gravitas',
-    'Drednaw': 'G-Max Stonesurge',
-    'Coalossal': 'G-Max Volcalith',
-    'Flapple': 'G-Max Tartness',
-    'Appletun': 'G-Max Sweetness',
-    'Sandaconda': 'G-Max Sandblast',
-    'Toxtricity': 'G-Max Stun Shock',
-    'Centiskorch': 'G-Max Centinferno',
-    'Hatterene': 'G-Max Smite',
-    'Grimmsnarl': 'G-Max Snooze',
-    'Alcremie': 'G-Max Finale',
-    'Copperajah': 'G-Max Steelsurge',
-    'Duraludon': 'G-Max Depletion',
-    'Venusaur': 'G-Max Vine Lash',
-    'Blastoise': 'G-Max Cannonade',
-    'Rillaboom': 'G-Max Drum Solo',
-    'Cinderace': 'G-Max Fireball',
-    'Inteleon': 'G-Max Hydrosnipe',
-    'Urshifu-Single Strike': 'G-Max One Blow',
-    'Urshifu-Rapid Strike': 'G-Max Rapid Flow',
-};
-
-var MOVES_SS_NATDEX = $.extend(true, {}, MOVES_SS, {});
-
-[
-    //Z-moves
-    'Breakneck Blitz', 'Inferno Overdrive', 'Bloom Doom', 'Hydro Vortex', 'Gigavolt Havoc', 'Never-Ending Nightmare',
-    'Black Hole Eclipse', 'Shattered Psyche', 'All-Out Pummeling', 'Corkscrew Crash', 'Subzero Slammer', 'Tectonic Rage',
-    'Continental Crush', 'Savage Spin-Out', 'Twinkle Tackle', 'Supersonic Skystrike', 'Devastating Drake', 'Acid Downpour',
-    'Catastropika', 'Clangorous Soulblaze', 'Genesis Supernova', "Let's Snuggle Forever", 'Light That Burns the Sky',
-    'Malicious Moonsault', 'Menacing Moonraze Maelstrom', 'Oceanic Operetta', 'Pulverizing Pancake', 'Searing Sunraze Smash',
-    'Sinister Arrow Raid', 'Soul-Stealing 7-Star Strike', 'Splintered Stormshards', 'Stoked Sparksurfer', 'Extreme Evoboost', '10,000,000 Volt Thunderbolt',
-    //Hidden Power
-    'Hidden Power Fire', 'Hidden Power Water', 'Hidden Power Grass', 'Hidden Power Electric', 'Hidden Power Psychic',
-    'Hidden Power Ice', 'Hidden Power Dragon', 'Hidden Power Dark', 'Hidden Power Fighting', 'Hidden Power Flying',
-    'Hidden Power Poison', 'Hidden Power Ground', 'Hidden Power Rock', 'Hidden Power Bug', 'Hidden Power Ghost', 'Hidden Power Steel',
-    //deleted SwSh and BDSP moves
-    'Feint Attack', 'Frustration', 'Jump Kick', 'Mud Bomb', 'Natural Gift', 'Pursuit', 'Return', 'Signal Beam', 'Sky Drop',
-    'Sky Uppercut', 'Synchronoise', 'Twineedle', 'Wake-Up Slap', 'Barrage', 'Bone Club', 'Bubble', 'Chip Away', 'Clamp',
-    'Comet Punch', 'Constrict', 'Dizzy Punch', 'Double Slap', 'Dragon Rage', 'Egg Bomb', 'Flame Burst', 'Heart Stamp',
-    'Ice Ball', 'Karate Chop', 'Magnet Bomb', 'Magnitude', 'Mirror Shot', 'Needle Arm', 'Ominous Wind', 'Psywave', 'Punishment',
-    'Rage', 'Razor Wind', 'Rolling Kick', 'Secret Power', 'Silver Wind', 'Smelling Salts', 'Sonic Boom', 'Spike Cannon',
-    'Steamroller', 'Trump Card', 'Wring Out', 'Meditate', 'Barrier', 'Bide', 'Mirror Move', 'Flash', 'Sharpen', 'Spider Web', 'Nightmare',
-    'Foresight', 'Assist', 'Refresh', 'Snatch', 'Camouflage', 'Mud Sport', 'Odor Sleuth', 'Grass Whistle', 'Water Sport', 'Miracle Eye',
-    'Embargo', 'Heal Block', 'Lucky Chant', 'Me First', 'Captivate', 'Heal Order', 'Telekinesis', 'Bestow', 'Rototiller', 'Ion Deluge',
-    'Spotlight', 'Beak Blast', 'Ice Hammer', 'Light of Ruin', 'Powder', 'Revelation Dance', 'Hyper Fang', 'Relic Song',
-    'Hyperspace Hole','Hyperspace Fury',
-].forEach(e => delete MOVES_SS[e]);
-
-var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
-    //Past move changes
-    'Cut': { isSlice: true, },
-    'Razor Leaf': { isSlice: true, },
-    'Slash': { isSlice: true, },
-    'Fury Cutter': { isSlice: true, },
-    'Air Cutter': {
-        isSlice: true,
-        isWind: true,
-    },
-    'Aerial Ace': { isSlice: true, },
-    'Leaf Blade': { isSlice: true, },
-    'Night Slash': { isSlice: true, },
-    'Air Slash': { isSlice: true, },
-    'X-Scissor': { isSlice: true, },
-    'Psycho Cut': { isSlice: true, },
-    'Cross Poison': { isSlice: true, },
-    'Sacred Sword': { isSlice: true, },
-    'Razor Shell': { isSlice: true, },
-    'Solar Blade': { isSlice: true, },
-    'Behemoth Blade': { isSlice: true, },
-    'Gust': { isWind: true, },
-    'Blizzard': { isWind: true, },
-    'Icy Wind': { isWind: true, },
-    'Twister': { isWind: true, },
-    'Heat Wave': { isWind: true, },
-    'Hurricane': { isWind: true, },
-    'Petal Blizzard': { isWind: true, },
-    'Fairy Wind': { isWind: true, },
-    'Aeroblast': { isWind: true, },
-    'Wicked Blow': { bp: 75, },
-    'Grassy Glide': { bp: 55, },
-    'Glacial Lance': { bp: 120, },
-    'Luster Purge': { bp: 95, },
-    'Mist Ball': { bp: 95, },
-
-    //PLA moves
     'Dire Claw': {
         bp: 80,
         type: 'Poison',
         category: 'Physical',
         hasSecondaryEffect: true,
         makesContact: true,
+        isSlice: true,
     },
     'Psyshield Bash': {
-        bp: 70,
+        bp: 90,
         type: 'Psychic',
         category: 'Physical',
         hasSecondaryEffect: true,
@@ -5135,7 +4627,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
         costHP: [1, 2, 'roundUp']
     },
     'Mountain Gale': {
-        bp: 100,
+        bp: 120,
         type: 'Ice',
         category: 'Physical',
         hasSecondaryEffect: true,
@@ -5180,7 +4672,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
         hasSecondaryEffect: true,
     },
     'Infernal Parade': {
-        bp: 60,
+        bp: 65,
         type: 'Ghost',
         category: 'Special',
         hasSecondaryEffect: true,
@@ -5220,14 +4712,12 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
     'Lunar Blessing': {
         type: 'Psychic',
         category: 'Status',
-        //isHealing: true,
     },
     'Take Heart': {
         type: 'Psychic',
         category: 'Status',
     },
 
-    //SV moves
     'Tera Blast': {
         bp: 80,
         type: 'Normal',
@@ -5263,6 +4753,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
         type: 'Dragon',
         category: 'Physical',
         hasSecondaryEffect: true,
+        isSlice: true,
     },
     'Jet Punch': {
         bp: 60,
@@ -5314,7 +4805,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
         hasSecondaryEffect: true,
     },
     'Triple Dive': {
-        bp: 30,
+        bp: 35,
         type: 'Water',
         category: 'Physical',
         makesContact: true,
@@ -5434,7 +4925,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
         hasSecondaryEffect: true,
     },
     'Hyper Drill': {
-        bp: 100,
+        bp: 120,
         type: 'Normal',
         category: 'Physical',
         makesContact: true,
@@ -5535,7 +5026,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
 
     //Teal Mask new additions
     'Blood Moon': {
-        bp: 140,
+        bp: 130,
         type: 'Normal',
         category: 'Special',
     },
@@ -5613,6 +5104,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
     'Dragon Cheer': {
         type: 'Dragon',
         category: 'Status',
+        isSound: true,
     },
     'Alluring Voice': {
         bp: 80,
@@ -5657,60 +5149,7 @@ var MOVES_SV_NATDEX = $.extend(true, {}, MOVES_SS_NATDEX, {
         category: 'Special',
         hasSecondaryEffect: true,
     },
-});
 
-var MOVES_SV = $.extend(true, {}, MOVES_SV_NATDEX, {});
-
-[   //Max Moves
-    'Max Strike', 'Max Flare', 'Max Geyser', 'Max Lightning', 'Max Overgrowth',
-    'Max Phantasm', 'Max Darkness', 'Max Mindstorm', 'Max Knuckle', 'Max Steelspike',
-    'Max Hailstorm', 'Max Quake', 'Max Rockfall', 'Max Flutterby', 'Max Starfall',
-    'Max Airstream', 'Max Wyrmwind', 'Max Ooze', 'G-Max Wildfire', 'G-Max Befuddle',
-    'G-Max Volt Crash', 'G-Max Gold Rush', 'G-Max Chi Strike', 'G-Max Terror', 'G-Max Foam Burst',
-    'G-Max Resonance', 'G-Max Cuddle', 'G-Max Replenish', 'G-Max Malodor', 'G-Max Meltdown',
-    'G-Max Wind Rage', 'G-Max Gravitas', 'G-Max Stonesurge', 'G-Max Volcalith', 'G-Max Tartness',
-    'G-Max Sweetness', 'G-Max Sandblast', 'G-Max Stun Shock', 'G-Max Centinferno', 'G-Max Smite',
-    'G-Max Snooze', 'G-Max Finale', 'G-Max Steelsurge', 'G-Max Depletion', 'G-Max Vine Lash',
-    'G-Max Cannonade', 'G-Max Drum Solo', 'G-Max Fireball', 'G-Max Hydrosnipe',
-    'G-Max One Blow', 'G-Max Rapid Flow',
-    //Z-moves
-    'Breakneck Blitz', 'All-Out Pummeling', 'Supersonic Skystrike', 'Acid Downpour', 'Tectonic Rage',
-    'Continental Crush', 'Savage Spin-Out', 'Never-Ending Nightmare', 'Corkscrew Crash', 'Inferno Overdrive',
-    'Hydro Vortex', 'Bloom Doom', 'Gigavolt Havoc', 'Shattered Psyche', 'Subzero Slammer',
-    'Devastating Drake', 'Black Hole Eclipse', 'Twinkle Tackle', 'Catastropika', 'Sinister Arrow Raid',
-    'Malicious Moonsault', 'Oceanic Operetta', 'Guardian of Alola', 'Soul-Stealing 7-Star Strike', 'Stoked Sparksurfer',
-    'Pulverizing Pancake', 'Extreme Evoboost', 'Genesis Supernova', '10,000,000 Volt Thunderbolt', 'Light That Burns the Sky',
-    'Searing Sunraze Smash', 'Menacing Moonraze Maelstrom', "Let's Snuggle Forever", 'Splintered Stormshards', 'Clangorous Soulblaze',
-    //Hidden Power
-    'Hidden Power Fire', 'Hidden Power Water', 'Hidden Power Grass', 'Hidden Power Electric', 'Hidden Power Psychic',
-    'Hidden Power Ice', 'Hidden Power Dragon', 'Hidden Power Dark', 'Hidden Power Fighting', 'Hidden Power Flying',
-    'Hidden Power Poison', 'Hidden Power Ground', 'Hidden Power Rock', 'Hidden Power Bug', 'Hidden Power Ghost', 'Hidden Power Steel',
-    //deleted SWSH moves
-    'Karate Chop', 'Double Slap', 'Comet Punch', 'Razor Wind', 'Jump Kick', 'Rolling Kick', 'Twineedle', 'Sonic Boom',
-    'Dragon Rage', 'Meditate', 'Rage', 'Barrier', 'Bide', 'Mirror Move', 'Egg Bomb', 'Bone Club',
-    'Clamp', 'Spike Cannon', 'Constrict', 'Barrage', 'Bubble', 'Dizzy Punch', 'Flash', 'Psywave',
-    'Sharpen', 'Spider Web', 'Nightmare', 'Feint Attack', 'Foresight', 'Return', 'Frustration', 'Magnitude',
-    'Pursuit', 'Hidden Power', 'Smelling Salts', 'Assist', 'Refresh', 'Snatch', 'Secret Power', 'Camouflage',
-    'Mud Sport', 'Ice Ball', 'Needle Arm', 'Odor Sleuth', 'Silver Wind', 'Grass Whistle', 'Signal Beam',
-    'Sky Uppercut', 'Water Sport', 'Miracle Eye', 'Wake-Up Slap', 'Natural Gift', 'Embargo', 'Trump Card',
-    'Heal Block', 'Wring Out', 'Lucky Chant', 'Me First', 'Punishment', 'Mud Bomb', 'Mirror Shot', 'Rock Climb',
-    'Magnet Bomb', 'Captivate', 'Heal Order', 'Ominous Wind', 'Telekinesis', 'Flame Burst', 'Synchronoise', 'Chip Away',
-    'Sky Drop', 'Bestow', 'Heart Stamp', 'Steamroller', 'Rototiller', 'Ion Deluge', 'Spotlight', 'Laser Focus', 'Gear Up',
-    //deleted SV moves
-    'Submission', 'Skull Bash', 'Hyper Fang', 'Mind Reader', 'Vital Throw', 'Hail', 'Nature Power', 'Magic Coat',
-    'Revenge', 'Grudge', 'Aromatherapy', 'Psycho Shift', 'Autotomize', 'Dual Chop',
-    'Leaf Tornado', 'Mat Block', 'Crafty Shield', 'Flower Shield', 'Venom Drench', 'Powder', 'Power-Up Punch',
-    'Eternabeam', 'Gear Grind', 'Head Charge', 'Lovely Kiss', 'Trick-or-Treat', 'Bonemerang', 'Octazooka', "King's Shield",
-    'Kinesis', 'Electrify', 'Light of Ruin', 'Anchor Shot', 'Bolt Beak', 'Chatter', 'Core Enforcer', 'Double Iron Bash',
-    'Fishious Rend', 'Geomancy', 'Hold Hands', "Land's Wrath", 'Meteor Assault', 'Mind Blown', 'Multi-Attack',
-    "Nature's Madness", 'Oblivion Wing', 'Octolock', 'Plasma Fists', 'Purify', 'Shadow Bone', 'Shell Trap',
-    'Snap Trap', 'Spectral Thief', 'Storm Throw', 'Techno Blast', 'Thousand Arrows', 'Thousand Waves', 'Searing Shot',
-    //unusable SV moves
-    'Blazing Torque', 'Wicked Torque', 'Noxious Torque', 'Combat Torque', 'Magical Torque', 'Power Shift',
-].forEach(e => delete MOVES_SV[e]);
-
-//This one will just be for adding Nihil Light
-var MOVES_ZA_NATDEX = $.extend(true, {}, MOVES_SV_NATDEX, {
     'Nihil Light': {
         bp: 200,
         type: 'Dragon',
@@ -5718,106 +5157,5 @@ var MOVES_ZA_NATDEX = $.extend(true, {}, MOVES_SV_NATDEX, {
         ignoresDefenseBoosts: true,
         isSpread: true, //THIS IS A PREDICTION
     }
-});
 
-var MOVES_CHAMPIONS_NATDEX = $.extend(true, {}, MOVES_ZA_NATDEX, {
-    'Growth': { type: 'Grass' },
-    'Bone Rush': { bp: 30 },
-    'Night Daze': { bp: 90 },
-    'First Impression': { bp: 100 },
-    'Spirit Shackle': { bp: 90 },
-    'Fire Lash': { bp: 90 },
-    'Trop Kick': { bp: 85 },
-    'Beak Blast': { bp: 120 },
-    'Snap Trap': { type: 'Steel' },
-    'Apple Acid': { bp: 90 },
-    'Grav Apple': { bp: 90 },
-    'Psyshield Bash': { bp: 90 },
-    'Mountain Gale': { bp: 120 },
-    'Infernal Parade': { bp: 65 },
-    'Dragon Claw': { isSlice: true },
-    'Shadow Claw': { isSlice: true },
-    'Dire Claw': { isSlice: true },
-    'Crush Claw': { isSlice: true },
-    'Dragon Cheer': { isSound: true },
-
-    //THE FOLLOWING IS SUBJECT TO CHANGE SINCE THEY ARE CHANGED IN THE CODE BUT NOT IN THE GAME
-    'Gear Grind': { bp: 60 },
-    'Anchor Shot': { bp: 90 },
-    'Revelation Dance': { bp: 100 },
-    'Dragon Hammer': { bp: 100 },
-    'Snipe Shot': { bp: 85 },
-    'Bolt Beak': { bp: 80 },
-    'Fisheous Rend': { bp: 80 },
-    'Astral Barrage': { bp: 110 },
-    'Triple Dive': { bp: 35 },
-    'Hyper Drill': { bp: 120 },
-    'Blood Moon': { bp: 130 },
-    'Metal Claw': { isSlice: true },
-});
-
-var MOVES_CHAMPIONS = {};
-[   //Moves available at launch
-    '(No Move)', 'Accelerock',
-    'Acid Armor', 'Acid Spray', 'Acrobatics', 'Acupressure', 'Aerial Ace', 'After You', 'Agility', 'Air Cutter',
-    'Air Slash', 'Alluring Voice', 'Ally Switch', 'Amnesia', 'Ancient Power', 'Apple Acid', 'Aqua Cutter', 'Aqua Jet', 'Aqua Ring',
-    'Aqua Step', 'Aqua Tail', 'Armor Cannon', 'Aromatic Mist', 'Assurance', 'Attract', 'Aura Sphere', 'Aura Wheel', 'Aurora Veil',
-    'Avalanche', 'Axe Kick', 'Baby-Doll Eyes', 'Baneful Bunker', 'Baton Pass', 'Beak Blast', 'Beat Up', 'Belch',
-    'Belly Drum', 'Bind', 'Bite', 'Bitter Blade', 'Bitter Malice', 'Blast Burn', 'Blaze Kick', 'Blizzard',
-    'Block', 'Body Press', 'Body Slam', 'Bone Rush', 'Boomburst', 'Bounce', 'Brave Bird', 'Breaking Swipe', 'Brick Break',
-    'Bug Bite', 'Bug Buzz', 'Bulk Up', 'Bulldoze', 'Bullet Punch', 'Bullet Seed', 'Burn Up', 'Burning Jealousy', 'Calm Mind',
-    'Ceaseless Edge', 'Charge', 'Charge Beam', 'Charm', 'Chilling Water', 'Chilly Reception', 'Circle Throw', 'Clanging Scales',
-    'Clangorous Soul', 'Clear Smog', 'Close Combat', 'Coaching', 'Coil', 'Comeuppance', 'Confuse Ray', 'Copycat',
-    'Corrosive Gas', 'Cosmic Power', 'Cotton Guard', 'Cotton Spore', 'Counter', 'Covet', 'Crabhammer', 'Cross Chop',
-    'Cross Poison', 'Crunch', 'Crush Claw', 'Curse', 'Dark Pulse', 'Darkest Lariat', 'Dazzling Gleam', 'Decorate', 'Defog', 'Destiny Bond',
-    'Detect', 'Dig', 'Dire Claw', 'Disable', 'Discharge', 'Dive', 'Double Hit', 
-    'Double Team', 'Double-Edge', 'Draco Meteor', 'Dragon Cheer', 'Dragon Claw', 'Dragon Dance', 'Dragon Darts', 'Dragon Pulse', 'Dragon Rush', 'Dragon Tail',
-    'Drain Punch', 'Draining Kiss', 'Drill Peck', 'Drill Run', 'Dual Wingbeat', 'Dynamic Punch', 'Earth Power', 'Earthquake', 'Eerie Impulse',
-    'Eerie Spell', 'Electric Terrain', 'Electrify', 'Electro Ball', 'Electro Shot', 'Electroweb', 'Encore', 'Endeavor',
-    'Endure', 'Energy Ball', 'Entrainment', 'Eruption', 'Expanding Force', 'Explosion', 'Extrasensory', 'Extreme Speed', 'Facade',
-    'Fairy Lock', 'Fake Out', 'Fake Tears', 'Feather Dance', 'Feint', 'Fell Stinger', 'Fickle Beam', 'Fiery Dance',
-    'Final Gambit', 'Fire Blast', 'Fire Fang', 'Fire Lash', 'Fire Punch', 'Fire Spin', 'First Impression', 'Fissure',
-    'Flail', 'Flame Charge', 'Flamethrower', 'Flare Blitz', 'Flash Cannon', 'Flatter', 'Fling', 'Flip Turn',
-    'Flower Trick', 'Fly', 'Flying Press', 'Focus Blast', 'Focus Energy', 'Focus Punch', 'Follow Me', "Forest's Curse",
-    'Foul Play', 'Freeze-Dry', 'Frenzy Plant', 'Frost Breath', 'Future Sight', 'Gastro Acid', 'Giga Drain', 'Giga Impact',
-    'Gigaton Hammer', 'Glare', 'Grass Knot', 'Grassy Glide', 'Grassy Terrain', 'Grav Apple', 'Gravity', 'Growth',
-    'Guard Split', 'Guard Swap', 'Guillotine', 'Gunk Shot', 'Gyro Ball', 'Hammer Arm', 'Hard Press', 'Haze',
-    'Head Smash', 'Headlong Rush', 'Heal Bell', 'Heal Pulse', 'Healing Wish', 'Heat Crash', 'Heat Wave', 'Heavy Slam',
-    'Helping Hand', 'Hex', 'High Horsepower', 'High Jump Kick', 'Horn Drill', 'Horn Leech', 'Howl', 'Hurricane', 'Hydro Cannon',
-    'Hydro Pump', 'Hyper Beam', 'Hyper Voice', 'Hypnosis', 'Ice Beam', 'Ice Fang', 'Ice Hammer', 'Ice Punch', 'Ice Shard', 'Ice Spinner', 'Icicle Crash',
-    'Icicle Spear', 'Icy Wind', 'Imprison', 'Infernal Parade', 'Inferno', 'Infestation', 'Ingrain', 'Instruct',
-    'Iron Defense', 'Iron Head', 'Iron Tail','Jet Punch', "King's Shield", 'Knock Off', 'Kowtow Cleave', 'Lash Out', 'Last Resort',
-    'Last Respects', 'Lava Plume', 'Leaf Blade', 'Leaf Storm', 'Leech Life', 'Leech Seed', 'Life Dew', 'Light Screen',
-    'Light of Ruin', 'Liquidation', 'Lock-On', 'Low Kick', 'Low Sweep', 'Lumina Crash', 'Lunge', 'Mach Punch', 'Magic Powder',
-    'Magic Room', 'Magnet Rise', 'Magnetic Flux', 'Matcha Gotcha', 'Mean Look', 'Mega Kick', 'Megahorn', 'Memento', 'Metal Burst', 'Metal Sound',
-    'Meteor Beam', 'Meteor Mash', 'Minimize', 'Mirror Coat', 'Misty Explosion', 'Misty Terrain', 'Moonblast',
-    'Moonlight', 'Morning Sun', 'Mortal Spin', 'Mountain Gale', 'Mud Shot', 'Mud-Slap', 'Muddy Water', 'Mystical Fire',
-    'Nasty Plot', 'Night Daze', 'Night Shade', 'Night Slash', 'Noble Roar', 'Nuzzle', 'Outrage', 'Overheat',
-    'Pain Split', 'Parabolic Charge', 'Parting Shot', 'Payback', 'Perish Song', 'Petal Blizzard', 'Petal Dance', 'Phantom Force', 'Pin Missile',
-    'Play Rough', 'Pluck', 'Poison Fang', 'Poison Jab', 'Poison Powder', 'Pollen Puff', 'Poltergeist', 'Population Bomb',
-    'Pounce', 'Power Gem', 'Power Split', 'Power Swap', 'Power Trick', 'Power Trip', 'Power Whip', 'Protect', 'Psych Up',
-    'Psychic', 'Psychic Fangs', 'Psychic Noise', 'Psychic Terrain', 'Psycho Cut', 'Psyshield Bash', 'Psyshock', 'Quash', 'Quick Attack',
-    'Quick Guard', 'Quiver Dance', 'Rage Powder', 'Raging Bull', 'Raging Fury', 'Rain Dance', 'Rapid Spin', 'Razor Shell',
-    'Recover', 'Recycle', 'Reflect', 'Reflect Type', 'Rest', 'Reversal', 'Rising Voltage',
-    'Roar', 'Rock Blast', 'Rock Polish', 'Rock Slide', 'Rock Tomb', 'Rock Wrecker', 'Role Play', 'Roost',
-    'Round', 'Sacred Sword', 'Safeguard', 'Salt Cure', 'Sand Tomb', 'Sandstorm', 'Scald', 'Scale Shot',
-    'Scary Face', 'Scorching Sands', 'Screech', 'Seed Bomb', 'Seismic Toss', 'Self-Destruct', 'Shadow Ball', 'Shadow Claw', 'Shadow Punch', 'Shadow Sneak',
-    'Shed Tail', 'Sheer Cold', 'Shell Side Arm', 'Shell Smash', 'Shelter', 'Simple Beam', 'Sing', 'Skill Swap',
-    'Skitter Smack', 'Sky Attack', 'Slack Off', 'Sleep Powder', 'Sleep Talk', 'Sludge Bomb', 'Sludge Wave', 'Smack Down',
-    'Smart Strike', 'Snap Trap', 'Snarl', 'Snore', 'Snowscape', 'Soak', 'Solar Beam',
-    'Solar Blade', 'Sparkling Aria', 'Speed Swap', 'Spicy Extract', 'Spikes', 'Spiky Shield', 'Spirit Shackle', /*'Spit Up',*/
-    'Spite', 'Stealth Rock', 'Steel Beam', 'Steel Roller', 'Steel Wing', 'Sticky Web', 'Stockpile',
-    'Stomping Tantrum', 'Stone Axe', 'Stone Edge', 'Stored Power', 'Storm Throw', 'Strength Sap', 'String Shot', 'Struggle', 'Struggle Bug',
-    'Stuff Cheeks', 'Stun Spore', 'Substitute', 'Sucker Punch', 'Sunny Day', 'Super Fang', 'Supercell Slam', 'Superpower',
-    'Surf', 'Swagger', 'Swallow', 'Sweet Kiss', 'Sweet Scent', 'Switcheroo', 'Swords Dance', 'Synthesis',
-    'Syrup Bomb', 'Tail Slap', 'Tailwind', 'Taunt', 'Tearful Look', 'Teatime', 'Teeter Dance', 'Temper Flare',
-    'Terrain Pulse', 'Thief', 'Thrash', 'Throat Chop', 'Thunder', 'Thunder Fang', 'Thunder Punch', 'Thunder Wave',
-    'Thunderbolt', 'Tickle', 'Tidy Up', 'Torch Song', 'Torment', 'Toxic', 'Toxic Spikes', 'Toxic Thread',
-    'Trailblaze', 'Transform', 'Tri Attack', 'Trick', 'Trick Room', 'Trick-or-Treat', 'Triple Arrows', 'Triple Axel',
-    'Trop Kick', 'Twin Beam', 'U-turn', 'Upper Hand', 'Uproar', 'Vacuum Wave', 'Venoshock', 'Volt Switch', 'Volt Tackle',
-    'Water Pulse', 'Water Shuriken', 'Water Spout', 'Waterfall', 'Wave Crash', 'Weather Ball', 'Whirlpool', 'Whirlwind',
-    'Wide Guard', 'Wild Charge', 'Will-O-Wisp', 'Wish', 'Wonder Room', 'Wood Hammer', 'Worry Seed', 'Wrap', 'X-Scissor', 'Yawn', 'Zap Cannon', 'Zen Headbutt',
-    //Has move descriptions but isn't learned by any Pokemon at launch
-    //'Double Shock', 'Milk Drink', 'Power Shift', 'Revival Blessing', 'Soft-Boiled', 'Spore',
-].forEach(e => MOVES_CHAMPIONS[e] = MOVES_CHAMPIONS_NATDEX[e]);
-//Spit Up is commented out because it hasn't been implemented
+}
