@@ -1903,7 +1903,9 @@ function changeTheme(theme) {
     }
   }
 }
-
+function resetCalc() {
+  window.location.reload();
+}
 
 document.getElementById('load-status').textContent = `${pkNames.length} Pokemon · ${Object.keys(MVDB).length} movimientos`;
 changeTheme('gen5');
