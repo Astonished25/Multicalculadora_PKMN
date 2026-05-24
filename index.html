@@ -684,6 +684,7 @@ function setActiveMoveSlot(idx) {
     let catLabel = mvSel.cat === 'p' ? 'Fisico' : mvSel.cat === 's' ? 'Especial' : 'Estado';
 
     document.getElementById('mv-name').textContent = mvSel.name;
+    bpOvr = false;
 
     if (mvSel.cat === 't') {
       document.getElementById('bp').value = 0;
@@ -1122,6 +1123,7 @@ function selectMv(name) {
   }
 
   document.getElementById('mv-detail').style.display = 'block';
+  bpOvr = false;
 
   if (cat === 't') {
       document.getElementById('bp').value = 0;
