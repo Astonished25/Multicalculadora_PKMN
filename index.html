@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Damage Calc v2.0</title>
+<title>Champions Damage Calc v3.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -58,7 +58,12 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   border-radius: 0 0 4px 4px;
 }
-
+.st-hdr { display: grid; grid-template-columns: 45px 35px 50px 40px 50px; gap: 8px; font-family: var(--ti); font-size: 9px; color: var(--a); letter-spacing: 1px; text-transform: uppercase; text-align: left; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--bd); }
+.st-row { display: grid; grid-template-columns: 45px 35px 50px 50px 50px; gap: 8px; align-items: center; font-family: var(--mo); font-size: 12px; text-align: left; margin-bottom: 3px; }
+.st-lbl { color: var(--t2); font-weight: bold; }
+.st-base { color: var(--t); text-align: center; }
+.st-tot { color: var(--a2); font-weight: bold; font-size: 13px; text-align: center; }
+.st-tot.hp-tot { color: var(--g); }
 .atk-dd.open, .def-dd.open {
   display: block;
 }
@@ -273,7 +278,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   box-sizing: border-box;
 }
 
-#move-pool-filter {
+#move-pool-filter, #def-move-pool-filter {
   width: 100%;
   height: 28px;
   background: var(--bg3);
@@ -283,6 +288,10 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   color: var(--t);
   font-size: 12px;
   box-sizing: border-box;
+  outline: none;
+}
+#move-pool-filter:focus, #def-move-pool-filter:focus {
+  border-color: var(--a);
 }
 .t-gen1 span { background: linear-gradient(135deg, #141f17 50%, #ff3355 50%); }
 .t-gen2 span { background: linear-gradient(135deg, #f4f0e6 50%, #c59b27 50%); }
@@ -344,7 +353,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 
 <div class="hdr">
   <div class="hdr-left">
-    <div class="hdr-t">CHAMPIONS DAMAGE CALC v2.0</div>
+    <div class="hdr-t">CHAMPIONS DAMAGE CALC v3.0</div>
     <div class="theme-selector">
       <label class="theme-check t-gen1" title="Gen 1: Rojo/Verde"><input type="radio" name="theme" onclick="changeTheme('gen1')" ><span></span></label>
       <label class="theme-check t-gen2" title="Gen 2: Oro/Plata"><input type="radio" name="theme" onclick="changeTheme('gen2')"><span></span></label>
@@ -370,7 +379,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 <div class="wrap">
 
 <div class="col">
-  <div class="sec-title">Pokemon Atacante</div>
+  <div class="sec-title">Pokemon 1</div>
 
   <div class="fg">
     <div class="fl">Seleccionar Pokemon</div>
@@ -381,17 +390,99 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   </div>
 
   <div id="atk-card" style="display:none">
+
     <div class="fg" id="atk-form-group" style="display:none; margin-top: 10px;">
       <div class="fl">Forma Alternativa</div>
       <select id="atk-form-select"></select>
     </div>
-    <div class="pk-card">
+
+    <div class="pk-card" style="margin-bottom: 10px;">
       <img id="atk-sprite" src="" alt="">
       <div>
         <div class="pk-card-name" id="atk-pname"></div>
         <div class="type-row" id="atk-types"></div>
-        <div class="stat-mini" id="atk-smini"></div>
+        <div class="stat-mini" id="atk-smini" style="margin-top: 5px;"></div>
       </div>
+    </div>
+
+    <div class="stat-table" style="margin-bottom: 15px;">
+      <div class="st-hdr"><span>Stat</span><span>Base</span><span>SP</span><span>Total</span><span>Boost</span></div>
+
+      <div class="st-row">
+        <span class="st-lbl">HP</span><span class="st-base" id="atk-base-hp">0</span>
+        <input type="number" id="atk-ev-hp" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot hp-tot" id="atk-tot-hp">0</span><span></span>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Attack</span><span class="st-base" id="atk-base-atk">0</span>
+        <input type="number" id="atk-ev-atk" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="atk-tot-atk">0</span>
+        <select id="atk-bo-atk" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Defense</span><span class="st-base" id="atk-base-def">0</span>
+        <input type="number" id="atk-ev-def" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="atk-tot-def">0</span>
+        <select id="atk-bo-def" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Sp. Atk</span><span class="st-base" id="atk-base-spa">0</span>
+        <input type="number" id="atk-ev-spa" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="atk-tot-spa">0</span>
+        <select id="atk-bo-spa" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Sp. Def</span><span class="st-base" id="atk-base-spd">0</span>
+        <input type="number" id="atk-ev-spd" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="atk-tot-spd">0</span>
+        <select id="atk-bo-spd" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Speed</span><span class="st-base" id="atk-base-spe">0</span>
+        <input type="number" id="atk-ev-spe" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="atk-tot-spe">0</span>
+        <select id="atk-bo-spe" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div style="font-family: var(--mo); font-size: 10px; color: var(--t2); margin-top: 5px; text-align: right;">
+        EVs: <span id="ev-counter-atk">0</span> / 66
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 60px 1fr; gap: 6px; align-items: center; margin-bottom: 15px;">
+
+      <div class="fl" style="margin:0;">Naturaleza</div>
+      <select id="atk-nat">
+        <optgroup label="Neutrales"><option value="Hardy">Hardy</option></optgroup>
+        <optgroup label="+ Atk"><option value="Lonely">Lonely (+Atk -Def)</option><option value="Brave">Brave (+Atk -Spe)</option><option value="Adamant">Adamant (+Atk -SpA)</option><option value="Naughty">Naughty (+Atk -SpD)</option></optgroup>
+        <optgroup label="+ Def"><option value="Bold">Bold (+Def -Atk)</option><option value="Relaxed">Relaxed (+Def -Spe)</option><option value="Impish">Impish (+Def -SpA)</option><option value="Lax">Lax (+Def -SpD)</option></optgroup>
+        <optgroup label="+ SpA"><option value="Modest">Modest (+SpA -Atk)</option><option value="Mild">Mild (+SpA -Def)</option><option value="Quiet">Quiet (+SpA -Spe)</option><option value="Rash">Rash (+SpA -SpD)</option></optgroup>
+        <optgroup label="+ SpD"><option value="Calm">Calm (+SpD -Atk)</option><option value="Gentle">Gentle (+SpD -Def)</option><option value="Sassy">Sassy (+SpD -Spe)</option><option value="Careful">Careful (+SpD -SpA)</option></optgroup>
+        <optgroup label="+ Spe"><option value="Timid">Timid (+Spe -Atk)</option><option value="Hasty">Hasty (+Spe -Def)</option><option value="Jolly">Jolly (+Spe -SpA)</option><option value="Naive">Naive (+Spe -SpD)</option></optgroup>
+
+      </select>
+
+      <div class="fl" style="margin:0;">Habilidad</div>
+      <select id="hab-a"><option value="none">N/A</option></select>
+
+      <div class="fl" style="margin:0;">Item</div>
+      <div style="position: relative;">
+        <input type="text" id="obj-a" class="search-input" placeholder="Buscar..." autocomplete="off" style="margin:0; padding:4px;">
+        <div id="obj-a-dd" class="atk-dd"></div>
+      </div>
+
+      <div class="fl" style="margin:0;">Status</div>
+      <select id="atk-status">
+        <option value="Healthy">Healthy</option>
+        <option value="Burned">Burned</option>
+        <option value="Poisoned">Poisoned</option>
+        <option value="Paralyzed">Paralyzed</option>
+      </select>
+
+      <div class="fl" style="margin:0;">Nivel</div>
+      <input type="number" id="atk-lvl" value="50" min="1" max="100">
+
+      <div class="fl" style="margin:0;">Tera</div>
+      <select id="atk-tera"><option value="none">N/A</option></select>
     </div>
 
     <div class="fg">
@@ -453,49 +544,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
         </div>
       </div>
     </div>
-<div class="g2" style="margin-top: 12px; margin-bottom: 12px;">
-  <div class="fg" style="position: relative;">
-    <div class="fl">Objeto</div>
-    <input type="text" id="obj-a" placeholder="Buscar objeto o descripción..." autocomplete="off">
-    <div id="obj-a-dd" class="atk-dd"></div>
-  </div>
-  <div class="fg">
-    <div class="fl">Habilidad</div>
-    <select id="hab-a">
-      <option value="none">N/A</option>
-    </select>
-  </div>
-</div>
-
-<hr style="margin: 15px 0; border: none; border-top: 1px solid var(--bd);">
-
-<div class="g2" style="margin-bottom: 15px;">
-  <div class="fg">
-    <div class="fl">Nivel</div>
-    <input type="number" id="atk-lvl" value="50" min="1" max="100">
-  </div>
-  <div class="fg">
-    <div class="fl">Tera Tipo</div>
-    <select id="atk-tera">
-      <option value="none">N/A</option>
-    </select>
-  </div>
-</div>
-
-<hr style="margin: 15px 0; border: none; border-top: 1px solid var(--bd);">
-    <div class="fg">
-      <div class="fl">Stat Ataque Efectivo</div>
-      <div class="sbox">
-        <span id="atk-slbl" style="font-family:var(--mo);font-size:10px;color:var(--t2)">ATK</span>
-        <span class="sbox-v" id="atk-sv">—</span>
-      </div>
-      <div class="sr"><label>SP (0-32)</label><input type="range" id="atk-evs" min="0" max="32" step="1" value="0"><input type="number" class="sv-input" id="atk-ev" value="0" min="0" max="32"></div>
-      <div class="sr"><label>Boost</label><input type="range" id="atk-boost" min="-6" max="6" step="1" value="0"><span class="sv" id="atk-bo">0</span></div>
-    </div>
-    <div class="fg">
-      <div class="fl">Naturaleza Ataque</div>
-      <select id="atk-nat"><option value="1">Neutral</option><option value="1.1">+ Atk/SpA</option><option value="0.9">- Atk/SpA</option></select>
-    </div>
 
   </div>
 </div>
@@ -551,16 +599,17 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   </div>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin: 10px 0;">
       <div class="cr"><input type="checkbox" id="chk-hh"><span>Helping Hand x1.5</span></div>
-      <div class="cr"><input type="checkbox" id="chk-burn"><span>Quemado Atacante</span></div>
       <div class="cr"><input type="checkbox" id="chk-crit"><span>Critico</span></div>
-      <div class="cr"><input type="checkbox" id="chk-poison"><span>Envenenado Atacante</span></div>
       <div class="cr"><input type="checkbox" id="chk-spread"><span>Spread x0.75</span></div>
       <div class="cr" style="opacity: 0.5; font-size: 11px; font-family: var(--mo);"></div>
     </div>
-<button class="btn" style="background: var(--bg3); border: 1px solid var(--bd); color: var(--a); margin-bottom: 5px;" onclick="swapAtkDef()">
-  ⇄ INTERCAMBIAR ATK / DEF
-</button>
+
   <div class="res-box">
+    <div class="res-grid" style="margin-bottom:6px">
+      <div><div class="res-lbl">Stat <span id="atk-slbl" style="color:var(--a)">Atk</span></div><div class="res-val" id="r-atk" style="color:var(--a);font-size:14px">—</div></div>
+      <div><div class="res-lbl">Stat <span id="def-slbl" style="color:var(--a2)">Def</span></div><div class="res-val" id="r-def" style="color:var(--a2);font-size:14px">—</div></div>
+      <div><div class="res-lbl">HP Defensor</div><div class="res-val" id="r-hp" style="color:var(--g);font-size:14px">—</div></div>
+    </div>
     <div class="res-grid">
       <div><div class="res-lbl">Dano Min</div><div class="res-val" id="r-min" style="color:var(--t)">—</div></div>
       <div><div class="res-lbl">Dano Max</div><div class="res-val" id="r-max" style="color:var(--t)">—</div></div>
@@ -572,7 +621,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 </div>
 
 <div class="col">
-  <div class="sec-title">Pokemon Defensor</div>
+  <div class="sec-title">Pokemon 2</div>
 
   <div class="fg">
     <div class="fl">Seleccionar Pokemon</div>
@@ -583,67 +632,156 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   </div>
 
   <div id="def-card" style="display:none">
+
     <div class="fg" id="def-form-group" style="display:none; margin-top: 10px;">
       <div class="fl">Forma Alternativa</div>
       <select id="def-form-select"></select>
     </div>
-    <div class="pk-card">
+
+    <div class="pk-card" style="margin-bottom: 10px;">
       <img id="def-sprite" src="" alt="">
       <div>
         <div class="pk-card-name" id="def-pname"></div>
         <div class="type-row" id="def-types"></div>
-        <div class="stat-mini" id="def-smini"></div>
+        <div class="stat-mini" id="def-smini" style="margin-top: 5px;"></div>
       </div>
     </div>
 
-    <hr>
+    <div class="stat-table" style="margin-bottom: 15px;">
+      <div class="st-hdr"><span>Stat</span><span>Base</span><span>SP</span><span>Total</span><span>Boost</span></div>
 
-    <div class="fg">
-      <div class="fl">HP</div>
-      <div class="sbox"><span style="font-family:var(--mo);font-size:10px;color:var(--t2)">HP</span><span class="sbox-v" id="def-hp-v" style="color:var(--g)">—</span></div>
-      <div class="sr"><label>SP HP (0-32)</label><input type="range" id="def-hevs" min="0" max="32" step="1" value="0"><input type="number" class="sv-input def-sv" id="def-hev" value="0" min="0" max="32"></div>
-    </div>
-    <div class="fg">
-      <div class="fl">Defensa Efectiva</div>
-      <div class="sbox"><span id="def-slbl" style="font-family:var(--mo);font-size:10px;color:var(--t2)">DEF</span><span class="sbox-v" id="def-sv">—</span></div>
-      <div class="sr"><label>SP Def (0-32)</label><input type="range" id="def-devs" min="0" max="32" step="1" value="0"><input type="number" class="sv-input def-sv" id="def-dev" value="0" min="0" max="32"></div>
-      <div class="sr"><label>Boost</label><input type="range" id="def-boost" min="-6" max="6" step="1" value="0"><span class="sv" id="def-bo">0</span></div>
+      <div class="st-row">
+        <span class="st-lbl">HP</span><span class="st-base" id="def-base-hp">0</span>
+        <input type="number" id="def-ev-hp" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot hp-tot" id="def-tot-hp">0</span><span></span>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Attack</span><span class="st-base" id="def-base-atk">0</span>
+        <input type="number" id="def-ev-atk" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="def-tot-atk">0</span>
+        <select id="def-bo-atk" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Defense</span><span class="st-base" id="def-base-def">0</span>
+        <input type="number" id="def-ev-def" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="def-tot-def">0</span>
+        <select id="def-bo-def" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Sp. Atk</span><span class="st-base" id="def-base-spa">0</span>
+        <input type="number" id="def-ev-spa" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="def-tot-spa">0</span>
+        <select id="def-bo-spa" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Sp. Def</span><span class="st-base" id="def-base-spd">0</span>
+        <input type="number" id="def-ev-spd" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="def-tot-spd">0</span>
+        <select id="def-bo-spd" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div class="st-row">
+        <span class="st-lbl">Speed</span><span class="st-base" id="def-base-spe">0</span>
+        <input type="number" id="def-ev-spe" class="st-inp" min="0" max="32" value="0">
+        <span class="st-tot" id="def-tot-spe">0</span>
+        <select id="def-bo-spe" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
+      </div>
+      <div style="font-family: var(--mo); font-size: 10px; color: var(--t2); margin-top: 5px; text-align: right;">
+        EVs: <span id="ev-counter-def">0</span> / 66
+      </div>
     </div>
 
-    <div class="g2" style="margin-top: 12px; margin-bottom: 12px;">
-      <div class="fg" style="position: relative;">
-        <div class="fl">Objeto</div>
-        <input type="text" id="obj-d" placeholder="Buscar objeto o descripción..." autocomplete="off">
+    <div style="display: grid; grid-template-columns: 60px 1fr; gap: 6px; align-items: center; margin-bottom: 15px;">
+
+      <div class="fl" style="margin:0;">Naturaleza</div>
+      <select id="def-nat">
+        <optgroup label="Neutrales"><option value="Hardy">Hardy</option></optgroup>
+        <optgroup label="+ Atk"><option value="Lonely">Lonely (+Atk -Def)</option><option value="Brave">Brave (+Atk -Spe)</option><option value="Adamant">Adamant (+Atk -SpA)</option><option value="Naughty">Naughty (+Atk -SpD)</option></optgroup>
+        <optgroup label="+ Def"><option value="Bold">Bold (+Def -Atk)</option><option value="Relaxed">Relaxed (+Def -Spe)</option><option value="Impish">Impish (+Def -SpA)</option><option value="Lax">Lax (+Def -SpD)</option></optgroup>
+        <optgroup label="+ SpA"><option value="Modest">Modest (+SpA -Atk)</option><option value="Mild">Mild (+SpA -Def)</option><option value="Quiet">Quiet (+SpA -Spe)</option><option value="Rash">Rash (+SpA -SpD)</option></optgroup>
+        <optgroup label="+ SpD"><option value="Calm">Calm (+SpD -Atk)</option><option value="Gentle">Gentle (+SpD -Def)</option><option value="Sassy">Sassy (+SpD -Spe)</option><option value="Careful">Careful (+SpD -SpA)</option></optgroup>
+        <optgroup label="+ Spe"><option value="Timid">Timid (+Spe -Atk)</option><option value="Hasty">Hasty (+Spe -Def)</option><option value="Jolly">Jolly (+Spe -SpA)</option><option value="Naive">Naive (+Spe -SpD)</option></optgroup>
+
+      </select>
+      <div class="fl" style="margin:0;">Habilidad</div>
+      <select id="hab-d"><option value="none">N/A</option></select>
+
+      <div class="fl" style="margin:0;">Item</div>
+      <div style="position: relative;">
+        <input type="text" id="obj-d" class="search-input" placeholder="Buscar..." autocomplete="off" style="margin:0; padding:4px;">
         <div id="obj-d-dd" class="def-dd"></div>
       </div>
-      <div class="fg">
-        <div class="fl">Habilidad</div>
-        <select id="hab-d">
-          <option value="none">N/A</option>
-        </select>
-      </div>
+
+      <div class="fl" style="margin:0;">Status</div>
+      <select id="def-status">
+        <option value="Healthy">Healthy</option>
+        <option value="Burned">Burned</option>
+        <option value="Poisoned">Poisoned</option>
+        <option value="Paralyzed">Paralyzed</option>
+      </select>
+
+      <div class="fl" style="margin:0;">Nivel</div>
+      <input type="number" id="def-lvl" value="50" min="1" max="100">
+
+      <div class="fl" style="margin:0;">Tera</div>
+      <select id="def-tera"><option value="none">N/A</option></select>
     </div>
 
-    <hr style="margin: 15px 0; border: none; border-top: 1px solid var(--bd);">
-
-    <div class="g2" style="margin-bottom: 15px;">
-      <div class="fg">
-        <div class="fl">Nivel</div>
-        <input type="number" id="def-lvl" value="50" min="1" max="100">
-      </div>
-      <div class="fg">
-        <div class="fl">Tera Tipo</div>
-        <select id="def-tera">
-          <option value="none">N/A</option>
-        </select>
-      </div>
-    </div>
-
-    <hr style="margin: 15px 0; border: none; border-top: 1px solid var(--bd);">
     <div class="fg">
-      <div class="fl">Naturaleza Defensa</div>
-      <select id="def-nat"><option value="1">Neutral</option><option value="1.1">+ Def/SpD</option><option value="0.9">- Def/SpD</option></select>
+      <div class="fl" style="margin-bottom: 6px;">
+        MOVIMIENTOS APRENDIDOS <span id="def-mv-count" style="font-size: 11px; color: var(--a2);"></span>
+      </div>
+      <div class="moves-container-split">
+        <div class="moves-slots-column">
+          <div class="move-slot active" onclick="setDefActiveMoveSlot(0)">
+            <div class="slot-label">MOV 1</div>
+            <input type="text" id="def-mv-slot-0" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="def-mv-slot-meta-0" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+          <div class="move-slot" onclick="setDefActiveMoveSlot(1)">
+            <div class="slot-label">MOV 2</div>
+            <input type="text" id="def-mv-slot-1" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="def-mv-slot-meta-1" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+          <div class="move-slot" onclick="setDefActiveMoveSlot(2)">
+            <div class="slot-label">MOV 3</div>
+            <input type="text" id="def-mv-slot-2" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="def-mv-slot-meta-2" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+          <div class="move-slot" onclick="setDefActiveMoveSlot(3)">
+            <div class="slot-label">MOV 4</div>
+            <input type="text" id="def-mv-slot-3" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="def-mv-slot-meta-3" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+        </div>
+        <div class="moves-pool-column">
+          <input type="text" id="def-move-pool-filter" placeholder="Filtrar movimiento del catálogo..." autocomplete="off">
+          <div id="def-mv-grid" class="mv-grid" style="flex:1;overflow-y:auto;"></div>
+        </div>
+      </div>
+    </div> <div id="def-mv-detail" style="display:none; margin-top: 15px;">
+      <div class="fg">
+        <div class="fl">Movimiento activo</div>
+        <div style="font-family:var(--fm);font-weight:700;font-size:14px;text-transform:capitalize" id="def-mv-name"></div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap" id="def-mv-tags"></div>
+      </div>
+
+      <div class="g2" style="margin-top: 12px; margin-bottom: 12px;">
+        <div class="fg">
+          <div class="fl">Base Power (editable)</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="number" id="def-bp" min="1" max="999" value="80">
+            <span id="def-bp-note" style="font-family:var(--mo);font-size:9px;color:var(--a2)"></span>
+          </div>
+        </div>
+        <div class="fg">
+          <div class="fl">Num. Golpes</div>
+          <select id="def-num-hits">
+            <option value="1">1</option>
+          </select>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -686,12 +824,54 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 </div>
 <script src="script_res/pokedex.js"></script>
 <script src="script_res/move_data.js"></script>
-<script src="script_res/pokemon_moves.js"></script> <script src="script_res/nature_data.js"></script>
+<script src="script_res/pokemon_moves.js"></script> <script>
+const NATURE_MODS = {
+  'Hardy':   [1,   1,   1,   1,   1],
+  'Lonely':  [1.1, 0.9, 1,   1,   1],
+  'Brave':   [1.1, 1,   1,   1,   0.9],
+  'Adamant': [1.1, 1,   0.9, 1,   1],
+  'Naughty': [1.1, 1,   1,   0.9, 1],
+  'Bold':    [0.9, 1.1, 1,   1,   1],
+  'Docile':  [1,   1,   1,   1,   1],
+  'Relaxed': [1,   1.1, 1,   1,   0.9],
+  'Impish':  [1,   1.1, 0.9, 1,   1],
+  'Lax':     [1,   1.1, 1,   0.9, 1],
+  'Timid':   [0.9, 1,   1,   1,   1.1],
+  'Hasty':   [1,   0.9, 1,   1,   1.1],
+  'Serious': [1,   1,   1,   1,   1],
+  'Jolly':   [1,   1,   0.9, 1,   1.1],
+  'Naive':   [1,   1,   1,   0.9, 1.1],
+  'Modest':  [0.9, 1,   1.1, 1,   1],
+  'Mild':    [1,   0.9, 1.1, 1,   1],
+  'Quiet':   [1,   1,   1.1, 1,   0.9],
+  'Bashful': [1,   1,   1,   1,   1],
+  'Rash':    [1,   1,   1.1, 0.9, 1],
+  'Calm':    [0.9, 1,   1,   1.1, 1],
+  'Gentle':  [1,   0.9, 1,   1.1, 1],
+  'Sassy':   [1,   1,   1,   1.1, 0.9],
+  'Careful': [1,   1,   0.9, 1.1, 1],
+  'Quirky':  [1,   1,   1,   1,   1]
+};
+
+const NATURE_EFFECT = {
+  'Hardy':null,'Docile':null,'Serious':null,'Bashful':null,'Quirky':null,
+  'Lonely':[0,1],'Brave':[0,4],'Adamant':[0,2],'Naughty':[0,3],
+  'Bold':[1,0],'Relaxed':[1,4],'Impish':[1,2],'Lax':[1,3],
+  'Timid':[4,0],'Hasty':[4,1],'Jolly':[4,2],'Naive':[4,3],
+  'Modest':[2,0],'Mild':[2,1],'Quiet':[2,4],'Rash':[2,3],
+  'Calm':[3,0],'Gentle':[3,1],'Sassy':[3,4],'Careful':[3,2]
+};
+</script>
 <script src="script_res/item_data.js"></script>
 <script>
 var attackerMovesSet = [null, null, null, null];
 var activeMoveSlotIdx = 0;
 var currentPokeMoves = [];
+
+var defenderMovesSet = [null, null, null, null];
+var defActiveMoveSlotIdx = 0;
+var currentDefPokeMoves = [];
+var activeSide = 'atk';
 const EVS=[0,4,12,20,28,36,44,52,60,68,76,84,92,100,108,116,124,132,140,148,156,164,172,180,188,196,204,212,220,228,236,244,252];
 const TPC={normal:'#9E9DA0',fire:'#E62829',water:'#0099FF',grass:'#1A9C3E',electric:'#FBD100',ice:'#42D8FF',fighting:'#FF8000',poison:'#9141CB',ground:'#9B7653',flying:'#81B9EF',psychic:'#EF4179',bug:'#92A119',rock:'#AFA981',ghost:'#70559B',dragon:'#0B6AC8',dark:'#49392F',steel:'#60A1B8',fairy:'#EF70EF'};
 const ALLTY=Object.keys(TPC);
@@ -699,8 +879,9 @@ const TC={normal:{rock:.5,ghost:0,steel:.5},fire:{fire:.5,water:.5,grass:2,ice:2
 var gen = 9;
 function setActiveMoveSlot(idx) {
   activeMoveSlotIdx = idx;
+  activeSide = 'atk';
 
-  const slots = document.querySelectorAll('.move-slot');
+  const slots = document.querySelectorAll('#atk-card .moves-slots-column .move-slot');
   slots.forEach((slot, i) => {
     if (i === idx) slot.classList.add('open', 'active');
     else slot.classList.remove('open', 'active');
@@ -731,6 +912,7 @@ function setActiveMoveSlot(idx) {
 
     const hitsSelect = document.getElementById('num-hits');
     if (hitsSelect) {
+      updatingHits = true;
       hitsSelect.innerHTML = '';
       let maxHits = 1;
       if (mvSel.hitRange) {
@@ -747,6 +929,7 @@ function setActiveMoveSlot(idx) {
         hitsSelect.appendChild(opt);
       }
       hitsSelect.value = maxHits;
+      updatingHits = false;
     }
 
     document.getElementById('atk-slbl').textContent = mvSel.cat === 's' ? 'SpA' : 'Atk';
@@ -1012,19 +1195,37 @@ function loadPoke(side, name, isFormChange = false) {
       if (slotInput) slotInput.value = '';
       if (slotMeta) slotMeta.innerHTML = '';
     }
-    if (typeof setActiveMoveSlot === 'function') setActiveMoveSlot(0);
+    if (activeSide === 'atk') {
+      if (typeof setActiveMoveSlot === 'function') setActiveMoveSlot(0);
+    }
     const filterInput = document.getElementById('move-pool-filter');
     if (filterInput) filterInput.value = '';
+  } else {
+    defenderMovesSet = [null, null, null, null];
+    for(let i = 0; i < 4; i++) {
+      const si = document.getElementById(`def-mv-slot-${i}`);
+      const sm = document.getElementById(`def-mv-slot-meta-${i}`);
+      if (si) si.value = '';
+      if (sm) sm.innerHTML = '';
+    }
+    if (activeSide === 'def') {
+      if (typeof setDefActiveMoveSlot === 'function') setDefActiveMoveSlot(0);
+    }
   }
 
   document.getElementById(`${pref}-search`).value = name;
   document.getElementById(`${pref}-sprite`).src = spriteUrl(sprId, name);
   document.getElementById(`${pref}-pname`).textContent = name.replace(/-/g, ' ');
   document.getElementById(`${pref}-types`).innerHTML = typeBadges(types);
-
   document.getElementById(`${pref}-smini`).innerHTML =
-    statChip('HP', hp, 'var(--g)') + statChip('Atk', atk) + statChip('Def', def) +
-    statChip('SpA', spa, 'var(--a2)') + statChip('SpD', spd) + statChip('Spe', spe, 'var(--y)');
+    statChip('HP', hp, 'var(--g)') + statChip('Atk', atk) + statChip('Def', def) + statChip('SpA', spa, 'var(--a2)') + statChip('SpD', spd) + statChip('Spe', spe, 'var(--y)');
+
+  document.getElementById(`${pref}-base-hp`).textContent = hp;
+  document.getElementById(`${pref}-base-atk`).textContent = atk;
+  document.getElementById(`${pref}-base-def`).textContent = def;
+  document.getElementById(`${pref}-base-spa`).textContent = spa;
+  document.getElementById(`${pref}-base-spd`).textContent = spd;
+  document.getElementById(`${pref}-base-spe`).textContent = spe;
 
   fillTera(`${pref}-tera`, types);
   document.getElementById(`${pref}-card`).style.display = 'block';
@@ -1052,7 +1253,7 @@ function loadPoke(side, name, isFormChange = false) {
 
   if (side === 'atk') {
     fillAbilities('hab-a', abilities);
-    if (!isFormChange) {
+    if (!isFormChange && activeSide === 'atk') {
       mvSel = null;
       const mvDetail = document.getElementById('mv-detail');
       if (mvDetail) mvDetail.style.display = 'none';
@@ -1060,6 +1261,12 @@ function loadPoke(side, name, isFormChange = false) {
     loadMovesForPoke(name, types);
   } else {
     fillAbilities('hab-d', abilities);
+    if (!isFormChange && activeSide === 'def') {
+      mvSel = null;
+      const mvDetail = document.getElementById('def-mv-detail');
+      if (mvDetail) mvDetail.style.display = 'none';
+    }
+    loadMovesForDefPoke(name, types);
   }
 
   const objSelect = document.getElementById(side === 'atk' ? 'obj-a' : 'obj-d');
@@ -1091,8 +1298,9 @@ function loadPoke(side, name, isFormChange = false) {
     updateAtkStat();
   } else {
     updateDefStats();
-    updateResult();
   }
+
+  updateResult();
 }
 
 function loadMovesForPoke(pokeName, types) {
@@ -1128,6 +1336,8 @@ function loadMovesForPoke(pokeName, types) {
 function selectMv(name) {
   const mData = MVDB[name];
   if (!mData) return;
+
+  activeSide = 'atk';
 
   const bp = mData.bp || 0;
   const type = mData.type.toLowerCase();
@@ -1173,6 +1383,7 @@ function selectMv(name) {
 
   const hitsSelect = document.getElementById('num-hits');
   if (hitsSelect) {
+    updatingHits = true;
     hitsSelect.innerHTML = '';
     let maxHits = 1;
     if (mData.hitRange) {
@@ -1189,6 +1400,7 @@ function selectMv(name) {
       hitsSelect.appendChild(opt);
     }
     hitsSelect.value = maxHits;
+    updatingHits = false;
   }
 
   const filterInput = document.getElementById('move-pool-filter');
@@ -1229,14 +1441,206 @@ function renderMvGrid(moves, q) {
 
     const div = document.createElement('div');
     div.className = 'mv-btn';
-    if (mvSel && mvSel.name === name) div.classList.add('sel');
+    if (mvSel && mvSel.name === name && activeSide === 'atk') div.classList.add('sel');
     div.innerHTML = `<span class="mv-name">${name}</span><span class="mv-meta" style="color:${tc}">${type} · ${catLabel} · BP:${bp || '—'}</span>`;
     div.addEventListener('click', () => selectMv(name));
     grid.appendChild(div);
   });
 }
 
+function setDefActiveMoveSlot(idx) {
+  defActiveMoveSlotIdx = idx;
+  activeSide = 'def';
 
+  const defMovesContainer = document.querySelector('#def-card .moves-slots-column');
+  const slots = defMovesContainer ? defMovesContainer.querySelectorAll('.move-slot') : [];
+  slots.forEach((slot, i) => {
+    slot.classList.toggle('active', i === idx);
+  });
+
+  if (defenderMovesSet[idx]) {
+    mvSel = defenderMovesSet[idx];
+
+    document.getElementById('def-mv-detail').style.display = 'block';
+    bpOvr = false;
+
+    if (mvSel.cat === 't') {
+      document.getElementById('def-bp').value = 0;
+      document.getElementById('def-bp-note').textContent = 'estado';
+    } else {
+      document.getElementById('def-bp').value = mvSel.bp || 80;
+      document.getElementById('def-bp-note').textContent = `base: ${mvSel.bp || '?'}`;
+    }
+
+    const tc2 = TPC[mvSel.type] || '#888';
+    const catCls = mvSel.cat === 'p' ? 'mc-ph' : mvSel.cat === 's' ? 'mc-sp' : 'mc-st';
+    const catLabel = mvSel.cat === 'p' ? 'Fisico' : mvSel.cat === 's' ? 'Especial' : 'Estado';
+
+    document.getElementById('def-mv-name').textContent = mvSel.name;
+    document.getElementById('def-mv-tags').innerHTML =
+      `<span class="tbadge" style="background:${tc2}22;color:${tc2};border-color:${tc2}44">${mvSel.type}</span>` +
+      `<span class="mcat ${catCls}">${catLabel}</span>`;
+
+    const hitsSelect = document.getElementById('def-num-hits');
+    if (hitsSelect) {
+      updatingHits = true;
+      hitsSelect.innerHTML = '';
+      let maxHits = 1;
+      if (mvSel.hitRange) maxHits = Array.isArray(mvSel.hitRange) ? mvSel.hitRange[1] : mvSel.hitRange;
+      for (let i = 1; i <= maxHits; i++) {
+        const opt = document.createElement('option');
+        opt.value = i; opt.textContent = i;
+        hitsSelect.appendChild(opt);
+      }
+      hitsSelect.value = maxHits;
+      updatingHits = false;
+    }
+
+    document.getElementById('atk-slbl').textContent = mvSel.cat === 's' ? 'SpA' : 'Atk';
+    document.getElementById('def-slbl').textContent = mvSel.cat === 's' ? 'SpD' : 'Def';
+
+    updateResult();
+  } else {
+    mvSel = null;
+    document.getElementById('def-mv-detail').style.display = 'none';
+    updateResult();
+  }
+}
+
+function loadMovesForDefPoke(pokeName, types) {
+  const allowedMovesLower = (typeof PKMOV !== 'undefined' ? PKMOV[pokeName] : []) || [];
+  const allMvNames = Object.keys(MVDB).sort();
+  const legalMoves = allMvNames.filter(m => allowedMovesLower.includes(m.toLowerCase()));
+  const finalSelection = legalMoves.length > 0 ? legalMoves : allMvNames;
+
+  const stab = finalSelection.filter(m => MVDB[m] && MVDB[m].type && types.includes(MVDB[m].type.toLowerCase()));
+  const rest = finalSelection.filter(m => MVDB[m] && MVDB[m].type && !types.includes(MVDB[m].type.toLowerCase()));
+  currentDefPokeMoves = [...stab, ...rest];
+
+  const countEl = document.getElementById('def-mv-count');
+  if (countEl) countEl.textContent = `(${currentDefPokeMoves.length} aprendidos)`;
+
+  renderDefMvGrid(currentDefPokeMoves, '');
+
+  const searchEl = document.getElementById('def-move-pool-filter');
+  if (searchEl) {
+    searchEl.value = '';
+    searchEl.oninput = e => {
+      const q = e.target.value.toLowerCase().replace(/-/g,' ');
+      const filtered = q ? currentDefPokeMoves.filter(m => m.toLowerCase().includes(q)) : currentDefPokeMoves;
+      renderDefMvGrid(filtered, q);
+    };
+  }
+}
+
+function renderDefMvGrid(moves, q) {
+  const grid = document.getElementById('def-mv-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  moves.forEach(name => {
+    const mData = MVDB[name];
+    if (!mData) return;
+    const bp = mData.bp || 0;
+    const type = mData.type;
+    const cat = mData.category;
+    const tc = TPC[type.toLowerCase()] || '#888';
+    let catLabel = 'Est';
+    if (cat === 'Physical') catLabel = 'Fis';
+    if (cat === 'Special') catLabel = 'Esp';
+    const div = document.createElement('div');
+    div.className = 'mv-btn';
+    if (mvSel && mvSel.name === name && activeSide === 'def') div.classList.add('sel');
+    div.innerHTML = `<span class="mv-name">${name}</span><span class="mv-meta" style="color:${tc}">${type} · ${catLabel} · BP:${bp || '—'}</span>`;
+    div.addEventListener('click', () => selectDefMv(name));
+    grid.appendChild(div);
+  });
+}
+
+function selectDefMv(name) {
+  const mData = MVDB[name];
+  if (!mData) return;
+
+  const bp = mData.bp || 0;
+  const type = mData.type.toLowerCase();
+  let cat = 't';
+  if (mData.category === 'Physical') cat = 'p';
+  if (mData.category === 'Special')  cat = 's';
+
+  const moveObj = { name, bp, type, cat, ...mData };
+  mvSel = moveObj;
+  activeSide = 'def';
+  defenderMovesSet[defActiveMoveSlotIdx] = moveObj;
+
+  const slotInput = document.getElementById(`def-mv-slot-${defActiveMoveSlotIdx}`);
+  if (slotInput) slotInput.value = name;
+
+  const slotMeta = document.getElementById(`def-mv-slot-meta-${defActiveMoveSlotIdx}`);
+  if (slotMeta) {
+    const tc = TPC[type] || '#888';
+    let shortCat = cat === 'p' ? 'Fis' : cat === 's' ? 'Esp' : 'Est';
+    slotMeta.innerHTML = `<span style="color:${tc};font-weight:bold;text-transform:uppercase;">${mData.type}</span> · ${shortCat} · BP: ${bp || '—'}`;
+  }
+
+  document.getElementById('def-mv-detail').style.display = 'block';
+  bpOvr = false;
+  if (cat === 't') {
+    document.getElementById('def-bp').value = 0;
+    document.getElementById('def-bp-note').textContent = 'estado';
+  } else {
+    document.getElementById('def-bp').value = bp || 80;
+    document.getElementById('def-bp-note').textContent = `base: ${bp || '?'}`;
+  }
+
+  const tc2 = TPC[type] || '#888';
+  const catCls = cat === 'p' ? 'mc-ph' : cat === 's' ? 'mc-sp' : 'mc-st';
+  const catLabel = cat === 'p' ? 'Fisico' : cat === 's' ? 'Especial' : 'Estado';
+  document.getElementById('def-mv-name').textContent = name;
+  document.getElementById('def-mv-tags').innerHTML =
+    `<span class="tbadge" style="background:${tc2}22;color:${tc2};border-color:${tc2}44">${mData.type}</span>` +
+    `<span class="mcat ${catCls}">${catLabel}</span>`;
+
+  const hitsSelect = document.getElementById('def-num-hits');
+  if (hitsSelect) {
+    updatingHits = true;
+    hitsSelect.innerHTML = '';
+    let maxHits = 1;
+    if (mData.hitRange) maxHits = Array.isArray(mData.hitRange) ? mData.hitRange[1] : mData.hitRange;
+    for (let i = 1; i <= maxHits; i++) {
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = i;
+      hitsSelect.appendChild(opt);
+    }
+    hitsSelect.value = maxHits;
+    updatingHits = false;
+  }
+
+  renderDefMvGrid(currentDefPokeMoves, '');
+  activeSide = 'def';
+  updateResult();
+}
+
+function applyNatureColors(pref, natureName) {
+  const statKeys = ['atk','def','spa','spd','spe'];
+  const labelIds = ['Attack','Defense','Sp. Atk','Sp. Def','Speed'];
+
+  statKeys.forEach((st, i) => {
+    const lbl = document.querySelector(`#${pref}-card .st-row:nth-child(${i+2}) .st-lbl`);
+    if (lbl) { lbl.style.color = ''; lbl.style.fontWeight = ''; }
+    const tot = document.getElementById(`${pref}-tot-${st}`);
+    if (tot) { tot.style.color = st === 'hp' ? 'var(--g)' : 'var(--a2)'; }
+  });
+  const effect = NATURE_EFFECT[natureName];
+  if (!effect) return;
+  const [up, down] = effect;
+  const upLbl = document.querySelector(`#${pref}-card .st-row:nth-child(${up+2}) .st-lbl`);
+  const upTot = document.getElementById(`${pref}-tot-${statKeys[up]}`);
+  if (upLbl) { upLbl.style.color = 'var(--g)'; upLbl.style.fontWeight = 'bold'; }
+  if (upTot) upTot.style.color = 'var(--g)';
+  const dnLbl = document.querySelector(`#${pref}-card .st-row:nth-child(${down+2}) .st-lbl`);
+  const dnTot = document.getElementById(`${pref}-tot-${statKeys[down]}`);
+  if (dnLbl) { dnLbl.style.color = 'var(--r)'; dnLbl.style.fontWeight = 'bold'; }
+  if (dnTot) dnTot.style.color = 'var(--r)';
+}
 
 function evStat(spIdx, base, lvl, nat, isHP) {
   const evs = EVS[Math.min(spIdx,32)] || 0;
@@ -1248,43 +1652,76 @@ function bm(b) { return b>=0 ? (2+b)/2 : 2/(2-b); }
 
 function updateAtkStat() {
   if (!atkPoke) return;
-  const isSp = mvSel?.cat === 's';
-  const eidx = parseInt(document.getElementById('atk-evs').value);
-  const boost = parseInt(document.getElementById('atk-boost').value);
-  const stat = getAtkStat(eidx);
-  document.getElementById('atk-sv').textContent = stat;
-  document.getElementById('atk-ev').value = eidx;
-  document.getElementById('atk-bo').textContent = boost > 0 ? '+' + boost : boost;
-  document.getElementById('atk-slbl').textContent = isSp ? 'SpA' : 'Atk';
+  const lvl = parseInt(document.getElementById('atk-lvl').value) || 50;
+  const nature = document.getElementById('atk-nat').value;
+  const mods = NATURE_MODS[nature] || [1, 1, 1, 1, 1];
+
+  ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach((st, i) => {
+    const base = atkPoke[st];
+    const ev = parseInt(document.getElementById(`atk-ev-${st}`).value) || 0;
+    const bo = parseInt(document.getElementById(`atk-bo-${st}`)?.value) || 0;
+
+    let total = 0;
+    if (st === 'hp') {
+      total = evStat(ev, base, lvl, 1, true);
+    } else {
+      total = Math.floor(evStat(ev, base, lvl, mods[i-1], false) * bm(bo));
+    }
+
+    const ability = document.getElementById('hab-a').value;
+    if (st === 'atk' && ability === 'huge-power') total *= 2;
+    if (st === 'def' && ability === 'fur-coat') total *= 2;
+
+    document.getElementById(`atk-tot-${st}`).textContent = total;
+    atkPoke[`final_${st}`] = total;
+  });
+  applyNatureColors('atk', nature);
 }
 
 function updateDefStats() {
   if (!defPoke) return;
-  const isSp = mvSel?.cat === 's';
-  const hpIdx = parseInt(document.getElementById('def-hevs').value);
-  const dIdx = parseInt(document.getElementById('def-devs').value);
-  const def = getDefStat(dIdx);
-  const boost = parseInt(document.getElementById('def-boost').value);
+  const lvl = parseInt(document.getElementById('def-lvl').value) || 50;
+  const nature = document.getElementById('def-nat').value;
+  const mods = NATURE_MODS[nature] || [1, 1, 1, 1, 1];
 
-  document.getElementById('def-hp-v').textContent = getHP(hpIdx);
-  document.getElementById('def-sv').textContent = def;
-  document.getElementById('def-hev').value = hpIdx;
-  document.getElementById('def-dev').value = dIdx;
-  document.getElementById('def-bo').textContent = boost > 0 ? '+' + boost : boost;
-  document.getElementById('def-slbl').textContent = isSp ? 'SpD' : 'Def';
+  ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach((st, i) => {
+    const base = defPoke[st];
+    const ev = parseInt(document.getElementById(`def-ev-${st}`).value) || 0;
+    const bo = parseInt(document.getElementById(`def-bo-${st}`)?.value) || 0;
+
+    let total = 0;
+    if (st === 'hp') {
+      total = evStat(ev, base, lvl, 1, true);
+    } else {
+      total = Math.floor(evStat(ev, base, lvl, mods[i-1], false) * bm(bo));
+    }
+
+    const ability = document.getElementById('hab-d').value;
+    if (st === 'atk' && ability === 'huge-power') total *= 2;
+    if (st === 'def' && ability === 'fur-coat') total *= 2;
+
+    document.getElementById(`def-tot-${st}`).textContent = total;
+    defPoke[`final_${st}`] = total;
+  });
+  applyNatureColors('def', nature);
 }
 
 function typeMult(atkT, defTs, defTera) {
   const ts = (defTera&&defTera!=='none') ? [defTera] : defTs;
   let m = 1;
-  for (const t of ts) m *= (TC[atkT]?.[t] ?? 1);
+  for (const t of ts) m *= (TC[atkT]?.[t.toLowerCase()] ?? 1);
   return m;
 }
 
 function stabMult(atkT, atkTs, atkTera) {
   const ta = atkTera && atkTera !== 'none';
-  if (ta) { if (atkTera===atkT) return atkTs.includes(atkT)?2.0:1.5; return 1.0; }
-  return atkTs.includes(atkT) ? 1.5 : 1.0;
+  const atkTsLower = atkTs.map(t => t.toLowerCase());
+
+  if (ta) {
+    if (atkTera === atkT) return 2.0;
+    return atkTsLower.includes(atkT) ? 1.5 : 1.0;
+  }
+  return atkTsLower.includes(atkT) ? 1.5 : 1.0;
 }
 
 function parseObj(val) {
@@ -1317,8 +1754,10 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     const isPhysical = mvSel?.cat === 'p';
     const isSpecial = mvSel?.cat === 's';
 
-    const itemA = document.getElementById('obj-a')?.value || 'none';
-    const itemD = document.getElementById('obj-d')?.value || 'none';
+    const itemA = document.getElementById(activeSide === 'def' ? 'obj-d' : 'obj-a')?.value || 'none';
+    const itemD = document.getElementById(activeSide === 'def' ? 'obj-a' : 'obj-d')?.value || 'none';
+    const realAtkPoke = activeSide === 'def' ? defPoke : atkPoke;
+    const realDefPoke = activeSide === 'def' ? atkPoke : defPoke;
 
     let safeMvT = (mvT || 'normal').toLowerCase();
 
@@ -1327,7 +1766,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
         return new Array(16).fill(0);
     }
 
-    let rawBP = parseInt(document.getElementById('bp').value) || 80;
+    let rawBP = basePower;
 
     const isNoItemA = (itemA === 'none' || itemA === '.N/A');
     const isNoItemD = (itemD === 'none' || itemD === '.N/A');
@@ -1394,7 +1833,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     }
 
     if (mvName === 'Low Kick' || mvName === 'Grass Knot') {
-        const w = defPoke ? defPoke.weight : 0;
+        const w = realDefPoke ? realDefPoke.weight : 0;
         if (w >= 200) rawBP = 120;
         else if (w >= 100) rawBP = 100;
         else if (w >= 50) rawBP = 80;
@@ -1403,10 +1842,42 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
         else rawBP = 20;
     }
     else if (mvName === 'Heavy Slam' || mvName === 'Heat Crash') {
-        if (atkPoke && defPoke && defPoke.weight > 0) {
-            const r = atkPoke.weight / defPoke.weight;
+        if (realAtkPoke && realDefPoke && realDefPoke.weight > 0) {
+            const r = realAtkPoke.weight / realDefPoke.weight;
             if (r >= 5) rawBP = 120; else if (r >= 4) rawBP = 100; else if (r >= 3) rawBP = 80; else if (r >= 2) rawBP = 60; else rawBP = 40;
         } else rawBP = 40;
+    }
+
+    else if (mvName === 'Electro Ball' || mvName === 'Gyro Ball') {
+        let speA = (realAtkPoke ? realAtkPoke.final_spe : 100);
+        let speD = (realDefPoke ? realDefPoke.final_spe : 100);
+
+        if (itemA === 'Choice Scarf') speA = Math.floor(speA * 1.5);
+        if (itemA === 'Iron Ball' || itemA === 'Macho Brace') speA = Math.floor(speA * 0.5);
+        if (itemD === 'Choice Scarf') speD = Math.floor(speD * 1.5);
+        if (itemD === 'Iron Ball' || itemD === 'Macho Brace') speD = Math.floor(speD * 0.5);
+
+        if (p.clima === 'sun' && p.habA === 'chlorophyll') speA *= 2;
+        if (p.clima === 'sun' && defAbility === 'chlorophyll') speD *= 2;
+        if (p.clima === 'rain' && p.habA === 'swift swim') speA *= 2;
+        if (p.clima === 'rain' && defAbility === 'swift swim') speD *= 2;
+        if (p.clima === 'sand' && p.habA === 'sand rush') speA *= 2;
+        if (p.clima === 'sand' && defAbility === 'sand rush') speD *= 2;
+        if (p.clima === 'snow' && p.habA === 'slush rush') speA *= 2;
+        if (p.clima === 'snow' && defAbility === 'slush rush') speD *= 2;
+
+        if (p.paralyzed) speA = Math.floor(speA * 0.5);
+
+        if (mvName === 'Electro Ball') {
+            const r = speD === 0 ? 0 : speA / speD;
+            if (r >= 4) rawBP = 150;
+            else if (r >= 3) rawBP = 120;
+            else if (r >= 2) rawBP = 80;
+            else if (r >= 1) rawBP = 60;
+            else rawBP = 40;
+        } else if (mvName === 'Gyro Ball') {
+            rawBP = speA === 0 ? 1 : Math.min(150, Math.floor((25 * speD) / speA) + 1);
+        }
     }
 
     let bpMods = [];
@@ -1421,9 +1892,15 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     if (hasDarkAura && safeMvT === 'dark') {
         bpMods.push(isAuraBreak ? 0x0C00 : 0x1548);
     }if (p.hh) bpMods.push(0x1800);
+    if (p.campo === 'misty' && safeMvT === 'dragon') {
+        bpMods.push(0x0800);
+    }
+    if (p.campo === 'grassy' && ['Earthquake', 'Bulldoze', 'Magnitude'].includes(mvName)) {
+        bpMods.push(0x0800);
+    }
     let isDoublePower = false;
 
-    if (mvName === "Facade" && (p.burn || p.poison)) {
+    if (mvName === "Facade" && (p.burn || p.poison || p.paralyzed)) {
         isDoublePower = true;
     }
     else if (mvName === "Brine") {
@@ -1452,7 +1929,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
     const mvT_Capitalized = safeMvT.charAt(0).toUpperCase() + safeMvT.slice(1);
     if (typeof getItemBoostType === 'function' && getItemBoostType(itemA) === mvT_Capitalized) bpMods.push(0x1333);
-    if (typeof getItemDualTypeBoost === 'function' && getItemDualTypeBoost(itemA, atkPoke?.name).includes(mvT_Capitalized)) bpMods.push(0x1333);
+    if (typeof getItemDualTypeBoost === 'function' && getItemDualTypeBoost(itemA, realAtkPoke?.name).includes(mvT_Capitalized)) bpMods.push(0x1333);
 
     if (itemA === 'Muscle Band' && isPhysical) bpMods.push(0x1199);
     if (itemA === 'Wise Glasses' && isSpecial) bpMods.push(0x1199);
@@ -1482,23 +1959,29 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     for (let i = 0; i < 16; i++) {
         let d = Math.floor(baseDamage * (85 + i) / 100);
 
-        if (p.spread && mvSel && mvSel.isSpread) d = Math.round((d * 0x0C00) / 0x1000);
+        if (p.spread && mvSel && mvSel.isSpread) d = pokeRound((d * 0x0C00) / 0x1000);
 
         if (p.clima === 'sun' || p.habA === 'mega sol' || p.habA === 'mega-sol') {
-            if (safeMvT === 'fire' || mvName === 'Hydro Steam') d = Math.round((d * 0x1800) / 0x1000);
-            else if (safeMvT === 'water' && p.clima === 'sun') d = Math.round((d * 0x0800) / 0x1000);
+            if (safeMvT === 'fire' || mvName === 'Hydro Steam') d = pokeRound((d * 0x1800) / 0x1000);
+            else if (safeMvT === 'water' && p.clima === 'sun') d = pokeRound((d * 0x0800) / 0x1000);
         }
         if (p.clima === 'rain') {
-            if (safeMvT === 'water') d = Math.round((d * 0x1800) / 0x1000);
-            else if (safeMvT === 'fire') d = Math.round((d * 0x0800) / 0x1000);
+            if (safeMvT === 'water') d = pokeRound((d * 0x1800) / 0x1000);
+            else if (safeMvT === 'fire') d = pokeRound((d * 0x0800) / 0x1000);
         }
 
-        if (p.crit) d = Math.floor(d * (p.habA === 'sniper' ? 2.25 : 1.5));
-
-        const hasSTAB = atkTs.includes(safeMvT);
-        if (hasSTAB) {
-            d = Math.floor(d * (p.habA === 'adaptability' ? 2.0 : 1.5));
+        if (p.crit) {
+            d = p.habA === 'sniper' ? pokeRound((d * 0x2400) / 0x1000) : pokeRound((d * 0x1800) / 0x1000);
         }
+
+        const hasSTAB = atkTs.map(t => t.toLowerCase()).includes(safeMvT);
+        const isTeraSTAB = (atkTera !== 'none' && atkTera === safeMvT);
+        if (hasSTAB || isTeraSTAB) {
+        let multiplier = (isTeraSTAB) ? 2.0 : 1.5;
+        if (p.habA === 'adaptability') multiplier = (isTeraSTAB) ? 2.25 : 2.0;
+
+        d = Math.floor(d * multiplier);
+    }
 
         d = Math.floor(d * tMult);
 
@@ -1620,121 +2103,205 @@ function verdict(dmgNoBerry, dmgWithBerry, hp, hitsPerTurn) {
 }
 
 function readP() {
+  const habAId = activeSide === 'def' ? 'hab-d' : 'hab-a';
+  const habDId = activeSide === 'def' ? 'hab-a' : 'hab-d';
+
+  const statusId = activeSide === 'def' ? 'def-status' : 'atk-status';
+  const activeStatus = document.getElementById(statusId)?.value || 'Healthy';
+
   return {
     aura:     document.getElementById('aura-activa')?.value || 'none',
-    lvl:      parseInt(document.getElementById('atk-lvl').value) || 50,
+    lvl:      parseInt(document.getElementById(activeSide === 'def' ? 'def-lvl' : 'atk-lvl').value) || 50,
     clima:    document.getElementById('clima').value,
     campo:    document.getElementById('campo').value,
     pantalla: document.getElementById('pantalla').value,
     spread:   document.getElementById('chk-spread').checked,
     crit:     document.getElementById('chk-crit').checked,
-    burn:     document.getElementById('chk-burn').checked,
-    poison:   document.getElementById('chk-poison').checked,
+    burn:     activeStatus === 'Burned' ,
+    poison:   activeStatus === 'Poisoned' ,
+    paralyzed: activeStatus === 'Paralyzed',
+    hasStatus: activeStatus !== 'Healthy' ,
     hh:       document.getElementById('chk-hh').checked,
-    habA:     document.getElementById('hab-a').value,
-    habD:     document.getElementById('hab-d').value,
+    habA:     document.getElementById(habAId).value,
+    habD:     document.getElementById(habDId).value,
     compie:   parseFloat(document.getElementById('compie').value)
   };
 }
-
-function getAtkStat(eidx) {
-  if (!atkPoke) return 70;
-  const mvName = mvSel?.name || '';
+function getAtkStat() {
+  const attacker = activeSide === 'def' ? defPoke : atkPoke;
+  if (!attacker) return 70;
   const isSp = mvSel?.cat === 's';
-  const base = mvName === 'Body Press' ? atkPoke.def : (isSp ? atkPoke.spa : atkPoke.atk);
+  const mvName = mvSel?.name || '';
+  const statName = mvName === 'Body Press' ? 'def' : (isSp ? 'spa' : 'atk');
 
-  const lvl = parseInt(document.getElementById('atk-lvl').value) || 50;
-  const nat = parseFloat(document.getElementById('atk-nat').value);
-  const boost = parseInt(document.getElementById('atk-boost').value);
-  const b = document.getElementById('chk-crit').checked ? Math.max(0, boost) : boost;
+  const atkHabId = activeSide === 'def' ? 'hab-d' : 'hab-a';
+  const defHabId = activeSide === 'def' ? 'hab-a' : 'hab-d';
+  const atkItemId = activeSide === 'def' ? 'obj-d' : 'obj-a';
+  
+  let atkEvId   = activeSide === 'def' ? 'def' : 'atk';
+  let atkNatId  = activeSide === 'def' ? 'def-nat' : 'atk-nat';
+  let atkLvlId  = activeSide === 'def' ? 'def-lvl' : 'atk-lvl';
 
-  let stat = Math.floor(evStat(eidx, base, lvl, nat, false) * bm(b));
-
-  const _abilityA = document.getElementById('hab-a').value;
-  const _abilityD = document.getElementById('hab-d').value;
+  const _abilityA = document.getElementById(atkHabId).value;
+  const _abilityD = document.getElementById(defHabId).value;
   const _ruina = document.getElementById('ruina-activa')?.value || 'none';
   const _clima = document.getElementById('clima').value;
   const _campo = document.getElementById('campo').value;
-  const itemA = document.getElementById('obj-a').value;
-  const _isBurned = document.getElementById('chk-burn').checked;
-  const _isPoisoned = document.getElementById('chk-poison').checked;
+  const itemA = document.getElementById(atkItemId).value;
+  const statusId = activeSide === 'def' ? 'def-status' : 'atk-status';
+  const activeStatus = document.getElementById(statusId)?.value || 'Healthy';
 
-  if (_abilityD === 'unaware' || _abilityD === 'ignorante') {
-      if (boost > 0) boost = 0;
+  const _isBurned = activeStatus === 'Burned' ;
+  const _isPoisoned = activeStatus === 'Poisoned' ;
+  const _hasStatus = activeStatus !== 'Healthy' || _isBurned || _isPoisoned;
+
+  let stat;
+
+  let targetForStat = attacker;
+
+  if (mvName === 'Foul Play') {
+      targetForStat = activeSide === 'def' ? atkPoke : defPoke;
+
+      atkEvId   = activeSide === 'def' ? 'atk' : 'def';
+      atkNatId  = activeSide === 'def' ? 'atk-nat' : 'def-nat';
+      atkLvlId  = activeSide === 'def' ? 'atk-lvl' : 'def-lvl';
+
+      const base = targetForStat[statName];
+      const lvl = parseInt(document.getElementById(atkLvlId).value) || 50;
+      const mods = NATURE_MODS[document.getElementById(atkNatId).value] || [1,1,1,1,1];
+      const natMult = mods[0];
+      const evs = parseInt(document.getElementById(`${atkEvId}-ev-${statName}`).value) || 0;
+      const bo = parseInt(document.getElementById(`${atkEvId}-bo-${statName}`)?.value) || 0;
+
+      stat = Math.floor(evStat(evs, base, lvl, natMult, false) * bm(bo));
+
+      if (_abilityA === 'huge power' || _abilityA === 'huge-power' || _abilityA === 'pure power' || _abilityA === 'pure-power') {
+          stat *= 2;
+      }
+  } else {
+      stat = attacker[`final_${statName}`] || 70;
   }
 
-  if (_abilityA === 'huge-power' && !isSp) stat *= 2;
-  if (_abilityA === 'guts' && (_isBurned || _isPoisoned) && !isSp) stat = Math.floor(stat * 1.5);
+  if (_abilityD === 'unaware' || _abilityD === 'ignorante') {
+     const bo = parseInt(document.getElementById(`${atkEvId}-bo-${statName}`)?.value) || 0;
+     if (bo > 0) {
+        const base = targetForStat[statName];
+        const lvl = parseInt(document.getElementById(atkLvlId).value) || 50;
+        const mods = NATURE_MODS[document.getElementById(atkNatId).value] || [1,1,1,1,1];
+        const natMult = statName==='def' ? mods[1] : (statName==='spa' ? mods[2] : mods[0]);
+        const evs = parseInt(document.getElementById(`${atkEvId}-ev-${statName}`).value) || 0;
+
+        stat = Math.floor(evStat(evs, base, lvl, natMult, false));
+
+        if (statName === 'atk' && (_abilityA === 'huge power' || _abilityA === 'huge-power' || _abilityA === 'pure power' || _abilityA === 'pure-power')) stat *= 2;
+        if (statName === 'def' && (_abilityA === 'fur coat' || _abilityA === 'fur-coat')) stat *= 2;
+     }
+  }
+
+  if (_abilityA === 'guts' && _hasStatus && !isSp) stat = Math.floor(stat * 1.5);
   if (_abilityA === 'toxic-boost' && _isPoisoned && !isSp) stat = Math.floor(stat * 1.5);
   if (_abilityA === 'flare-boost' && _isBurned && isSp) stat = Math.floor(stat * 1.5);
   if (_abilityA === 'solar-power' && _clima === 'sun' && isSp) stat = Math.floor(stat * 1.5);
 
-  const isProto = _abilityA === 'protosynthesis';
-  const isQuark = _abilityA === 'quark drive' ;
+  const isProto = _abilityA === 'protosynthesis' || _abilityA === 'paleosintesis';
+  const isQuark = _abilityA === 'quark drive' || _abilityA === 'carga-cuark';
 
   if ((isProto && (_clima === 'sun' || itemA === 'Booster Energy')) ||
-      (isQuark && (_campo === 'electric' || itemA === 'Booster Energy'))) {
-      stat = Math.floor(stat * 1.3);
-  }
+      (isQuark && (_campo === 'electric' || itemA === 'Booster Energy'))) { stat = Math.floor(stat * 1.3); }
   if (_abilityA === 'orichalcum-pulse' && _clima === 'sun' && !isSp) stat = Math.floor(stat * 5461 / 4096);
   if (_abilityA === 'hadron-engine' && _campo === 'electric' && isSp) stat = Math.floor(stat * 5461 / 4096);
 
   if (!isSp && (_ruina === 'tablets' || _abilityD === 'tablets-of-ruin') && _abilityA !== 'tablets-of-ruin') stat = Math.floor(stat * 0.75);
   if (isSp && (_ruina === 'vessel' || _abilityD === 'vessel-of-ruin') && _abilityA !== 'vessel-of-ruin') stat = Math.floor(stat * 0.75);
 
-
   if (itemA === 'Choice Band' && !isSp) stat = Math.floor(stat * 1.5);
   if (itemA === 'Choice Specs' && isSp) stat = Math.floor(stat * 1.5);
-  if (itemA === 'Thick Club' && !isSp && ['Cubone', 'Marowak', 'Marowak-Alola'].includes(atkPoke.name)) stat *= 2;
-  if (itemA === 'Light Ball' && ['Pikachu', 'Pikachu-Gmax'].includes(atkPoke.name)) stat *= 2;
-  if (itemA === 'Deep Sea Tooth' && atkPoke.name === 'Clamperl' && isSp) stat *= 2;
+  if (itemA === 'Thick Club' && !isSp && ['Cubone', 'Marowak', 'Marowak-Alola'].includes(attacker.name)) stat *= 2;
+  if (itemA === 'Light Ball' && ['Pikachu', 'Pikachu-Gmax'].includes(attacker.name)) stat *= 2;
+  if (itemA === 'Deep Sea Tooth' && attacker.name === 'Clamperl' && isSp) stat *= 2;
 
   return stat;
 }
-
-function getHP(idx) {
-  if (!defPoke) return 150;
-  const lvl = parseInt(document.getElementById('def-lvl').value)||50;
-  return evStat(idx, defPoke.hp, lvl, 1, true);
+function getHP(spIdx) {
+  const targetPoke = activeSide === 'def' ? atkPoke : defPoke;
+  if (!targetPoke) return 150;
+  if (spIdx === undefined) return targetPoke.final_hp || 150;
+  const lvlId = activeSide === 'def' ? 'atk-lvl' : 'def-lvl';
+  const lvl = parseInt(document.getElementById(lvlId).value) || 50;
+  return evStat(spIdx, targetPoke.hp, lvl, 1, true);
 }
 
-function getDefStat(idx) {
-  if (!defPoke) return 100;
+function getDefStat(spIdx) {
+  const targetPoke = activeSide === 'def' ? atkPoke : defPoke;
+  if (!targetPoke) return 100;
   const isSp = mvSel?.cat === 's';
-  const base = isSp ? defPoke.spd : defPoke.def;
-  const lvl = parseInt(document.getElementById('def-lvl').value) || 50;
-  const nat = parseFloat(document.getElementById('def-nat').value);
-  const boost = parseInt(document.getElementById('def-boost').value);
-  const b = document.getElementById('chk-crit').checked ? Math.min(0, boost) : boost;
+  const statName = isSp ? 'spd' : 'def';
+  const natId = activeSide === 'def' ? 'atk-nat' : 'def-nat';
+  const lvlId = activeSide === 'def' ? 'atk-lvl' : 'def-lvl';
 
-  let stat = Math.floor(evStat(idx, base, lvl, nat, false) * bm(b));
+  if (mvSel?.dealsPhysicalDamage === true) {
+    statName = 'def';
+  }
 
-  const _abilityA = document.getElementById('hab-a').value;
-  const _abilityD = document.getElementById('hab-d').value;
+  let stat;
+  if (spIdx !== undefined) {
+    const lvl = parseInt(document.getElementById(lvlId).value) || 50;
+    const mods = NATURE_MODS[document.getElementById(natId).value] || [1,1,1,1,1];
+    const natMult = isSp ? mods[3] : mods[1];
+    stat = Math.max(1, Math.floor(evStat(spIdx, targetPoke[statName], lvl, natMult, false)));
+  } else {
+    stat = targetPoke[`final_${statName}`] || 100;
+  }
+
+  const atkAbilId = activeSide === 'def' ? 'hab-d' : 'hab-a';
+  const defAbilId = activeSide === 'def' ? 'hab-a' : 'hab-d';
+  const defItemId = activeSide === 'def' ? 'obj-a' : 'obj-d';
+  const defBoId   = activeSide === 'def' ? 'atk' : 'def';
+  const defNatId  = activeSide === 'def' ? 'atk-nat' : 'def-nat';
+  const defLvlId  = activeSide === 'def' ? 'atk-lvl' : 'def-lvl';
+
+  const _abilityA = document.getElementById(atkAbilId).value;
+  const _abilityD = document.getElementById(defAbilId).value;
+
+  const ignoresDefBoosts = mvSel?.ignoresDefenseBoosts === true;
+
+  if (_abilityA === 'unaware' || _abilityA === 'ignorante' || ignoresDefBoosts) {
+     const bo = parseInt(document.getElementById(`${defBoId}-bo-${statName}`)?.value) || 0;
+     if (bo !== 0) {
+        const base = targetPoke[statName];
+        const lvl = parseInt(document.getElementById(defLvlId).value) || 50;
+        const mods = NATURE_MODS[document.getElementById(defNatId).value] || [1,1,1,1,1];
+        const natMult = statName === 'def' ? mods[1] : mods[3];
+        const evs = parseInt(document.getElementById(`${defBoId}-ev-${statName}`).value) || 0;
+        stat = Math.floor(evStat(evs, base, lvl, natMult, false));
+     }
+  }
+
   const _ruina = document.getElementById('ruina-activa')?.value || 'none';
   const _clima = document.getElementById('clima').value;
   const _campo = document.getElementById('campo').value;
-  const itemD = document.getElementById('obj-d').value;
+  const itemD = document.getElementById(defItemId).value;
 
-  const isProto = _abilityD === 'protosynthesis';
-  const isQuark = _abilityD === 'quark drive' ;
+  const defTeraId = activeSide === 'def' ? 'atk-tera' : 'def-tera';
+  const defTera = document.getElementById(defTeraId).value;
+  const activeDefTypes = (defTera && defTera !== 'none') ? [defTera.toLowerCase()] : targetPoke.types.map(t => t.toLowerCase());
 
-  if (_abilityA === 'unaware' || _abilityA === 'ignorante') {
-      if (boost > 0) boost = 0;
-  }
+  if (!isSp && _clima === 'snow' && activeDefTypes.includes('ice')) stat = Math.floor(stat * 1.5);
+  if (isSp && _clima === 'sand' && activeDefTypes.includes('rock')) stat = Math.floor(stat * 1.5);
+
+  const isProto = _abilityD === 'protosynthesis' || _abilityD === 'paleosintesis';
+  const isQuark = _abilityD === 'quark drive' || _abilityD === 'carga-cuark';
 
   if ((isProto && (_clima === 'sun' || itemD === 'Booster Energy')) ||
-      (isQuark && (_campo === 'electric' || itemD === 'Booster Energy'))) {
-      stat = Math.floor(stat * 1.3);
-  }
-  if (!isSp && (_ruina === 'sword' || _abilityA === 'sword-of-ruin') && _abilityD !== 'sword-of-ruin') stat = Math.floor(stat * 0.75);
-  if (isSp && (_ruina === 'beads' || _abilityA === 'beads-of-ruin') && _abilityD !== 'beads-of-ruin') stat = Math.floor(stat * 0.75);
+      (isQuark && (_campo === 'electric' || itemD === 'Booster Energy'))) { stat = Math.floor(stat * 1.3); }
 
-  if (itemD === 'Eviolite' && defPoke.canEvolve) stat = Math.floor(stat * 1.5);
+  if (!isSp && (_ruina === 'sword' || _abilityA === 'sword of ruin') && _abilityD !== 'sword of ruin') stat = Math.floor(stat * 0.75);
+  if (isSp && (_ruina === 'beads' || _abilityA === 'beads of ruin') && _abilityD !== 'beads of ruin') stat = Math.floor(stat * 0.75);
+
+  if (itemD === 'Eviolite' && targetPoke.canEvolve) stat = Math.floor(stat * 1.5);
   if (itemD === 'Assault Vest' && isSp) stat = Math.floor(stat * 1.5);
-  if (itemD === 'Deep Sea Scale' && defPoke.name === 'Clamperl' && isSp) stat *= 2;
-  if (itemD === 'Metal Powder' && defPoke.name === 'Ditto' && !isSp) stat *= 2;
-  if (_abilityD === 'fur-coat' && !isSp) stat *= 2;
+  if (itemD === 'Deep Sea Scale' && targetPoke.name === 'Clamperl' && isSp) stat *= 2;
+  if (itemD === 'Metal Powder' && targetPoke.name === 'Ditto' && !isSp) stat *= 2;
 
   return Math.max(1, stat);
 }
@@ -1769,13 +2336,47 @@ function fillAbilities(selectId, abilities) {
 }
 
 function updateResult() {
-  if (!atkPoke || !defPoke || !mvSel) return;
+  if (!atkPoke || !defPoke) return;
+
+  if (!mvSel) {
+    if (document.getElementById('r-atk')) document.getElementById('r-atk').textContent = '—';
+    if (document.getElementById('r-def')) document.getElementById('r-def').textContent = '—';
+    if (document.getElementById('r-hp'))  document.getElementById('r-hp').textContent  = '—';
+    if (document.getElementById('r-min')) document.getElementById('r-min').textContent = '—';
+    if (document.getElementById('r-max')) document.getElementById('r-max').textContent = '—';
+
+    const vel = document.getElementById('r-verd');
+    if (vel) {
+      vel.textContent = '—';
+      vel.className = 'res-val';
+    }
+    if (document.getElementById('r-rng')) document.getElementById('r-rng').textContent = '';
+
+    const sec = document.getElementById('mx-section');
+    const wrap = document.getElementById('mx-wrap');
+    if (sec && wrap) {
+      sec.classList.add('visible');
+      sec.style.display = 'block';
+      document.getElementById('mx-section-title').textContent = '';
+      wrap.innerHTML = '<div class="empty-mx"><span class="spin">⟳</span> Esperando movimiento...</div>';
+    }
+
+    const cellDetail = document.getElementById('mx-cell-detail');
+    if (cellDetail) cellDetail.style.display = 'none';
+
+    return;
+  }
+
+  const isSp = mvSel?.cat === 's';
+  const atkSlbl = document.getElementById('atk-slbl');
+  const defSlbl = document.getElementById('def-slbl');
+  if (atkSlbl) atkSlbl.textContent = isSp ? 'SpA' : 'Atk';
+  if (defSlbl) defSlbl.textContent = isSp ? 'SpD' : 'Def';
+
   const habAEl = document.getElementById('hab-a');
   if (habAEl && (habAEl.value === 'mega sol')) {
     const climaSelect = document.getElementById('clima');
-    if (climaSelect) {
-      climaSelect.value = 'sun';
-    }
+    if (climaSelect) climaSelect.value = 'sun';
   }
 
   if (mvSel.cat === 't') {
@@ -1785,22 +2386,29 @@ function updateResult() {
     const vel = document.getElementById('r-verd');
     vel.textContent = 'Estado';
     vel.className = 'res-val v-safe';
-
     updateLiveMatrix();
     return;
   }
 
   const p = readP();
-  const atk = getAtkStat(parseInt(document.getElementById('atk-evs').value));
-  const def = getDefStat(parseInt(document.getElementById('def-devs').value));
-  const hp  = getHP(parseInt(document.getElementById('def-hevs').value));
-  const bp  = parseInt(document.getElementById('bp').value)||80;
-  const atkTs  = atkPoke.types;
-  const defTs  = defPoke.types;
-  const atkTera = document.getElementById('atk-tera').value;
-  const defTera = document.getElementById('def-tera').value;
+  const atk = getAtkStat();
+  const def = getDefStat();
+  const hp  = getHP();
+
+  const rAtk = document.getElementById('r-atk');
+  const rDef = document.getElementById('r-def');
+  const rHp  = document.getElementById('r-hp');
+  if (rAtk) rAtk.textContent = atk;
+  if (rDef) rDef.textContent = def;
+  if (rHp)  rHp.textContent  = hp;
+
+  const atkTs  = activeSide === 'def' ? defPoke.types : atkPoke.types;
+  const defTs  = activeSide === 'def' ? atkPoke.types : defPoke.types;
+  const atkTera = document.getElementById(activeSide === 'def' ? 'def-tera' : 'atk-tera').value;
+  const defTera = document.getElementById(activeSide === 'def' ? 'atk-tera' : 'def-tera').value;
+  const bp   = parseInt(document.getElementById(activeSide === 'def' ? 'def-bp' : 'bp').value)||80;
   const mvT  = mvSel.type;
-  const hits = parseInt(document.getElementById('num-hits').value)||1;
+  const hits = parseInt(document.getElementById(activeSide === 'def' ? 'def-num-hits' : 'num-hits').value)||1;
 
   const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
   const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
@@ -1831,17 +2439,24 @@ function updateLiveMatrix() {
   sec.style.display = 'block';
 
   const p = readP();
-  const atkTs = atkPoke.types, defTs = defPoke.types;
-  const atkTera = document.getElementById('atk-tera').value;
-  const defTera = document.getElementById('def-tera').value;
+  const atkTs = activeSide === 'def' ? defPoke.types : atkPoke.types;
+  const defTs = activeSide === 'def' ? atkPoke.types : defPoke.types;
+  const atkTera = document.getElementById(activeSide === 'def' ? 'def-tera' : 'atk-tera').value;
+  const defTera = document.getElementById(activeSide === 'def' ? 'atk-tera' : 'def-tera').value;
   const mvT = mvSel.type;
-  const bp = parseInt(document.getElementById('bp').value)||80;
-  const hits = parseInt(document.getElementById('num-hits').value)||1;
-  const atkEv = parseInt(document.getElementById('atk-evs').value);
-  const atk = getAtkStat(atkEv);
+  const bp = parseInt(document.getElementById(activeSide === 'def' ? 'def-bp' : 'bp').value)||80;
+  const hits = parseInt(document.getElementById(activeSide === 'def' ? 'def-num-hits' : 'num-hits').value)||1;
+  const isSp2 = mvSel?.cat === 's';
+  const atkStatId = isSp2
+    ? (activeSide === 'def' ? 'def-ev-spa' : 'atk-ev-spa')
+    : (activeSide === 'def' ? 'def-ev-atk' : 'atk-ev-atk');
+  const atkEv = parseInt(document.getElementById(atkStatId)?.value) || 0;
+  const atk = getAtkStat();
+  const atkName = activeSide === 'def' ? defPoke.name : atkPoke.name;
+  const defName = activeSide === 'def' ? atkPoke.name : defPoke.name;
 
   document.getElementById('mx-section-title').textContent =
-    `${atkPoke.name} → ${mvSel.name.replace(/-/g,' ')} (${hits} hits) vs ${defPoke.name} | Atacante: ${atkEv} SP (${EVS[atkEv]} EVs)`;
+    `${atkName} → ${mvSel.name.replace(/-/g,' ')} (${hits} hits) vs ${defName} | Atacante: ${atkEv} SP (${EVS[Math.min(atkEv,32)]} EVs)`;
 
   const N = 33;
   let h = '<table class="mx"><thead><tr>';
@@ -1934,16 +2549,15 @@ function pkRenderItem(name) {
           </div>`;
 }
 
-buildDropdown('atk-dd','atk-search', pkNames, pkRenderItem, name => loadPoke('atk', name));
-buildDropdown('def-dd','def-search', pkNames, pkRenderItem, name => loadPoke('def', name));
-
-
 document.getElementById('atk-search').removeAttribute('readonly');
 document.getElementById('def-search').removeAttribute('readonly');
 
+var updatingHits = false;
+
 document.getElementById('bp').addEventListener('input', () => { bpOvr=true; document.getElementById('bp-note').textContent='manual'; updateResult(); });
-['clima','campo','pantalla','obj-a','obj-d','compie','hab-a','hab-d','atk-tera','def-tera','num-hits'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
-['chk-hh','chk-crit','chk-spread','chk-burn','chk-poison'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
+['clima','campo','pantalla','obj-a','obj-d','compie','hab-a','hab-d','atk-tera','def-tera'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
+document.getElementById('num-hits').addEventListener('change', () => { if (!updatingHits) updateResult(); });
+['chk-hh','chk-crit','chk-spread'].forEach(id=>document.getElementById(id).addEventListener('change',()=>updateResult()));
 
 function syncEvs(rangeId, numId, updateFunc) {
   const r = document.getElementById(rangeId);
@@ -1968,17 +2582,38 @@ function syncEvs(rangeId, numId, updateFunc) {
   });
 }
 
-['atk-boost','atk-nat','atk-lvl'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{updateAtkStat();updateResult();}));
-['def-boost','def-nat','def-lvl'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{updateDefStats();updateResult();}));
+['atk', 'def'].forEach(side => {
+  ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach(stat => {
+    const evInput = document.getElementById(`${side}-ev-${stat}`);
+    const boInput = document.getElementById(`${side}-bo-${stat}`);
+    if (evInput) evInput.addEventListener('input', () => { if(side==='atk') updateAtkStat(); else updateDefStats(); updateResult(); updateEvCounter(side); });
+    if (boInput) boInput.addEventListener('change', () => { if(side==='atk') updateAtkStat(); else updateDefStats(); updateResult(); });
+  });
+  const natEl = document.getElementById(`${side}-nat`);
+  const lvlEl = document.getElementById(`${side}-lvl`);
+  if (natEl) natEl.addEventListener('change', () => { if(side==='atk') updateAtkStat(); else updateDefStats(); updateResult(); });
+  if (lvlEl) lvlEl.addEventListener('input', () => { if(side==='atk') updateAtkStat(); else updateDefStats(); updateResult(); });
+});
 
-['clima','campo','pantalla','obj-a','obj-d','compie','hab-a','hab-d','atk-tera','def-tera','num-hits','aura-activa','ruina-activa'].forEach(id=> {
+document.getElementById('def-bp').addEventListener('input', () => { bpOvr=true; document.getElementById('def-bp-note').textContent='manual'; updateResult(); });
+document.getElementById('def-num-hits').addEventListener('change', () => { if (!updatingHits) updateResult(); });
+
+['clima','campo','pantalla','obj-a','obj-d','compie','hab-a','hab-d','atk-tera','def-tera','num-hits','aura-activa','ruina-activa','atk-status','def-status'].forEach(id=> {
   const el = document.getElementById(id);
   if(el) el.addEventListener('change',()=>updateResult());
 });
 
-syncEvs('atk-evs', 'atk-ev', updateAtkStat);
-syncEvs('def-hevs', 'def-hev', updateDefStats);
-syncEvs('def-devs', 'def-dev', updateDefStats);
+function updateEvCounter(side) {
+  let total = 0;
+  ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach(st => {
+    total += parseInt(document.getElementById(`${side}-ev-${st}`).value) || 0;
+  });
+  const counter = document.getElementById(`ev-counter-${side}`);
+  if (counter) {
+    counter.textContent = total;
+    counter.style.color = (total > 66) ? 'var(--r)' : 'var(--a)';
+  }
+}
 
 function changeTheme(theme) {
   const root = document.documentElement;
