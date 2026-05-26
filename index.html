@@ -1824,11 +1824,15 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
             rawBP = 50;
         }
     }
-    if (safeMvT === 'normal') {
-        if (p.habA === 'pixilate' ) { safeMvT = 'fairy'; ateBoost = true; }
-        else if (p.habA === 'aerilate' ) { safeMvT = 'flying'; ateBoost = true; }
-        else if (p.habA === 'refrigerate' ) { safeMvT = 'ice'; ateBoost = true; }
-        else if (p.habA === 'galvanize' ) { safeMvT = 'electric'; ateBoost = true; }
+    if (['normalize'].includes(p.habA) && safeMvT !== 'normal') {
+        safeMvT = 'normal';
+        ateBoost = true;
+    } else if (safeMvT === 'normal') {
+
+        if (['pixilate'].includes(p.habA)) { safeMvT = 'fairy'; ateBoost = true; }
+        else if (['aerilate'].includes(p.habA)) { safeMvT = 'flying'; ateBoost = true; }
+        else if (['refrigerate'].includes(p.habA)) { safeMvT = 'ice'; ateBoost = true; }
+        else if (['galvanize'].includes(p.habA)) { safeMvT = 'electric'; ateBoost = true; }
         else if (p.habA === 'dragonize') { safeMvT = 'dragon'; ateBoost = true; }
     }
 
@@ -1924,7 +1928,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     if (p.habA === 'iron fist' && mvData.isPunch ) bpMods.push(0x1333);
     if (p.habA === 'strong jaw' && mvData.isBite ) bpMods.push(0x1800);
     if (p.habA === 'mega launcher' && mvData.isPulse ) bpMods.push(0x1800);
-    if (p.habA === 'sharpness' && mvData.isSlice ) bpMods.push(0x1555);
+    if (p.habA === 'sharpness' && mvData.isSlice ) bpMods.push(0x1800);
     if (p.habA === 'punk rock' && mvData.isSound ) bpMods.push(0x14CD);
 
     const mvT_Capitalized = safeMvT.charAt(0).toUpperCase() + safeMvT.slice(1);
@@ -2234,25 +2238,16 @@ function getHP(spIdx) {
 function getDefStat(spIdx) {
   const targetPoke = activeSide === 'def' ? atkPoke : defPoke;
   if (!targetPoke) return 100;
+
   const isSp = mvSel?.cat === 's';
-  const statName = isSp ? 'spd' : 'def';
-  const natId = activeSide === 'def' ? 'atk-nat' : 'def-nat';
-  const lvlId = activeSide === 'def' ? 'atk-lvl' : 'def-lvl';
+  let statName = isSp ? 'spd' : 'def';
 
   if (mvSel?.dealsPhysicalDamage === true) {
     statName = 'def';
   }
 
-  let stat;
-  if (spIdx !== undefined) {
-    const lvl = parseInt(document.getElementById(lvlId).value) || 50;
-    const mods = NATURE_MODS[document.getElementById(natId).value] || [1,1,1,1,1];
-    const natMult = isSp ? mods[3] : mods[1];
-    stat = Math.max(1, Math.floor(evStat(spIdx, targetPoke[statName], lvl, natMult, false)));
-  } else {
-    stat = targetPoke[`final_${statName}`] || 100;
-  }
-
+  const natId = activeSide === 'def' ? 'atk-nat' : 'def-nat';
+  const lvlId = activeSide === 'def' ? 'atk-lvl' : 'def-lvl';
   const atkAbilId = activeSide === 'def' ? 'hab-d' : 'hab-a';
   const defAbilId = activeSide === 'def' ? 'hab-a' : 'hab-d';
   const defItemId = activeSide === 'def' ? 'obj-a' : 'obj-d';
@@ -2265,16 +2260,37 @@ function getDefStat(spIdx) {
 
   const ignoresDefBoosts = mvSel?.ignoresDefenseBoosts === true;
 
-  if (_abilityA === 'unaware' || _abilityA === 'ignorante' || ignoresDefBoosts) {
-     const bo = parseInt(document.getElementById(`${defBoId}-bo-${statName}`)?.value) || 0;
-     if (bo !== 0) {
-        const base = targetPoke[statName];
-        const lvl = parseInt(document.getElementById(defLvlId).value) || 50;
-        const mods = NATURE_MODS[document.getElementById(defNatId).value] || [1,1,1,1,1];
-        const natMult = statName === 'def' ? mods[1] : mods[3];
-        const evs = parseInt(document.getElementById(`${defBoId}-ev-${statName}`).value) || 0;
-        stat = Math.floor(evStat(evs, base, lvl, natMult, false));
-     }
+  const isUnaware = _abilityA === 'unaware' || _abilityA === 'ignorante';
+
+  const bo = parseInt(document.getElementById(`${defBoId}-bo-${statName}`)?.value) || 0;
+
+  let stat;
+  if (spIdx !== undefined) {
+
+    const lvl = parseInt(document.getElementById(lvlId).value) || 50;
+    const mods = NATURE_MODS[document.getElementById(natId).value] || [1,1,1,1,1];
+    const natMult = statName === 'def' ? mods[1] : mods[3];
+
+    stat = Math.max(1, Math.floor(evStat(spIdx, targetPoke[statName], lvl, natMult, false)));
+
+    if (!ignoresDefBoosts && !isUnaware && bo !== 0) {
+        stat = Math.max(1, Math.floor(stat * bm(bo)));
+    }
+
+  } else {
+
+    stat = targetPoke[`final_${statName}`] || 100;
+
+    if ((ignoresDefBoosts || isUnaware) && bo != 0) {
+       const base = targetPoke[statName];
+       const lvl = parseInt(document.getElementById(defLvlId).value) || 50;
+       const mods = NATURE_MODS[document.getElementById(defNatId).value] || [1,1,1,1,1];
+       const natMult = statName === 'def' ? mods[1] : mods[3];
+
+       const currentEvs = parseInt(document.getElementById(`${defBoId}-ev-${statName}`).value) || 0;
+
+       stat = Math.floor(evStat(currentEvs, base, lvl, natMult, false));
+    }
   }
 
   const _ruina = document.getElementById('ruina-activa')?.value || 'none';
