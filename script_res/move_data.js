@@ -70,7 +70,7 @@ const MVDB = {
         makesContact: true,
         hitRange: 2
     },
-    'Double-Edge': {
+    'Double Edge': {
         bp: 120,
         type: 'Normal',
         category: 'Physical',
@@ -205,7 +205,7 @@ const MVDB = {
         category: 'Physical',
         makesContact: true
     },
-    'Self-Destruct': {
+    'SelfDestruct': {
         bp: 200,
         type: 'Normal',
         category: 'Physical',
@@ -1243,7 +1243,7 @@ const MVDB = {
         type: 'Fighting',
         category: 'Status'
     },
-    'Lock-On': {
+    'Lock On': {
         type: 'Normal',
         category: 'Status'
     },
@@ -1344,7 +1344,7 @@ const MVDB = {
         type: 'Fairy',
         category: 'Status',
     },
-    'Lock-On': {
+    'Lock On': {
         type: 'Normal',
         category: 'Status',
     },
@@ -1379,7 +1379,7 @@ const MVDB = {
         isSpread: true,
         hasSecondaryEffect: true
     },
-    'Mud-Slap': {
+    'Mud Slap': {
         bp: 20,
         type: 'Ground',
         category: 'Special',
@@ -3309,7 +3309,7 @@ const MVDB = {
         miniDoubleBP: true,
         zp: 170
     },
-    'Freeze-Dry': {
+    'Freeze Dry': {
         bp: 70,
         type: 'Ice',
         category: 'Special',
@@ -3769,7 +3769,7 @@ const MVDB = {
         makesContact: true,
         bp: 70,
     },
-    'Multi-Attack': {
+    'Multi Attack': {
         category: 'Physical',
         type: 'Normal',
         makesContact: true,
