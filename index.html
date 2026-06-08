@@ -462,7 +462,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       </select>
 
       <div class="fl" style="margin:0;">Habilidad</div>
-      <select id="hab-a"><option value="none">N/A</option></select>
+      <select id="hab-a" onchange="updateAtkStat()"><option value="none">N/A</option></select>
 
       <div class="fl" style="margin:0;">Item</div>
       <div style="position: relative;">
@@ -703,7 +703,7 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 
       </select>
       <div class="fl" style="margin:0;">Habilidad</div>
-      <select id="hab-d"><option value="none">N/A</option></select>
+      <select id="hab-d" onchange="updateDefStats()"><option value="none">N/A</option></select>
 
       <div class="fl" style="margin:0;">Item</div>
       <div style="position: relative;">
@@ -1670,7 +1670,7 @@ function updateAtkStat() {
 
     const ability = document.getElementById('hab-a').value;
     if (st === 'atk' && ability === 'huge power') total *= 2;
-    if (st === 'def' && ability === 'fur-coat') total *= 2;
+    if (st === 'def' && ability === 'fur coat') total *= 2;
 
     document.getElementById(`atk-tot-${st}`).textContent = total;
     atkPoke[`final_${st}`] = total;
@@ -1698,7 +1698,7 @@ function updateDefStats() {
 
     const ability = document.getElementById('hab-d').value;
     if (st === 'atk' && ability === 'huge power') total *= 2;
-    if (st === 'def' && ability === 'fur-coat') total *= 2;
+    if (st === 'def' && ability === 'fur coat') total *= 2;
 
     document.getElementById(`def-tot-${st}`).textContent = total;
     defPoke[`final_${st}`] = total;
@@ -1779,7 +1779,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     }
 
 
-    const isMoldBreaker = ['mold-breaker', 'teravolt', 'turboblaze'].includes(p.habA);
+    const isMoldBreaker = ['mold breaker', 'teravolt', 'turboblaze'].includes(p.habA);
     const defAbility = isMoldBreaker ? '' : p.habD;
 
     const mvData = (typeof MVDB !== 'undefined' && MVDB[mvName]) ? MVDB[mvName] : (mvSel || {});
@@ -1789,7 +1789,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     }
 
     if (mvName === 'Weather Ball') {
-        if (p.clima === "sun" || p.habA === "mega sol" || p.habA === "mega-sol") {
+        if (p.clima === "sun" || p.habA === "mega sol" || p.habA === "mega sol") {
             safeMvT = "fire";
             rawBP = 100;
         } else if (p.clima === "rain") {
@@ -2203,20 +2203,20 @@ function getAtkStat() {
   }
 
   if (_abilityA === 'guts' && _hasStatus && !isSp) stat = Math.floor(stat * 1.5);
-  if (_abilityA === 'toxic-boost' && _isPoisoned && !isSp) stat = Math.floor(stat * 1.5);
-  if (_abilityA === 'flare-boost' && _isBurned && isSp) stat = Math.floor(stat * 1.5);
-  if (_abilityA === 'solar-power' && _clima === 'sun' && isSp) stat = Math.floor(stat * 1.5);
+  if (_abilityA === 'toxic boost' && _isPoisoned && !isSp) stat = Math.floor(stat * 1.5);
+  if (_abilityA === 'flare boost' && _isBurned && isSp) stat = Math.floor(stat * 1.5);
+  if (_abilityA === 'solar power' && _clima === 'sun' && isSp) stat = Math.floor(stat * 1.5);
 
   const isProto = _abilityA === 'protosynthesis' || _abilityA === 'paleosintesis';
   const isQuark = _abilityA === 'quark drive' || _abilityA === 'carga-cuark';
 
   if ((isProto && (_clima === 'sun' || itemA === 'Booster Energy')) ||
       (isQuark && (_campo === 'electric' || itemA === 'Booster Energy'))) { stat = Math.floor(stat * 1.3); }
-  if (_abilityA === 'orichalcum-pulse' && _clima === 'sun' && !isSp) stat = Math.floor(stat * 5461 / 4096);
-  if (_abilityA === 'hadron-engine' && _campo === 'electric' && isSp) stat = Math.floor(stat * 5461 / 4096);
+  if (_abilityA === 'orichalcum pulse' && _clima === 'sun' && !isSp) stat = Math.floor(stat * 5461 / 4096);
+  if (_abilityA === 'hadron engine' && _campo === 'electric' && isSp) stat = Math.floor(stat * 5461 / 4096);
 
-  if (!isSp && (_ruina === 'tablets' || _abilityD === 'tablets-of-ruin') && _abilityA !== 'tablets-of-ruin') stat = Math.floor(stat * 0.75);
-  if (isSp && (_ruina === 'vessel' || _abilityD === 'vessel-of-ruin') && _abilityA !== 'vessel-of-ruin') stat = Math.floor(stat * 0.75);
+  if (!isSp && (_ruina === 'tablets' || _abilityD === 'tablets of ruin') && _abilityA !== 'tablets of ruin') stat = Math.floor(stat * 0.75);
+  if (isSp && (_ruina === 'vessel' || _abilityD === 'vessel of ruin') && _abilityA !== 'vessel of ruin') stat = Math.floor(stat * 0.75);
 
   if (itemA === 'Choice Band' && !isSp) stat = Math.floor(stat * 1.5);
   if (itemA === 'Choice Specs' && isSp) stat = Math.floor(stat * 1.5);
