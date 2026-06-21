@@ -1923,7 +1923,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
     if (p.habA === 'sand force' && p.clima === 'sand' && ['rock', 'ground', 'steel'].includes(safeMvT)) bpMods.push(0x14CD);
     if (p.habA === 'sheer force' && mvData.hasSecondaryEffect) bpMods.push(0x14CD);
-    if (p.habA === 'tough claws' && (mvData.makesContact || isPhysical)) bpMods.push(0x14CD);
+    if (p.habA === 'tough claws' && (mvData.makesContact && isPhysical)) bpMods.push(0x14CD);
     if (p.habA === 'reckless' && mvData.hasRecoil ) bpMods.push(0x1333);
     if (p.habA === 'iron fist' && mvData.isPunch ) bpMods.push(0x1333);
     if (p.habA === 'strong jaw' && mvData.isBite ) bpMods.push(0x1800);
