@@ -1904,6 +1904,16 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     }
     let isDoublePower = false;
 
+    if (p.campo === 'electric' && safeMvT === 'electric') {
+        bpMods.push(0x14CD);
+    }
+    if (p.campo === 'grassy' && safeMvT === 'grass') {
+        bpMods.push(0x14CD);
+    }
+    if (p.campo === 'psychic' && safeMvT === 'psychic') {
+        bpMods.push(0x14CD);
+    }
+  
     if (mvName === "Facade" && (p.burn || p.poison || p.paralyzed)) {
         isDoublePower = true;
     }
