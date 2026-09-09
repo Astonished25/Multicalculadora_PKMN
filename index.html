@@ -2015,7 +2015,7 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
             if (isPhysical || mvData.makesContact) finalMods.push(0x800);
         }
         if (defAbility === 'aura guard') {
-            const attackerNegatesContact = p.habA === 'long-reach' || itemA === 'Punching Glove';
+            const attackerNegatesContact = p.habA === 'long reach' || itemA === 'Punching Glove';
             if (mvData.makesContact && !attackerNegatesContact) {
                 finalMods.push(0x0800); 
             }
