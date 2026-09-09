@@ -2014,6 +2014,12 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
             if (safeMvT === 'fire') finalMods.push(0x2000);
             if (isPhysical || mvData.makesContact) finalMods.push(0x800);
         }
+        if (defAbility === 'aura guard') {
+            const attackerNegatesContact = p.habA === 'long-reach' || itemA === 'Punching Glove';
+            if (mvData.makesContact && !attackerNegatesContact) {
+                finalMods.push(0x0800); 
+            }
+        }
 
         if (isFirstHit && typeof getBerryResistType === 'function' && getBerryResistType(itemD) === mvT_Capitalized && (tMult > 1 || safeMvT === 'normal')) {
             finalMods.push(0x0800);
