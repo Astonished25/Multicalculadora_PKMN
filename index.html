@@ -2478,8 +2478,71 @@ function updateLiveMatrix() {
   const atkName = activeSide === 'def' ? defPoke.name : atkPoke.name;
   const defName = activeSide === 'def' ? atkPoke.name : defPoke.name;
 
-  document.getElementById('mx-section-title').textContent =
-    `${atkName} → ${mvSel.name.replace(/-/g,' ')} (${hits} hits) vs ${defName} | Atacante: ${atkEv} SP (${EVS[Math.min(atkEv,32)]} EVs)`;
+  // ── TITLE ────
+
+  const isSp = mvSel?.cat === 's';
+  const statLabel = isSp ? 'SpA' : 'Atk';
+
+  const atkNatId = activeSide === 'def' ? 'def-nat' : 'atk-nat';
+  const atkNatName = document.getElementById(atkNatId)?.value || 'Hardy';
+  const atkNatMods = NATURE_MODS[atkNatName] || [1,1,1,1,1];
+  const atkNatStatIdx = isSp ? 2 : 0; // spa=2, atk=0
+  const atkNatSym = atkNatMods[atkNatStatIdx] > 1 ? '+' : atkNatMods[atkNatStatIdx] < 1 ? '-' : '';
+
+  const atkBoStatId = isSp
+    ? (activeSide === 'def' ? 'def-bo-spa' : 'atk-bo-spa')
+    : (activeSide === 'def' ? 'def-bo-atk' : 'atk-bo-atk');
+  const atkBoost = parseInt(document.getElementById(atkBoStatId)?.value) || 0;
+  const atkBoostStr = atkBoost !== 0 ? `${atkBoost > 0 ? '+' : ''}${atkBoost} ` : '';
+
+  const atkNameDisplay = atkName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
+
+  const hhStr = p.hh ? 'Helping Hand ' : '';
+
+  const mvDisplayName = mvSel.name;
+  const safeMvTDisplay = mvT ? mvT.charAt(0).toUpperCase() + mvT.slice(1).toLowerCase() : '';
+  const bpPart = (mvSel.cat !== 't') ? ` (${bp} BP ${safeMvTDisplay})` : '';
+
+  const defNatId = activeSide === 'def' ? 'atk-nat' : 'def-nat';
+  const defNatName = document.getElementById(defNatId)?.value || 'Hardy';
+  const defNatMods = NATURE_MODS[defNatName] || [1,1,1,1,1];
+  const defNatStatIdx = isSp ? 3 : 1; // spd=3, def=1
+  const defNatSym = defNatMods[defNatStatIdx] > 1 ? '+' : defNatMods[defNatStatIdx] < 1 ? '-' : '';
+
+  const defBoStatId = isSp
+    ? (activeSide === 'def' ? 'atk-bo-spd' : 'def-bo-spd')
+    : (activeSide === 'def' ? 'atk-bo-def' : 'def-bo-def');
+  const defBoost = parseInt(document.getElementById(defBoStatId)?.value) || 0;
+  const defBoostStr = defBoost !== 0 ? `${defBoost > 0 ? '+' : ''}${defBoost} ` : '';
+
+  const defNameDisplay = defName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
+
+  const condParts = [];
+  if (p.clima && p.clima !== 'none' && p.clima !== 'N/A') {
+    const climaMap = { sun:'in Sun', rain:'in Rain', sand:'in Sand', snow:'in Snow', harshsun:'in Harsh Sun', heavyrain:'in Heavy Rain' };
+    const climaStr = climaMap[p.clima] || `in ${p.clima}`;
+    condParts.push(climaStr);
+  }
+  if (p.campo && p.campo !== 'none' && p.campo !== 'N/A') {
+    const campoMap = { electric:'on Electric Terrain', grassy:'on Grassy Terrain', psychic:'on Psychic Terrain', misty:'on Misty Terrain' };
+    const campoStr = campoMap[p.campo] || `on ${p.campo} Terrain`;
+    condParts.push(campoStr);
+  }
+  if (p.pantalla && p.pantalla !== 'none' && p.pantalla !== 'N/A') {
+    const pantallaMap = { reflect:"with Reflect", ls:"with Light Screen", aurora:"with Aurora Veil" };
+    const pantallaStr = pantallaMap[p.pantalla];
+    if (pantallaStr) condParts.push(`with an ally's ${pantallaStr === 'with Reflect' ? 'Reflect' : pantallaStr === 'with Light Screen' ? 'Light Screen' : 'Aurora Veil'}`);
+  }
+  if (p.compie && p.compie !== 1) condParts.push("with an ally's Friend Guard");
+
+  const condStr = condParts.length ? ' ' + condParts.join(' ') : '';
+
+  const titleStr =
+    `${atkBoostStr}${atkEv}${atkNatSym} ${statLabel} ${atkNameDisplay} ${hhStr}${mvDisplayName}${bpPart}` +
+    ` vs. ${defBoostStr}${defNatSym} ${defNameDisplay}${condStr}`;
+
+  document.getElementById('mx-section-title').textContent = titleStr;
+
 
   const N = 33;
   let h = '<table class="mx"><thead><tr>';
