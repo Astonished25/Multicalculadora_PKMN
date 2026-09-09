@@ -4396,7 +4396,8 @@ const MVDB = {
     'Expanding Force': {
         bp: 80,
         type: 'Psychic',
-        category: 'Special'
+        category: 'Special',
+        isSpread: true
     },
     'Flip Turn': {
         bp: 60,
