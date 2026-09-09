@@ -220,7 +220,7 @@ const MVDB = {
         zp: 200
     },
     'Slash': {
-        bp: 70,
+        bp: 80,
         type: 'Normal',
         category: 'Physical',
         makesContact: true,
@@ -4322,7 +4322,7 @@ const MVDB = {
         makesContact: true,
     },
     'Meteor Assault': {
-        bp: 150,
+        bp: 170,
         type: 'Fighting',
         category: 'Physical',
     },
@@ -4963,6 +4963,7 @@ const MVDB = {
         type: 'Electric',
         category: 'Physical',
         makesContact: true,
+        isPunch: true
     },
     'Gigaton Hammer': {
         bp: 160,
