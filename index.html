@@ -1777,6 +1777,9 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     else if (mvName === 'Knock Off') {
         rawBP = isNoItemD ? 65 : 97;
     }
+    else if (mvName === 'Expanding Force') {
+        rawBP = (p.campo === 'psychic') ? 120 : basePower;
+    }
 
 
     const isMoldBreaker = ['mold breaker', 'teravolt', 'turboblaze'].includes(p.habA);
@@ -1963,7 +1966,6 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
     let finalBP = Math.max(1, Math.round((rawBP * chainMods(bpMods)) / 0x1000));
     if (p.campo === 'electric' && mvName === 'Rising Voltage') finalBP *= 2;
-    if (p.campo === 'psychic' && mvName === 'Expanding Force') finalBP = 120;
 
     let dmgStep = Math.floor(Math.floor(Math.floor(2 * p.lvl / 5 + 2) * finalBP * atk) / def);
     let baseDamage = Math.floor(dmgStep / 50) + 2;
