@@ -63,7 +63,7 @@ html,body{background:var(--bg);color:var(--t);font-family:var(--fm);font-size:15
 .st-lbl { color: var(--t2); font-weight: bold; }
 .st-base { color: var(--t); text-align: center; }
 .st-tot { color: var(--a2); font-weight: bold; font-size: 13px; text-align: center; }
-.st-tot.hp-tot { color: var(--g); }
+.st-tot.hp-tot { color: var(--a2); }
 .atk-dd.open, .def-dd.open {
   display: block;
 }
@@ -1621,25 +1621,38 @@ function selectDefMv(name) {
 
 function applyNatureColors(pref, natureName) {
   const statKeys = ['atk','def','spa','spd','spe'];
-  const labelIds = ['Attack','Defense','Sp. Atk','Sp. Def','Speed'];
 
-  statKeys.forEach((st, i) => {
-    const lbl = document.querySelector(`#${pref}-card .st-row:nth-child(${i+2}) .st-lbl`);
-    if (lbl) { lbl.style.color = ''; lbl.style.fontWeight = ''; }
+  statKeys.forEach(st => {
     const tot = document.getElementById(`${pref}-tot-${st}`);
-    if (tot) { tot.style.color = st === 'hp' ? 'var(--g)' : 'var(--a2)'; }
+    if (tot) {
+      tot.style.color = 'var(--a2)';
+      const lbl = tot.closest('.st-row')?.querySelector('.st-lbl');
+      if (lbl) { lbl.style.color = ''; lbl.style.fontWeight = ''; }
+    }
   });
+
+  const hpTot = document.getElementById(`${pref}-tot-hp`);
+  if (hpTot) hpTot.style.color = 'var(--a2)';
+
   const effect = NATURE_EFFECT[natureName];
   if (!effect) return;
   const [up, down] = effect;
-  const upLbl = document.querySelector(`#${pref}-card .st-row:nth-child(${up+2}) .st-lbl`);
-  const upTot = document.getElementById(`${pref}-tot-${statKeys[up]}`);
-  if (upLbl) { upLbl.style.color = 'var(--g)'; upLbl.style.fontWeight = 'bold'; }
-  if (upTot) upTot.style.color = 'var(--g)';
-  const dnLbl = document.querySelector(`#${pref}-card .st-row:nth-child(${down+2}) .st-lbl`);
-  const dnTot = document.getElementById(`${pref}-tot-${statKeys[down]}`);
-  if (dnLbl) { dnLbl.style.color = 'var(--r)'; dnLbl.style.fontWeight = 'bold'; }
-  if (dnTot) dnTot.style.color = 'var(--r)';
+
+  const upSt = statKeys[up];
+  const upTot = document.getElementById(`${pref}-tot-${upSt}`);
+  if (upTot) {
+    upTot.style.color = 'var(--g)';
+    const upLbl = upTot.closest('.st-row')?.querySelector('.st-lbl');
+    if (upLbl) { upLbl.style.color = 'var(--g)'; upLbl.style.fontWeight = 'bold'; }
+  }
+
+  const dnSt = statKeys[down];
+  const dnTot = document.getElementById(`${pref}-tot-${dnSt}`);
+  if (dnTot) {
+    dnTot.style.color = 'var(--r)';
+    const dnLbl = dnTot.closest('.st-row')?.querySelector('.st-lbl');
+    if (dnLbl) { dnLbl.style.color = 'var(--r)'; dnLbl.style.fontWeight = 'bold'; }
+  }
 }
 
 function evStat(spIdx, base, lvl, nat, isHP) {
@@ -2558,7 +2571,7 @@ function updateLiveMatrix() {
 
   const N = 33;
   let h = '<table class="mx"><thead><tr>';
-  h += `<th class="sb2" style="min-width:72px;font-size:8px">DEF SP &#9660;<br>HP SP &#9658;</th>`;
+  h += `<th class="sb2" style="min-width:72px;font-size:8px">HP SP &#9658;<br>DEF SP &#9660;</th>`;
   for (let hi = 0; hi < N; hi++) {
     const hp = getHP(hi);
     h += `<th class="sr2"><div style="color:var(--g);font-weight:700">${hi}</div><div style="font-size:8px;color:var(--t2)">${hp}</div></th>`;
