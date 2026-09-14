@@ -2567,6 +2567,8 @@ function updateLiveMatrix() {
     ` vs. ${defBoostStr}${defNatSym} ${defNameDisplay}${condStr}`;
 
   document.getElementById('mx-section-title').textContent = titleStr;
+  const defNatBoosts = defNatMods[isSp ? 3 : 1] > 1;
+  const defLabel = isSp ? 'SpD' : 'Def';
 
 
   const N = 33;
@@ -2574,12 +2576,18 @@ function updateLiveMatrix() {
   h += `<th class="sb2" style="min-width:72px;font-size:8px">HP SP &#9658;<br>DEF SP &#9660;</th>`;
   for (let hi = 0; hi < N; hi++) {
     const hp = getHP(hi);
-    h += `<th class="sr2"><div style="color:var(--g);font-weight:700">${hi}</div><div style="font-size:8px;color:var(--t2)">${hp}</div></th>`;
+    const isMagic = hp % 16 === 0;
+    h += `<th class="sr2">
+      <div style="color:var(--g);font-weight:${isMagic?'900':'700'};${isMagic?'text-decoration:underline;text-shadow:0 0 6px rgba(0,230,118,0.6)':''}">${hi}</div>
+      <div style="font-size:8px;color:${isMagic?'var(--g)':'var(--t2)'};font-weight:${isMagic?'700':'400'}">${hp}</div>
+    </th>`;
   }
   h += '</tr></thead><tbody>';
 
   for (let di = 0; di < N; di++) {
     const def = getDefStat(di);
+    const defEV = EVS[di];
+    const defNatSym = defNatBoosts ? '+' : '';
     h += `<tr><th class="sc"><div style="color:var(--a);font-weight:700">${di}</div><div style="font-size:8px;color:var(--t2)">${def}</div></th>`;
     for (let hi = 0; hi < N; hi++) {
       if (mvSel.cat === 't') {
@@ -2589,6 +2597,8 @@ function updateLiveMatrix() {
             </td>`;
       } else {
         const hp = getHP(hi);
+        const hpEV = EVS[hi];
+        const isMagicHP = hp % 16 === 0;
 
         const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
         const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
@@ -2602,10 +2612,14 @@ function updateLiveMatrix() {
         const dmgText = `${mn}-${mx}`;
         const pctText = `${(mn/hp*100).toFixed(1)}% - ${(mx/hp*100).toFixed(1)}%`;
 
+        const hpTooltip = isMagicHP ? `★${hi} HP (${hpEV} EVs) [×16]` : `${hi} HP (${hpEV} EVs)`;
+        const tooltipText = `${hpTooltip} | ${di}${defNatSym} ${defLabel} (${defEV} EVs) — ${v.label}: ${dmgText} (${pctText})`;
+        const cellBorder = isMagicHP ? 'border-left:2px solid rgba(0,230,118,0.35);' : '';
+
         h += `<td class="${v.cls}"
-              style="cursor:pointer; padding: 4px 3px; line-height: 1.2;"
+              style="cursor:pointer; padding: 4px 3px; line-height: 1.2;${cellBorder}"
               onclick="showCellDetail(${hi}, ${di}, '${v.label}', '${dmgText}', '${pctText}')"
-              title="Click para ver EVs necesarios">
+              title="${tooltipText}">
               <div style="font-weight: bold;">${v.label}</div>
               <div style="font-size: 8px; opacity: 0.75; font-weight: 500; margin-top: 1px;">${totalSP} SP</div>
             </td>`;
