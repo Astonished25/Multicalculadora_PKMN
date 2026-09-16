@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Damage Calc v3.1</title>
+<title>Champions Damage Calc v4</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -347,6 +347,68 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   -webkit-appearance: none; margin: 0;
 }
 
+
+/* ── MODE BUTTONS ─────────────────────────────────────── */
+.mode-btn-wrap { display: flex; gap: 6px; }
+.mode-btn {
+  font-family: var(--mo); font-size: 10px; padding: 5px 14px;
+  border-radius: 4px; cursor: pointer; letter-spacing: 1px;
+  border: 1px solid var(--bd); background: var(--bg3); color: var(--t2);
+  transition: all 0.2s;
+}
+.mode-btn.active-def { border-color: var(--a2); color: var(--a2); background: rgba(124,77,255,0.08); }
+.mode-btn.active-atk { border-color: var(--a);  color: var(--a);  background: rgba(0,212,255,0.08); }
+.mode-btn:hover { opacity: 0.8; }
+
+/* ── ATK SLIDER PANEL ─────────────────────────────────── */
+#atk-slider-panel {
+  display: none;
+  background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px;
+  padding: 12px 14px;
+}
+#atk-slider-panel .sldr-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+#atk-slider-panel .sldr-label {
+  font-family: var(--mo); font-size: 10px; color: var(--t2); width: 80px; flex-shrink: 0;
+}
+#atk-sp-slider {
+  flex: 1; accent-color: var(--a);
+}
+#atk-sp-val {
+  font-family: var(--mo); font-size: 13px; color: var(--a); font-weight: 700;
+  width: 30px; text-align: right;
+}
+#atk-sp-stat {
+  font-family: var(--mo); font-size: 10px; color: var(--t2);
+}
+#atk-chart-verdict {
+  font-family: var(--mo); font-size: 11px; padding: 6px 10px;
+  border-radius: 3px; background: var(--bg3); border: 1px solid var(--bd);
+  color: var(--t2); margin-top: 6px; text-align: center;
+}
+
+/* ── ATK CHART ────────────────────────────────────────── */
+#atk-chart-section {
+  display: none;
+  background: var(--bg2); border-top: 1px solid var(--bd); padding: 16px 18px;
+}
+#atk-chart-section .mx-section-hdr {
+  margin-bottom: 10px;
+}
+#atk-chart-canvas {
+  width: 100%; height: 340px; display: block;
+}
+
+table.mx .hl-cross {
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.3) !important;
+}
+table.mx .hl-active {
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.5), inset 0 0 0 2px var(--a) !important;
+  position: relative;
+  z-index: 10;
+}
+
 </style>
 </head>
 <body>
@@ -367,8 +429,12 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
     </div>
   </div>
 
-  <div class="hdr-mid">
-    <button class="reset-top-btn" onclick="resetCalc()">🗑 RESET CALCULADORA</button>
+  <div class="hdr-mid" style="display:flex;align-items:center;gap:10px">
+    <div class="mode-btn-wrap">
+      <button class="mode-btn" id="btn-mode-atk" onclick="setCalcMode('atk')" title="Modo Ataque: gráfica de daño vs. inversión ofensiva">⚔ ATK</button>
+      <button class="reset-top-btn" onclick="resetCalc()">🗑 RESET</button>
+      <button class="mode-btn active-def" id="btn-mode-def" onclick="setCalcMode('def')" title="Modo Defensa: matriz de EVs">🛡 DEF</button>
+    </div>
   </div>
 
   <div class="hdr-right">
@@ -604,7 +670,8 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       <div class="cr" style="opacity: 0.5; font-size: 11px; font-family: var(--mo);"></div>
     </div>
 
-  <div class="res-box">
+  <!-- MODO DEF: caja de stats normal -->
+  <div id="def-res-box" class="res-box">
     <div class="res-grid" style="margin-bottom:6px">
       <div><div class="res-lbl">Stat <span id="atk-slbl" style="color:var(--a)">Atk</span></div><div class="res-val" id="r-atk" style="color:var(--a);font-size:14px">—</div></div>
       <div><div class="res-lbl">Stat <span id="def-slbl" style="color:var(--a2)">Def</span></div><div class="res-val" id="r-def" style="color:var(--a2);font-size:14px">—</div></div>
@@ -616,6 +683,21 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
       <div><div class="res-lbl">Veredicto</div><div class="res-val" id="r-verd" style="font-size:13px">—</div></div>
     </div>
     <div class="res-range" id="r-rng"></div>
+  </div>
+
+  <!-- MODO ATK: slider de SP ofensivos -->
+  <div id="atk-slider-panel">
+    <div class="sldr-row">
+      <span class="sldr-label">SP Ataque</span>
+      <input type="range" id="atk-sp-slider" min="0" max="32" value="0"
+             oninput="onAtkSliderChange(this.value)">
+      <span id="atk-sp-val">0</span>
+      <span style="font-family:var(--mo);font-size:9px;color:var(--t2)">SP</span>
+    </div>
+    <div style="font-family:var(--mo);font-size:10px;color:var(--t2);margin-bottom:6px">
+      Stat: <span id="atk-sp-stat" style="color:var(--a);font-weight:700">—</span>
+      &nbsp;·&nbsp; EVs: <span id="atk-sp-evs" style="color:var(--t)">0</span>
+    </div>
   </div>
 
 </div>
@@ -822,6 +904,19 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
     <div class="empty-mx"><span class="spin">⟳</span> Calculando...</div>
   </div>
 </div>
+<div id="atk-chart-section">
+  <div class="mx-section-hdr">
+    <span>GRÁFICA DE DAÑO</span>
+    <span id="atk-chart-title" style="font-family:var(--mo);font-size:10px;color:var(--t2)"></span>
+    <button onclick="document.getElementById('atk-chart-section').style.display='none'"
+            style="background:var(--bg3);border:1px solid var(--bd);color:var(--t2);font-family:var(--mo);font-size:10px;padding:3px 8px;border-radius:3px;cursor:pointer">✕ Cerrar</button>
+  </div>
+  <!-- Contenedor añadido para permitir Scroll al hacer zoom en móviles o pantallas chicas -->
+  <div id="atk-chart-wrapper" style="overflow-x: auto; width: 100%; border-radius: 4px;">
+    <canvas id="atk-chart-canvas" style="min-width: 800px; display: block; cursor: crosshair;"></canvas>
+  </div>
+</div>
+
 <script src="script_res/pokedex.js"></script>
 <script src="script_res/move_data.js"></script>
 <script src="script_res/pokemon_moves.js"></script> <script>
@@ -889,6 +984,7 @@ function setActiveMoveSlot(idx) {
 
   if (attackerMovesSet[idx]) {
     mvSel = attackerMovesSet[idx];
+    syncSliderToCurrentEvs(mvSel.cat, mvSel.name);
     document.getElementById('mv-detail').style.display = 'block';
 
     const tc = TPC[mvSel.type] || '#888';
@@ -1165,6 +1261,8 @@ function statChip(label, val, color='var(--a)') {
   return `<span class="stat-chip">${label} <b style="color:${color}">${val}</b></span>`;
 }
 
+
+
 function loadPoke(side, name, isFormChange = false) {
   const d = PKDB[name];
   if (!d) return;
@@ -1188,6 +1286,7 @@ function loadPoke(side, name, isFormChange = false) {
   if (side === 'atk') atkPoke = pokeObj; else defPoke = pokeObj;
 
   if (side === 'atk') {
+
     attackerMovesSet = [null, null, null, null];
     for(let i = 0; i < 4; i++) {
       const slotInput = document.getElementById(`mv-slot-${i}`);
@@ -1346,6 +1445,7 @@ function selectMv(name) {
   let catLabel = 'Estado';
   if (mData.category === 'Physical') { cat = 'p'; catLabel = 'Fisico'; }
   if (mData.category === 'Special') { cat = 's'; catLabel = 'Especial'; }
+  syncSliderToCurrentEvs(cat, name);
 
   const moveObj = { name, bp, type, cat, ...mData };
   mvSel = moveObj;
@@ -1460,6 +1560,7 @@ function setDefActiveMoveSlot(idx) {
 
   if (defenderMovesSet[idx]) {
     mvSel = defenderMovesSet[idx];
+    syncSliderToCurrentEvs(mvSel.cat, mvSel.name);
 
     document.getElementById('def-mv-detail').style.display = 'block';
     bpOvr = false;
@@ -1569,6 +1670,7 @@ function selectDefMv(name) {
   const moveObj = { name, bp, type, cat, ...mData };
   mvSel = moveObj;
   activeSide = 'def';
+  syncSliderToCurrentEvs(cat, name);
   defenderMovesSet[defActiveMoveSlotIdx] = moveObj;
 
   const slotInput = document.getElementById(`def-mv-slot-${defActiveMoveSlotIdx}`);
@@ -2394,26 +2496,29 @@ function updateResult() {
     if (document.getElementById('r-max')) document.getElementById('r-max').textContent = '—';
 
     const vel = document.getElementById('r-verd');
-    if (vel) {
-      vel.textContent = '—';
-      vel.className = 'res-val';
-    }
+    if (vel) { vel.textContent = '—'; vel.className = 'res-val'; }
     if (document.getElementById('r-rng')) document.getElementById('r-rng').textContent = '';
 
-    const sec = document.getElementById('mx-section');
-    const wrap = document.getElementById('mx-wrap');
-    if (sec && wrap) {
-      sec.classList.add('visible');
-      sec.style.display = 'block';
-      document.getElementById('mx-section-title').textContent = '';
-      wrap.innerHTML = '<div class="empty-mx"><span class="spin">⟳</span> Esperando movimiento...</div>';
+    if (calcMode === 'def') {
+        const sec = document.getElementById('mx-section');
+        const wrap = document.getElementById('mx-wrap');
+        if (sec && wrap) {
+          sec.classList.add('visible');
+          sec.style.display = 'block';
+          document.getElementById('mx-section-title').textContent = '';
+          wrap.innerHTML = '<div class="empty-mx"><span class="spin">⟳</span> Esperando movimiento...</div>';
+        }
+    } else {
+        updateAtkChart(); 
     }
 
     const cellDetail = document.getElementById('mx-cell-detail');
     if (cellDetail) cellDetail.style.display = 'none';
-
     return;
   }
+
+  document.getElementById('mx-section').style.display = calcMode === 'def' ? 'block' : 'none';
+  document.getElementById('atk-chart-section').style.display = calcMode === 'atk' ? 'block' : 'none';
 
   const isSp = mvSel?.cat === 's';
   const atkSlbl = document.getElementById('atk-slbl');
@@ -2461,7 +2566,6 @@ function updateResult() {
   const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
   const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
 
-
   const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
 
   const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
@@ -2478,13 +2582,92 @@ function updateResult() {
 
   updateLiveMatrix();
 }
+function generateShowdownTitle() {
+  if (!mvSel || !atkPoke || !defPoke) return "";
 
+  const isSp = mvSel.cat === 's';
+  const statName = mvSel.name === 'Body Press' ? 'Def' : (isSp ? 'SpA' : 'Atk');
+
+  const atkP = activeSide === 'def' ? defPoke : atkPoke;
+  const defP = activeSide === 'def' ? atkPoke : defPoke;
+
+  const atkBo = parseInt(document.getElementById(activeSide === 'def' ? `def-bo-${statName.toLowerCase()}` : `atk-bo-${statName.toLowerCase()}`)?.value) || 0;
+  const atkBoStr = atkBo !== 0 ? (atkBo > 0 ? `+${atkBo} ` : `${atkBo} `) : '';
+
+  const atkSpId = activeSide === 'def' ? `def-ev-${statName.toLowerCase()}` : `atk-ev-${statName.toLowerCase()}`;
+  let atkSp = parseInt(document.getElementById(atkSpId)?.value) || 0;
+
+  const atkNatId = activeSide === 'def' ? 'def-nat' : 'atk-nat';
+  const atkNatMods = NATURE_MODS[document.getElementById(atkNatId)?.value || 'Hardy'] || [1,1,1,1,1];
+  const atkNatIdx = statName === 'SpA' ? 2 : (statName === 'Def' ? 1 : 0);
+  const atkNatSym = atkNatMods[atkNatIdx] > 1 ? '+' : (atkNatMods[atkNatIdx] < 1 ? '-' : '');
+
+  const atkName = atkP.name.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('-');
+  const defName = defP.name.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('-');
+
+  const p = readP();
+  let mods = [];
+  if (p.hh) mods.push("Helping Hand");
+  if (p.crit) mods.push("Crit");
+  if (p.spread && mvSel.isSpread) mods.push("Spread");
+
+  let conds = [];
+  if (p.clima && p.clima !== 'none' && p.clima !== 'N/A') {
+    const cMap = {sun:'in Sun', rain:'in Rain', sand:'in Sand', snow:'in Snow'};
+    if(cMap[p.clima]) conds.push(cMap[p.clima]);
+  }
+  if (p.campo && p.campo !== 'none' && p.campo !== 'N/A') {
+    const tMap = {electric:'in Electric Terrain', grassy:'in Grassy Terrain', psychic:'in Psychic Terrain', misty:'in Misty Terrain'};
+    if(tMap[p.campo]) conds.push(tMap[p.campo]);
+  }
+  if (p.pantalla && p.pantalla !== 'none' && p.pantalla !== 'N/A') {
+    const scrMap = {reflect:'through Reflect', ls:'through Light Screen'};
+    if (scrMap[p.pantalla]) conds.push(scrMap[p.pantalla]);
+  }
+  if (p.aura && p.aura !== 'none' && p.aura !== 'N/A') {
+    conds.push(p.aura === 'fairy' ? 'with Fairy Aura' : (p.aura === 'dark' ? 'with Dark Aura' : 'with Aura Break'));
+  }
+  if (p.compie !== 1) conds.push("with Friend Guard");
+
+  let modsStr = mods.length ? mods.join(' ') + ' ' : '';
+  let atkString = `${atkBoStr}${atkSp}${atkNatSym} ${statName} ${atkName} ${modsStr}${mvSel.name}`;
+  let defString = `vs. ${defName}`;
+
+  let fullTitle = `${atkString} ${defString}`;
+  if (conds.length) fullTitle += ` ${conds.join(', ')}`;
+
+  const atk = getAtkStat();
+  const def = getDefStat();
+  const hp = getHP();
+  const atkTs = activeSide === 'def' ? defPoke.types : atkPoke.types;
+  const defTs = activeSide === 'def' ? atkPoke.types : defPoke.types;
+  const atkTera = document.getElementById(activeSide === 'def' ? 'def-tera' : 'atk-tera').value;
+  const defTera = document.getElementById(activeSide === 'def' ? 'atk-tera' : 'def-tera').value;
+  const bp = parseInt(document.getElementById(activeSide === 'def' ? 'def-bp' : 'bp').value)||80;
+  const hits = parseInt(document.getElementById(activeSide === 'def' ? 'def-num-hits' : 'num-hits').value)||1;
+
+  const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvSel.type, defTs, defTera, p, false);
+  const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvSel.type, defTs, defTera, p, true);
+
+  const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
+  const mx = arrWithBerry[15] + (arrNoBerry[15] * (hits - 1));
+  const pctMn = (mn/hp*100).toFixed(1);
+  const pctMx = (mx/hp*100).toFixed(1);
+
+  fullTitle += `: ${mn}-${mx}`;
+  return fullTitle;
+}
 function updateLiveMatrix() {
+  if (calcMode === 'atk') {
+    updateAtkChart();
+    return;
+  }
   const sec = document.getElementById('mx-section');
   const wrap = document.getElementById('mx-wrap');
   if (!sec || !wrap) return;
 
   sec.style.display = 'block';
+
 
   const p = readP();
   const atkTs = activeSide === 'def' ? defPoke.types : atkPoke.types;
@@ -2503,7 +2686,6 @@ function updateLiveMatrix() {
   const atkName = activeSide === 'def' ? defPoke.name : atkPoke.name;
   const defName = activeSide === 'def' ? atkPoke.name : defPoke.name;
 
-  // ── TITLE ────
 
   const isSp = mvSel?.cat === 's';
   const statLabel = isSp ? 'SpA' : 'Atk';
@@ -2511,7 +2693,7 @@ function updateLiveMatrix() {
   const atkNatId = activeSide === 'def' ? 'def-nat' : 'atk-nat';
   const atkNatName = document.getElementById(atkNatId)?.value || 'Hardy';
   const atkNatMods = NATURE_MODS[atkNatName] || [1,1,1,1,1];
-  const atkNatStatIdx = isSp ? 2 : 0; // spa=2, atk=0
+  const atkNatStatIdx = isSp ? 2 : 0; 
   const atkNatSym = atkNatMods[atkNatStatIdx] > 1 ? '+' : atkNatMods[atkNatStatIdx] < 1 ? '-' : '';
 
   const atkBoStatId = isSp
@@ -2531,7 +2713,7 @@ function updateLiveMatrix() {
   const defNatId = activeSide === 'def' ? 'atk-nat' : 'def-nat';
   const defNatName = document.getElementById(defNatId)?.value || 'Hardy';
   const defNatMods = NATURE_MODS[defNatName] || [1,1,1,1,1];
-  const defNatStatIdx = isSp ? 3 : 1; // spd=3, def=1
+  const defNatStatIdx = isSp ? 3 : 1; 
   const defNatSym = defNatMods[defNatStatIdx] > 1 ? '+' : defNatMods[defNatStatIdx] < 1 ? '-' : '';
 
   const defBoStatId = isSp
@@ -2567,9 +2749,9 @@ function updateLiveMatrix() {
     ` vs. ${defBoostStr}${defNatSym} ${defNameDisplay}${condStr}`;
 
   document.getElementById('mx-section-title').textContent = titleStr;
+
   const defNatBoosts = defNatMods[isSp ? 3 : 1] > 1;
   const defLabel = isSp ? 'SpD' : 'Def';
-
 
   const N = 33;
   let h = '<table class="mx"><thead><tr>';
@@ -2618,7 +2800,7 @@ function updateLiveMatrix() {
 
         h += `<td class="${v.cls}"
               style="cursor:pointer; padding: 4px 3px; line-height: 1.2;${cellBorder}"
-              onclick="showCellDetail(${hi}, ${di}, '${v.label}', '${dmgText}', '${pctText}')"
+              onclick="showCellDetail(this, ${hi}, ${di}, '${v.label}', '${dmgText}', '${pctText}')"
               title="${tooltipText}">
               <div style="font-weight: bold;">${v.label}</div>
               <div style="font-size: 8px; opacity: 0.75; font-weight: 500; margin-top: 1px;">${totalSP} SP</div>
@@ -2635,7 +2817,7 @@ function calcMatrix() {
   updateResult();
 }
 
-function showCellDetail(hi, di, resultLabel, dmgRange, pctRange) {
+function showCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
   const detailBox = document.getElementById('mx-cell-detail');
   const hpEV = EVS[hi];
   const defEV = EVS[di];
@@ -2656,6 +2838,25 @@ function showCellDetail(hi, di, resultLabel, dmgRange, pctRange) {
   document.getElementById('det-range').innerHTML =
     `<span style="color:var(--a2)">RESULTADO:</span> <b>${resultLabel}</b> | ` +
     `DAÑO: <b>${dmgRange}</b> | <b>${pctRange}</b>`;
+
+  const table = tdEl.closest('table');
+
+  table.querySelectorAll('.hl-active').forEach(el => el.classList.remove('hl-active'));
+  table.querySelectorAll('.hl-cross').forEach(el => el.classList.remove('hl-cross'));
+
+  const row = tdEl.parentElement;
+  const colIdx = Array.from(row.children).indexOf(tdEl);
+
+  row.childNodes.forEach(cell => {
+    if(cell.nodeType === 1) cell.classList.add('hl-cross');
+  });
+
+  Array.from(table.rows).forEach(r => {
+    if (r.children[colIdx]) r.children[colIdx].classList.add('hl-cross');
+  });
+
+  tdEl.classList.remove('hl-cross');
+  tdEl.classList.add('hl-active');
 
   detailBox.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
@@ -2787,9 +2988,395 @@ function changeTheme(theme) {
       root.style.setProperty(prop, selected[prop]);
     }
   }
+  if (typeof updateResult === 'function') updateResult();
 }
 function resetCalc() {
   window.location.reload();
+}
+
+let calcMode = 'def';
+
+function setCalcMode(mode) {
+  calcMode = mode;
+
+  document.getElementById('btn-mode-def').className = 'mode-btn' + (mode === 'def' ? ' active-def' : '');
+  document.getElementById('btn-mode-atk').className = 'mode-btn' + (mode === 'atk' ? ' active-atk' : '');
+
+  document.getElementById('def-res-box').style.display       = mode === 'def' ? 'block' : 'none';
+  document.getElementById('atk-slider-panel').style.display  = mode === 'atk' ? 'block' : 'none';
+  document.getElementById('mx-section').style.display        = mode === 'def' ? '' : 'none';
+  document.getElementById('atk-chart-section').style.display = mode === 'atk' ? 'block' : 'none';
+
+  if (mode === 'atk') {
+    updateAtkChart();
+  } else {
+    updateResult();
+  }
+}
+
+function onAtkSliderChange(spVal) {
+  const sp = parseInt(spVal);
+  document.getElementById('atk-sp-val').textContent = sp;
+  document.getElementById('atk-sp-evs').textContent = EVS[sp] + ' EVs';
+
+  if (mvSel) {
+      const isSp = mvSel.cat === 's';
+      const statName = mvSel.name === 'Body Press' ? 'def' : (isSp ? 'spa' : 'atk');
+      const evInputId = activeSide === 'def' ? `def-ev-${statName}` : `atk-ev-${statName}`;
+      const evInput = document.getElementById(evInputId);
+      if (evInput) {
+          evInput.value = sp;
+          if (activeSide === 'def') updateDefStats(); else updateAtkStat();
+          updateEvCounter(activeSide === 'def' ? 'def' : 'atk');
+      }
+  }
+
+  updateResult();
+}
+
+function syncSliderToCurrentEvs(cat, moveName) {
+    const isSp = cat === 's';
+    const statName = moveName === 'Body Press' ? 'def' : (isSp ? 'spa' : 'atk');
+    const evInputId = activeSide === 'def' ? `def-ev-${statName}` : `atk-ev-${statName}`;
+    const evInput = document.getElementById(evInputId);
+
+    const sldr = document.getElementById('atk-sp-slider');
+    if (sldr && evInput) {
+        const currentVal = parseInt(evInput.value) || 0;
+        sldr.value = currentVal;
+
+        const valEl = document.getElementById('atk-sp-val');
+        if (valEl) valEl.textContent = currentVal;
+
+        const evsEl = document.getElementById('atk-sp-evs');
+        if (evsEl) evsEl.textContent = EVS[currentVal] + ' EVs';
+    }
+}
+
+function hexToRgb(hex) {
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : {r: 0, g: 212, b: 255};
+}
+
+let atkChartHoveredSP = null;
+let atkChartListenerAdded = false;
+let isAtkChartTooltipLocked = false;
+
+function updateAtkChart() {
+  const section = document.getElementById('atk-chart-section');
+  const canvas  = document.getElementById('atk-chart-canvas');
+  const titleEl = document.getElementById('atk-chart-title');
+
+  if (!atkChartListenerAdded) {
+    const handleMove = (e) => {
+      if (isAtkChartTooltipLocked) return;
+
+      let clientX = e.clientX;
+      if (e.touches && e.touches.length > 0) clientX = e.touches[0].clientX;
+      else if (e.changedTouches && e.changedTouches.length > 0) clientX = e.changedTouches[0].clientX;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const PAD_left = 58;
+      const cW = canvas.offsetWidth - PAD_left - 24;
+      let sp = Math.round(((x - PAD_left) / cW) * 32);
+
+      if (sp >= 0 && sp <= 32) {
+        if (atkChartHoveredSP !== sp) {
+          atkChartHoveredSP = sp;
+          updateAtkChart();
+        }
+      } else {
+         if (atkChartHoveredSP !== null) {
+            atkChartHoveredSP = null;
+            updateAtkChart();
+         }
+      }
+    };
+
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('touchmove', handleMove, {passive: true});
+    canvas.addEventListener('touchstart', handleMove, {passive: true});
+    canvas.addEventListener('mouseleave', () => {
+       if (!isAtkChartTooltipLocked) {
+           atkChartHoveredSP = null;
+           updateAtkChart();
+       }
+    });
+
+    canvas.addEventListener('click', (e) => {
+       if (atkChartHoveredSP !== null || isAtkChartTooltipLocked) {
+           isAtkChartTooltipLocked = !isAtkChartTooltipLocked;
+           if (!isAtkChartTooltipLocked) handleMove(e);
+           updateAtkChart();
+       }
+    });
+    atkChartListenerAdded = true;
+  }
+
+  if (!mvSel || !atkPoke || !defPoke) {
+    titleEl.textContent = 'Selecciona un Pokémon atacante, defensor y movimiento';
+    return;
+  }
+
+  const isSp = mvSel?.cat === 's';
+  const statName = mvSel?.name === 'Body Press' ? 'def' : (isSp ? 'spa' : 'atk');
+  const evInputId = activeSide === 'def' ? `def-ev-${statName}` : `atk-ev-${statName}`;
+  const evInput = document.getElementById(evInputId);
+  const sldr = document.getElementById('atk-sp-slider');
+
+  if (evInput && sldr) {
+      const inputVal = parseInt(evInput.value) || 0;
+      if (parseInt(sldr.value) !== inputVal) {
+          sldr.value = inputVal;
+          document.getElementById('atk-sp-val').textContent = inputVal;
+          document.getElementById('atk-sp-evs').textContent = EVS[inputVal] + ' EVs';
+      }
+  }
+  const currentAtkSP = parseInt(sldr?.value || 0);
+
+  const atkStatNow = getAtkStat();
+  document.getElementById('atk-sp-stat').textContent = atkStatNow;
+
+  const p       = readP();
+  const atkTs   = activeSide === 'def' ? defPoke.types : atkPoke.types;
+  const defTs   = activeSide === 'def' ? atkPoke.types : defPoke.types;
+  const atkTera = document.getElementById(activeSide === 'def' ? 'def-tera' : 'atk-tera').value;
+  const defTera = document.getElementById(activeSide === 'def' ? 'atk-tera' : 'def-tera').value;
+  const mvT     = mvSel.type;
+  const bp      = parseInt(document.getElementById(activeSide === 'def' ? 'def-bp' : 'bp').value) || 80;
+  const hits    = parseInt(document.getElementById(activeSide === 'def' ? 'def-num-hits' : 'num-hits').value) || 1;
+
+  const hpMin = getHP(0);
+  const hpMax = getHP(32);
+
+  const N = 33;
+  const dmgMin = [];
+  const dmgMax = [];
+
+  for (let di = 0; di < N; di++) {
+    const def = getDefStat(di);
+    const hp = getHP();
+    const arr = calcDmgArr(atkStatNow, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
+    dmgMin.push(arr[0] * hits);
+    dmgMax.push(arr[15] * hits);
+  }
+
+  const titleStr = generateShowdownTitle();
+  titleEl.textContent = `${titleStr} | Rango HP: ${hpMin}–${hpMax}`;
+
+  const cs = getComputedStyle(document.documentElement);
+  const cBg   = cs.getPropertyValue('--bg2').trim()  || '#111622';
+  const cBd   = cs.getPropertyValue('--bd').trim()   || '#2a3550';
+  const cT2   = cs.getPropertyValue('--t2').trim()   || '#7a8fa6';
+  const cT    = cs.getPropertyValue('--t').trim()    || '#e0e8f0';
+  const cA    = cs.getPropertyValue('--a').trim()    || '#00d4ff';
+  const cA2   = cs.getPropertyValue('--a2').trim()   || '#7c4dff';
+
+  const rgbA = hexToRgb(cA);
+  const fillStyleArea = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.18)`;
+  const strokeStyleFaint = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.55)`;
+
+  const dpr = window.devicePixelRatio || 1;
+  const wrapper = document.getElementById('atk-chart-wrapper');
+  const wWidth = wrapper ? wrapper.clientWidth : 860;
+  const W   = Math.max(wWidth, 800);
+  const H   = 450;
+
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const PAD = { top: 28, right: 24, bottom: 40, left: 58 };
+  const cW  = W - PAD.left - PAD.right;
+  const cH  = H - PAD.top  - PAD.bottom;
+
+  const allVals = [...dmgMin, ...dmgMax, hpMin, hpMax];
+  let yMin = Math.max(0, Math.min(...allVals) - 15);
+  let yMax = Math.max(...allVals) + 25;
+  if (yMax - yMin < 50) yMax = yMin + 50;
+
+  function toX(i) { return PAD.left + (i / (N - 1)) * cW; }
+  function toY(v) { return PAD.top  + cH - ((v - yMin) / (yMax - yMin)) * cH; }
+
+  ctx.fillStyle = cBg;
+  ctx.fillRect(0, 0, W, H);
+
+  const yTicks = 6;
+  for (let i = 0; i <= yTicks; i++) {
+    const v = yMin + (yMax - yMin) * i / yTicks;
+    const y = toY(v);
+    ctx.strokeStyle = cBd;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y); ctx.stroke();
+    ctx.fillStyle = cT2;
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(v), PAD.left - 8, y + 4);
+  }
+
+  ctx.font = 'bold 10px monospace';
+  ctx.textAlign = 'center';
+  for (let i = 0; i < N; i++) {
+    const x = toX(i);
+    ctx.strokeStyle = (i % 4 === 0) ? cBd : 'rgba(42,53,80,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, PAD.top); ctx.lineTo(x, PAD.top + cH); ctx.stroke();
+    if (i % 4 === 0) {
+      ctx.fillStyle = cT2;
+      ctx.fillText(i, x, H - PAD.bottom + 16);
+    }
+  }
+
+  ctx.strokeStyle = cT;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + cH); ctx.lineTo(PAD.left + cW, PAD.top + cH);
+  ctx.stroke();
+
+  ctx.fillStyle = cT;
+  ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('SP Def/SpD del defensor', PAD.left + cW / 2, H - 6);
+
+  ctx.save();
+  ctx.translate(12, PAD.top + cH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Daño', 0, 0);
+  ctx.restore();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(PAD.left, PAD.top, cW, cH);
+  ctx.clip();
+
+  const hpYMax = toY(hpMax);
+  const hpYMin = toY(hpMin);
+
+  ctx.fillStyle = 'rgba(124,77,255,0.18)';
+  ctx.fillRect(PAD.left, hpYMax, cW, hpYMin - hpYMax);
+
+  ctx.lineWidth = 3;
+  ctx.setLineDash([10, 5]);
+  ctx.strokeStyle = cA2;
+  ctx.beginPath(); ctx.moveTo(PAD.left, hpYMax); ctx.lineTo(PAD.left + cW, hpYMax); ctx.stroke();
+
+  ctx.lineWidth = 2;
+  ctx.setLineDash([2, 4]);
+  ctx.strokeStyle = 'rgba(124,77,255,0.8)';
+  ctx.beginPath(); ctx.moveTo(PAD.left, hpYMin); ctx.lineTo(PAD.left + cW, hpYMin); ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  ctx.beginPath();
+  ctx.moveTo(toX(0), toY(dmgMin[0]));
+  for (let i = 1; i < N; i++) ctx.lineTo(toX(i), toY(dmgMin[i]));
+  for (let i = N-1; i >= 0; i--) ctx.lineTo(toX(i), toY(dmgMax[i]));
+  ctx.closePath();
+  ctx.fillStyle = fillStyleArea; 
+  ctx.fill();
+
+  ctx.strokeStyle = cA;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(toX(0), toY(dmgMax[0]));
+  for (let i = 1; i < N; i++) ctx.lineTo(toX(i), toY(dmgMax[i]));
+  ctx.stroke();
+
+  ctx.strokeStyle = strokeStyleFaint; 
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(toX(0), toY(dmgMin[0]));
+  for (let i = 1; i < N; i++) ctx.lineTo(toX(i), toY(dmgMin[i]));
+  ctx.stroke();
+
+  ctx.restore();
+
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'right';
+  const legX = W - PAD.right - 10;
+  const legY = PAD.top + 10;
+
+  ctx.lineWidth = 2.5; ctx.strokeStyle = cA;
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY - 3); ctx.lineTo(legX - 140, legY - 3); ctx.stroke();
+  ctx.fillStyle = cA; ctx.fillText('Daño máx roll (100%)', legX, legY);
+
+  ctx.lineWidth = 1.5; ctx.strokeStyle = strokeStyleFaint;
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY + 11); ctx.lineTo(legX - 140, legY + 11); ctx.stroke();
+  ctx.fillStyle = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.8)`; ctx.fillText('Daño mín roll (85%)', legX, legY + 14);
+
+  ctx.lineWidth = 3; ctx.strokeStyle = cA2; ctx.setLineDash([10, 5]);
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY + 25); ctx.lineTo(legX - 140, legY + 25); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = cA2; ctx.fillText(`HP máx ${hpMax} (32 SP)`, legX, legY + 28);
+
+  ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(124,77,255,0.8)'; ctx.setLineDash([2, 4]);
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY + 39); ctx.lineTo(legX - 140, legY + 39); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(124,77,255,0.8)'; ctx.fillText(`HP mín ${hpMin} (0 SP)`, legX, legY + 42);
+
+  if (atkChartHoveredSP !== null) {
+    const hX = toX(atkChartHoveredSP);
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(hX, PAD.top); ctx.lineTo(hX, PAD.top + cH); ctx.stroke();
+
+    const yMaxDmg = toY(dmgMax[atkChartHoveredSP]);
+    const yMinDmg = toY(dmgMin[atkChartHoveredSP]);
+    const hHpMax = toY(hpMax);
+    const hHpMin = toY(hpMin);
+
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = cA;
+    ctx.lineWidth = 2;
+    [yMaxDmg, yMinDmg, hHpMax, hHpMin].forEach(y => {
+      if (y >= PAD.top && y <= PAD.top + cH) {
+         ctx.beginPath(); ctx.arc(hX, y, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      }
+    });
+
+    const boxW = 205, boxH = 68;
+    let boxX = hX + 12;
+    let boxY = PAD.top + 20;
+    if (boxX + boxW > W - PAD.right) boxX = hX - boxW - 12;
+
+    ctx.fillStyle = 'rgba(0,0,0,0.85)';
+    ctx.strokeStyle = cA;
+    ctx.lineWidth = 1;
+    ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 12px monospace';
+    ctx.textAlign = 'left';
+
+    const currentDefStat = getDefStat(atkChartHoveredSP);
+    ctx.fillText(`Def/SpD SP: ${atkChartHoveredSP} (${currentDefStat})`, boxX + 8, boxY + 16);
+
+    ctx.font = '11px monospace';
+    ctx.fillStyle = '#ddd';
+    ctx.fillText(`HP MÁX: ${hpMax} - HP MÍN: ${hpMin}`, boxX + 8, boxY + 34);
+
+    ctx.fillStyle = '#ffea00';
+    ctx.fillText(`DAÑO MÁX: ${dmgMax[atkChartHoveredSP]}`, boxX + 8, boxY + 50);
+
+    const wMax = ctx.measureText(`DAÑO MÁX: ${dmgMax[atkChartHoveredSP]}`).width;
+    ctx.fillStyle = '#fff';
+    ctx.fillText(` - `, boxX + 8 + wMax, boxY + 50);
+
+    const wGuion = ctx.measureText(` - `).width;
+    ctx.fillStyle = '#00e5ff';
+    ctx.fillText(`DAÑO MÍN: ${dmgMin[atkChartHoveredSP]}`, boxX + 8 + wMax + wGuion, boxY + 50);
+
+    ctx.fillStyle = '#999';
+    ctx.font = '9px monospace';
+    const fixText = isAtkChartTooltipLocked ? "(Click para soltar)" : "(Click para fijar)";
+    ctx.fillText(fixText, boxX + 8, boxY + 62);
+  }
 }
 
 document.getElementById('load-status').textContent = `${pkNames.length} Pokemon · ${Object.keys(MVDB).length} movimientos`;
