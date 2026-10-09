@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Damage Calc v4</title>
+<title>Champions Damage Calc v5</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -408,14 +408,36 @@ table.mx .hl-active {
   position: relative;
   z-index: 10;
 }
+/* Resaltado bloqueado de la matriz (EVs Actuales del Pokémon) */
+table.mx .mx-locked-axis {
+  background-color: rgba(255, 234, 0, 0.15) !important;
+  box-shadow: inset 0 0 0 2px rgba(255, 234, 0, 0.4) !important;
+}
+table.mx .mx-locked-cell {
+  background-color: rgba(255, 234, 0, 0.4) !important;
+  box-shadow: inset 0 0 0 3px var(--y) !important;
+  position: relative;
+  z-index: 5;
+}
 
+/* Resaltado temporal (Previsualización de un Click) */
+table.mx .hl-cross {
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.45) !important;
+  outline: 1px solid rgba(0, 212, 255, 0.3) !important;
+  outline-offset: -1px;
+}
+table.mx .hl-active {
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.1), inset 0 0 0 2px var(--a) !important;
+  position: relative;
+  z-index: 10;
+}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-left">
-    <div class="hdr-t">CHAMPIONS DAMAGE CALC v3.0</div>
+    <div class="hdr-t">CHAMPIONS DAMAGE CALC v5.0</div>
     <div class="theme-selector">
       <label class="theme-check t-gen1" title="Gen 1: Rojo/Verde"><input type="radio" name="theme" onclick="changeTheme('gen1')" ><span></span></label>
       <label class="theme-check t-gen2" title="Gen 2: Oro/Plata"><input type="radio" name="theme" onclick="changeTheme('gen2')"><span></span></label>
@@ -432,6 +454,7 @@ table.mx .hl-active {
   <div class="hdr-mid" style="display:flex;align-items:center;gap:10px">
     <div class="mode-btn-wrap">
       <button class="mode-btn" id="btn-mode-atk" onclick="setCalcMode('atk')" title="Modo Ataque: gráfica de daño vs. inversión ofensiva">⚔ ATK</button>
+      <button class="mode-btn" id="btn-mode-spe" onclick="setCalcMode('spe')" title="Modo Velocidad">👟 SPE</button>
       <button class="reset-top-btn" onclick="resetCalc()">🗑 RESET</button>
       <button class="mode-btn active-def" id="btn-mode-def" onclick="setCalcMode('def')" title="Modo Defensa: matriz de EVs">🛡 DEF</button>
     </div>
@@ -510,7 +533,10 @@ table.mx .hl-active {
         <select id="atk-bo-spe" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
       </div>
       <div style="font-family: var(--mo); font-size: 10px; color: var(--t2); margin-top: 5px; text-align: right;">
-        EVs: <span id="ev-counter-atk">0</span> / 66
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 8px;">
+          <button id="btn-exp-atk" onclick="exportShowdown('atk')" style="background:var(--bg3); border:1px solid var(--bd); color:var(--a); font-family:var(--mo); font-size:9px; padding:4px 8px; border-radius:3px; cursor:pointer; transition:all 0.2s;">📋 EXPORTAR SHOWDOWN</button>
+          <div style="font-family: var(--mo); font-size: 10px; color: var(--t2);">EVs: <span id="ev-counter-atk">0</span> / 66</div>
+        </div>
       </div>
     </div>
 
@@ -700,6 +726,39 @@ table.mx .hl-active {
     </div>
   </div>
 
+  <!-- MODO SPE: slider de SP velocidad (Va en la columna del medio) -->
+  <div id="spe-slider-panel" style="display:none; background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px; padding: 12px 14px;">
+    <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;">COMPARATIVA DE VELOCIDAD</div>
+
+    <div class="sldr-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+      <span class="sldr-label" style="font-family: var(--mo); font-size: 10px; color: var(--t2); width: 80px;">SP Velocidad</span>
+      <input type="range" id="spe-sp-slider" min="0" max="32" value="0" oninput="onSpeSliderChange(this.value)" style="flex:1; accent-color:var(--a);">
+      <span id="spe-sp-val" style="font-family:var(--mo); font-size:13px; color:var(--a); font-weight:700; width:30px; text-align:right">0</span>
+      <span style="font-family:var(--mo);font-size:9px;color:var(--t2)">SP</span>
+    </div>
+
+    <div style="font-family:var(--mo);font-size:10px;color:var(--t2);margin-bottom:12px">
+      Stat: <span id="spe-sp-stat" style="color:var(--a);font-weight:700">—</span> &nbsp;·&nbsp; EVs: <span id="spe-sp-evs" style="color:var(--t)">0 EVs</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; border-top:1px solid var(--bd); padding-top:10px;">
+        <div class="cr"><input type="checkbox" id="chk-tw-a" onchange="updateSpeChart()"><span id="lbl-tw-a" style="color:var(--t)">Tailwind (Poke 1)</span></div>
+        <div class="cr"><input type="checkbox" id="chk-tw-d" onchange="updateSpeChart()"><span id="lbl-tw-d" style="color:var(--t2)">Tailwind (Poke 2)</span></div>
+        <div class="cr"><input type="checkbox" id="chk-scarf-a" onchange="updateSpeChart()"><span id="lbl-scarf-a" style="color:var(--t)">Scarf (Poke 1)</span></div>
+        <div class="cr"><input type="checkbox" id="chk-scarf-d" onchange="updateSpeChart()"><span id="lbl-scarf-d" style="color:var(--t2)">Scarf (Poke 2)</span></div>
+    </div>
+  </div>
+
+  <!-- MÓDULO IMPORTADOR SHOWDOWN -->
+  <div style="background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px; padding: 12px 14px; margin-top: 10px;">
+    <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;">IMPORTAR SHOWDOWN</div>
+    <textarea id="import-showdown-text" placeholder="Pega el set exportado de Showdown aquí..." style="width: 100%; height: 90px; background: var(--bg3); border: 1px solid var(--bd); color: var(--t); font-family: var(--mo); font-size: 11px; padding: 8px; border-radius: 4px; resize: none; outline: none; margin-bottom: 10px;"></textarea>
+    <div style="display: flex; justify-content: space-between;">
+      <button onclick="importShowdown('atk', this)" style="background:var(--bg3); border:1px solid var(--bd); color:var(--t); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">⬅ IMPORTAR POKE 1</button>
+      <button onclick="importShowdown('def', this)" style="background:var(--bg3); border:1px solid var(--bd); color:var(--t); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">IMPORTAR POKE 2 ➡</button>
+    </div>
+  </div>
+
 </div>
 
 <div class="col">
@@ -768,7 +827,10 @@ table.mx .hl-active {
         <select id="def-bo-spe" class="st-sel"><option value="0">--</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option><option value="6">+6</option><option value="-1">-1</option><option value="-2">-2</option><option value="-3">-3</option><option value="-4">-4</option><option value="-5">-5</option><option value="-6">-6</option></select>
       </div>
       <div style="font-family: var(--mo); font-size: 10px; color: var(--t2); margin-top: 5px; text-align: right;">
-        EVs: <span id="ev-counter-def">0</span> / 66
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 8px;">
+          <button id="btn-exp-def" onclick="exportShowdown('def')" style="background:var(--bg3); border:1px solid var(--bd); color:var(--a); font-family:var(--mo); font-size:9px; padding:4px 8px; border-radius:3px; cursor:pointer; transition:all 0.2s;">📋 EXPORTAR SHOWDOWN</button>
+          <div style="font-family: var(--mo); font-size: 10px; color: var(--t2);">EVs: <span id="ev-counter-def">0</span> / 66</div>
+        </div>
       </div>
     </div>
 
@@ -916,6 +978,31 @@ table.mx .hl-active {
     <canvas id="atk-chart-canvas" style="min-width: 800px; display: block; cursor: crosshair;"></canvas>
   </div>
 </div>
+<div id="spe-chart-section" style="display:none; background: var(--bg2); border-top: 1px solid var(--bd); padding: 16px 18px;">
+  <div class="mx-section-hdr">
+    <span>GRÁFICA DE VELOCIDAD</span>
+    <button onclick="document.getElementById('spe-chart-section').style.display='none'" style="background:var(--bg3);border:1px solid var(--bd);color:var(--t2);font-family:var(--mo);font-size:10px;padding:3px 8px;border-radius:3px;cursor:pointer">✕ Cerrar</button>
+  </div>
+
+  <!-- Contenedor Flex en Fila (Lado a lado) -->
+  <div style="display:flex; flex-wrap:wrap; gap:30px; align-items:center; justify-content:center; max-width: 1050px; margin: 0 auto; padding-top: 10px;">
+
+      <!-- Gráfica Horizontal (Izquierda) -->
+      <div style="flex: 1 1 500px; display:flex; justify-content: center; overflow-x: auto;">
+          <!-- Canvas adaptado a un ancho cómodo para convivir con la caja -->
+          <canvas id="spe-chart-canvas" width="600" height="180" style="max-width: 100%;"></canvas>
+      </div>
+
+      <!-- Caja de Veredicto (Derecha) -->
+      <div style="flex: 1 1 350px; display:flex; justify-content: center;">
+          <div id="spe-verdict-box" style="width:100%; max-width: 400px; border:2px solid var(--bd); background:var(--bg3); padding:20px; border-radius:8px; text-align:center; font-family:var(--mo); font-size:15px; color:var(--t); line-height:1.6;">
+              Esperando datos...
+          </div>
+      </div>
+
+  </div>
+</div>
+
 
 <script src="script_res/pokedex.js"></script>
 <script src="script_res/move_data.js"></script>
@@ -1284,31 +1371,56 @@ function loadPoke(side, name, isFormChange = false) {
 
   const pref = (side === 'atk') ? 'atk' : 'def';
   if (side === 'atk') atkPoke = pokeObj; else defPoke = pokeObj;
+  if (!isFormChange) {
+      ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach(st => {
+          const evInp = document.getElementById(`${pref}-ev-${st}`);
+          if(evInp) evInp.value = 0;
+          const boInp = document.getElementById(`${pref}-bo-${st}`);
+          if(boInp) boInp.value = 0;
+      });
+      const natEl = document.getElementById(`${pref}-nat`);
+      if(natEl) natEl.value = 'Hardy';
 
+      const statusEl = document.getElementById(`${pref}-status`);
+      if(statusEl) statusEl.value = 'Healthy';
+
+      const lvlEl = document.getElementById(`${pref}-lvl`);
+      if(lvlEl) lvlEl.value = 50;
+
+      const itemEl = document.getElementById(side === 'atk' ? 'obj-a' : 'obj-d');
+      if(itemEl) itemEl.value = '';
+
+      updateEvCounter(pref);
+  }
+
+  // ---- PRESERVAR MOVIMIENTOS ----
   if (side === 'atk') {
-
-    attackerMovesSet = [null, null, null, null];
-    for(let i = 0; i < 4; i++) {
-      const slotInput = document.getElementById(`mv-slot-${i}`);
-      const slotMeta = document.getElementById(`mv-slot-meta-${i}`);
-      if (slotInput) slotInput.value = '';
-      if (slotMeta) slotMeta.innerHTML = '';
-    }
-    if (activeSide === 'atk') {
-      if (typeof setActiveMoveSlot === 'function') setActiveMoveSlot(0);
+    if (!isFormChange) {
+        attackerMovesSet = [null, null, null, null];
+        for(let i = 0; i < 4; i++) {
+          const slotInput = document.getElementById(`mv-slot-${i}`);
+          const slotMeta = document.getElementById(`mv-slot-meta-${i}`);
+          if (slotInput) slotInput.value = '';
+          if (slotMeta) slotMeta.innerHTML = '';
+        }
+        if (activeSide === 'atk') {
+          if (typeof setActiveMoveSlot === 'function') setActiveMoveSlot(0);
+        }
     }
     const filterInput = document.getElementById('move-pool-filter');
     if (filterInput) filterInput.value = '';
   } else {
-    defenderMovesSet = [null, null, null, null];
-    for(let i = 0; i < 4; i++) {
-      const si = document.getElementById(`def-mv-slot-${i}`);
-      const sm = document.getElementById(`def-mv-slot-meta-${i}`);
-      if (si) si.value = '';
-      if (sm) sm.innerHTML = '';
-    }
-    if (activeSide === 'def') {
-      if (typeof setDefActiveMoveSlot === 'function') setDefActiveMoveSlot(0);
+    if (!isFormChange) {
+        defenderMovesSet = [null, null, null, null];
+        for(let i = 0; i < 4; i++) {
+          const si = document.getElementById(`def-mv-slot-${i}`);
+          const sm = document.getElementById(`def-mv-slot-meta-${i}`);
+          if (si) si.value = '';
+          if (sm) sm.innerHTML = '';
+        }
+        if (activeSide === 'def') {
+          if (typeof setDefActiveMoveSlot === 'function') setDefActiveMoveSlot(0);
+        }
     }
   }
 
@@ -1862,7 +1974,6 @@ function chainMods(mods) {
 var gen = 9;
 
 function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera, p, isFirstHit) {
-
     if (!mvSel) return new Array(16).fill(0);
 
     const mvName = mvSel?.name || '';
@@ -1876,127 +1987,96 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
     let safeMvT = (mvT || 'normal').toLowerCase();
 
-
     if (itemD === 'Air Balloon' && safeMvT === 'ground' && mvName !== 'Thousand Arrows') {
         return new Array(16).fill(0);
     }
 
     let rawBP = basePower;
-
     const isNoItemA = (itemA === 'none' || itemA === '.N/A');
     const isNoItemD = (itemD === 'none' || itemD === '.N/A');
 
     if (mvName === 'Acrobatics') {
         rawBP = isNoItemA ? 110 : 55;
-    }
-    else if (mvName === 'Knock Off') {
+    } else if (mvName === 'Knock Off') {
         rawBP = isNoItemD ? 65 : 97;
-    }
-    else if (mvName === 'Expanding Force') {
+    } else if (mvName === 'Expanding Force') {
         rawBP = (p.campo === 'psychic') ? 120 : basePower;
     }
 
-
-    const isMoldBreaker = ['mold breaker', 'teravolt', 'turboblaze'].includes(p.habA);
-    const defAbility = isMoldBreaker ? '' : p.habD;
+    const atkAbil = p.habA ? p.habA.toLowerCase() : '';
+    const isMoldBreaker = ['mold breaker', 'teravolt', 'turboblaze'].includes(atkAbil);
+    const defAbility = isMoldBreaker ? '' : (p.habD ? p.habD.toLowerCase() : '');
 
     const mvData = (typeof MVDB !== 'undefined' && MVDB[mvName]) ? MVDB[mvName] : (mvSel || {});
     let ateBoost = false;
-    if (p.habA === 'liquid voice' && mvData.isSound) {
+
+    if (atkAbil === 'liquid voice' && mvData.isSound) {
         safeMvT = 'water';
     }
 
     if (mvName === 'Weather Ball') {
-        if (p.clima === "sun" || p.habA === "mega sol" || p.habA === "mega sol") {
-            safeMvT = "fire";
-            rawBP = 100;
+        if (p.clima === "sun" || atkAbil === "mega sol" || atkAbil === "mega-sol") {
+            safeMvT = "fire"; rawBP = 100;
         } else if (p.clima === "rain") {
-            safeMvT = "water";
-            rawBP = 100;
+            safeMvT = "water"; rawBP = 100;
         } else if (p.clima === "sand") {
-            safeMvT = "rock";
-            rawBP = 100;
+            safeMvT = "rock"; rawBP = 100;
         } else if (p.clima === "snow") {
-            safeMvT = "ice";
-            rawBP = 100;
+            safeMvT = "ice"; rawBP = 100;
         } else {
-            safeMvT = "normal";
-            rawBP = 50;
+            safeMvT = "normal"; rawBP = 50;
         }
+    } else if (mvName === "Terrain Pulse") {
+        if (p.campo === "electric") { safeMvT = "electric"; rawBP = 100; }
+        else if (p.campo === "grassy") { safeMvT = "grass"; rawBP = 100; }
+        else if (p.campo === "psychic") { safeMvT = "psychic"; rawBP = 100; }
+        else if (p.campo === "misty") { safeMvT = "fairy"; rawBP = 100; }
+        else { safeMvT = "normal"; rawBP = 50; }
     }
-    else if (mvName === "Terrain Pulse") {
-        if (p.campo === "electric") {
-            safeMvT = "electric";
-            rawBP = 100;
-        } else if (p.campo === "grassy") {
-            safeMvT = "grass";
-            rawBP = 100;
-        } else if (p.campo === "psychic") {
-            safeMvT = "psychic";
-            rawBP = 100;
-        } else if (p.campo === "misty") {
-            safeMvT = "fairy";
-            rawBP = 100;
-        } else {
-            safeMvT = "normal";
-            rawBP = 50;
-        }
-    }
-    if (['normalize'].includes(p.habA) && safeMvT !== 'normal') {
-        safeMvT = 'normal';
-        ateBoost = true;
-    } else if (safeMvT === 'normal') {
 
-        if (['pixilate'].includes(p.habA)) { safeMvT = 'fairy'; ateBoost = true; }
-        else if (['aerilate'].includes(p.habA)) { safeMvT = 'flying'; ateBoost = true; }
-        else if (['refrigerate'].includes(p.habA)) { safeMvT = 'ice'; ateBoost = true; }
-        else if (['galvanize'].includes(p.habA)) { safeMvT = 'electric'; ateBoost = true; }
-        else if (p.habA === 'dragonize') { safeMvT = 'dragon'; ateBoost = true; }
+    if (['normalize'].includes(atkAbil) && safeMvT !== 'normal') {
+        safeMvT = 'normal'; ateBoost = true;
+    } else if (safeMvT === 'normal') {
+        if (atkAbil === 'pixilate') { safeMvT = 'fairy'; ateBoost = true; }
+        else if (atkAbil === 'aerilate') { safeMvT = 'flying'; ateBoost = true; }
+        else if (atkAbil === 'refrigerate') { safeMvT = 'ice'; ateBoost = true; }
+        else if (atkAbil === 'galvanize') { safeMvT = 'electric'; ateBoost = true; }
+        else if (atkAbil === 'dragonize') { safeMvT = 'dragon'; ateBoost = true; }
     }
 
     if (mvName === 'Low Kick' || mvName === 'Grass Knot') {
         const w = realDefPoke ? realDefPoke.weight : 0;
-        if (w >= 200) rawBP = 120;
-        else if (w >= 100) rawBP = 100;
-        else if (w >= 50) rawBP = 80;
-        else if (w >= 25) rawBP = 60;
-        else if (w >= 10) rawBP = 40;
-        else rawBP = 20;
-    }
-    else if (mvName === 'Heavy Slam' || mvName === 'Heat Crash') {
+        if (w >= 200) rawBP = 120; else if (w >= 100) rawBP = 100; else if (w >= 50) rawBP = 80;
+        else if (w >= 25) rawBP = 60; else if (w >= 10) rawBP = 40; else rawBP = 20;
+    } else if (mvName === 'Heavy Slam' || mvName === 'Heat Crash') {
         if (realAtkPoke && realDefPoke && realDefPoke.weight > 0) {
             const r = realAtkPoke.weight / realDefPoke.weight;
-            if (r >= 5) rawBP = 120; else if (r >= 4) rawBP = 100; else if (r >= 3) rawBP = 80; else if (r >= 2) rawBP = 60; else rawBP = 40;
+            if (r >= 5) rawBP = 120; else if (r >= 4) rawBP = 100; else if (r >= 3) rawBP = 80;
+            else if (r >= 2) rawBP = 60; else rawBP = 40;
         } else rawBP = 40;
-    }
-
-    else if (mvName === 'Electro Ball' || mvName === 'Gyro Ball') {
+    } else if (mvName === 'Electro Ball' || mvName === 'Gyro Ball') {
         let speA = (realAtkPoke ? realAtkPoke.final_spe : 100);
         let speD = (realDefPoke ? realDefPoke.final_spe : 100);
-
         if (itemA === 'Choice Scarf') speA = Math.floor(speA * 1.5);
         if (itemA === 'Iron Ball' || itemA === 'Macho Brace') speA = Math.floor(speA * 0.5);
         if (itemD === 'Choice Scarf') speD = Math.floor(speD * 1.5);
         if (itemD === 'Iron Ball' || itemD === 'Macho Brace') speD = Math.floor(speD * 0.5);
 
-        if (p.clima === 'sun' && p.habA === 'chlorophyll') speA *= 2;
+        if (p.clima === 'sun' && atkAbil === 'chlorophyll') speA *= 2;
         if (p.clima === 'sun' && defAbility === 'chlorophyll') speD *= 2;
-        if (p.clima === 'rain' && p.habA === 'swift swim') speA *= 2;
+        if (p.clima === 'rain' && atkAbil === 'swift swim') speA *= 2;
         if (p.clima === 'rain' && defAbility === 'swift swim') speD *= 2;
-        if (p.clima === 'sand' && p.habA === 'sand rush') speA *= 2;
+        if (p.clima === 'sand' && atkAbil === 'sand rush') speA *= 2;
         if (p.clima === 'sand' && defAbility === 'sand rush') speD *= 2;
-        if (p.clima === 'snow' && p.habA === 'slush rush') speA *= 2;
+        if (p.clima === 'snow' && atkAbil === 'slush rush') speA *= 2;
         if (p.clima === 'snow' && defAbility === 'slush rush') speD *= 2;
 
         if (p.paralyzed) speA = Math.floor(speA * 0.5);
 
         if (mvName === 'Electro Ball') {
             const r = speD === 0 ? 0 : speA / speD;
-            if (r >= 4) rawBP = 150;
-            else if (r >= 3) rawBP = 120;
-            else if (r >= 2) rawBP = 80;
-            else if (r >= 1) rawBP = 60;
-            else rawBP = 40;
+            if (r >= 4) rawBP = 150; else if (r >= 3) rawBP = 120; else if (r >= 2) rawBP = 80;
+            else if (r >= 1) rawBP = 60; else rawBP = 40;
         } else if (mvName === 'Gyro Ball') {
             rawBP = speA === 0 ? 1 : Math.min(150, Math.floor((25 * speD) / speA) + 1);
         }
@@ -2004,60 +2084,38 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
 
     let bpMods = [];
     if (ateBoost) bpMods.push(0x1333);
-    const hasFairyAura = p.aura === 'fairy' || p.habA === 'fairy aura' || p.habD === 'fairy aura';
-    const hasDarkAura  = p.aura === 'dark'  || p.habA === 'dark aura'  || p.habD === 'dark aura';
-    const isAuraBreak  = p.aura === 'break' || p.habA === 'aura break' || p.habD === 'aura break';
+    const hasFairyAura = p.aura === 'fairy' || atkAbil === 'fairy aura' || defAbility === 'fairy aura';
+    const hasDarkAura  = p.aura === 'dark'  || atkAbil === 'dark aura'  || defAbility === 'dark aura';
+    const isAuraBreak  = p.aura === 'break' || atkAbil === 'aura break' || defAbility === 'aura break';
 
-    if (hasFairyAura && safeMvT === 'fairy') {
-        bpMods.push(isAuraBreak ? 0x0C00 : 0x1548);
-    }
-    if (hasDarkAura && safeMvT === 'dark') {
-        bpMods.push(isAuraBreak ? 0x0C00 : 0x1548);
-    }if (p.hh) bpMods.push(0x1800);
-    if (p.campo === 'misty' && safeMvT === 'dragon') {
-        bpMods.push(0x0800);
-    }
-    if (p.campo === 'grassy' && ['Earthquake', 'Bulldoze', 'Magnitude'].includes(mvName)) {
-        bpMods.push(0x0800);
-    }
+    if (hasFairyAura && safeMvT === 'fairy') bpMods.push(isAuraBreak ? 0x0C00 : 0x1548);
+    if (hasDarkAura && safeMvT === 'dark') bpMods.push(isAuraBreak ? 0x0C00 : 0x1548);
+    if (p.hh) bpMods.push(0x1800);
+    if (p.campo === 'misty' && safeMvT === 'dragon') bpMods.push(0x0800);
+    if (p.campo === 'grassy' && ['Earthquake', 'Bulldoze', 'Magnitude'].includes(mvName)) bpMods.push(0x0800);
+
     let isDoublePower = false;
+    if (p.campo === 'electric' && safeMvT === 'electric') bpMods.push(0x14CD);
+    if (p.campo === 'grassy' && safeMvT === 'grass') bpMods.push(0x14CD);
+    if (p.campo === 'psychic' && safeMvT === 'psychic') bpMods.push(0x14CD);
 
-    if (p.campo === 'electric' && safeMvT === 'electric') {
-        bpMods.push(0x14CD);
-    }
-    if (p.campo === 'grassy' && safeMvT === 'grass') {
-        bpMods.push(0x14CD);
-    }
-    if (p.campo === 'psychic' && safeMvT === 'psychic') {
-        bpMods.push(0x14CD);
-    }
-  
     if (mvName === "Facade" && (p.burn || p.poison || p.paralyzed)) {
         isDoublePower = true;
-    }
-    else if (mvName === "Brine") {
-        isDoublePower = false;
-    }
-    else if (["Venoshock", "Barb Barrage"].includes(mvName)) {
-        isDoublePower = false;
-    }
-    else if (["Retaliate", "Fusion Bolt", "Fusion Flare", "Lash Out"].includes(mvName)) {
+    } else if (["Brine", "Venoshock", "Barb Barrage", "Retaliate", "Fusion Bolt", "Fusion Flare", "Lash Out"].includes(mvName)) {
         isDoublePower = false;
     }
 
-    if (isDoublePower) {
-        bpMods.push(0x2000);
-    }
+    if (isDoublePower) bpMods.push(0x2000);
 
-    if (p.habA === 'sand force' && p.clima === 'sand' && ['rock', 'ground', 'steel'].includes(safeMvT)) bpMods.push(0x14CD);
-    if (p.habA === 'sheer force' && mvData.hasSecondaryEffect) bpMods.push(0x14CD);
-    if (p.habA === 'tough claws' && (mvData.makesContact && isPhysical)) bpMods.push(0x14CD);
-    if (p.habA === 'reckless' && mvData.hasRecoil ) bpMods.push(0x1333);
-    if (p.habA === 'iron fist' && mvData.isPunch ) bpMods.push(0x1333);
-    if (p.habA === 'strong jaw' && mvData.isBite ) bpMods.push(0x1800);
-    if (p.habA === 'mega launcher' && mvData.isPulse ) bpMods.push(0x1800);
-    if (p.habA === 'sharpness' && mvData.isSlice ) bpMods.push(0x1800);
-    if (p.habA === 'punk rock' && mvData.isSound ) bpMods.push(0x14CD);
+    if (atkAbil === 'sand force' && p.clima === 'sand' && ['rock', 'ground', 'steel'].includes(safeMvT)) bpMods.push(0x14CD);
+    if (atkAbil === 'sheer force' && mvData.hasSecondaryEffect) bpMods.push(0x14CD);
+    if (atkAbil === 'tough claws' && (mvData.makesContact && isPhysical)) bpMods.push(0x14CD);
+    if (atkAbil === 'reckless' && mvData.hasRecoil) bpMods.push(0x1333);
+    if (atkAbil === 'iron fist' && mvData.isPunch) bpMods.push(0x1333);
+    if (atkAbil === 'strong jaw' && mvData.isBite) bpMods.push(0x1800);
+    if (atkAbil === 'mega launcher' && mvData.isPulse) bpMods.push(0x1800);
+    if (atkAbil === 'sharpness' && mvData.isSlice) bpMods.push(0x1800);
+    if (atkAbil === 'punk rock' && mvData.isSound) bpMods.push(0x14CD);
 
     const mvT_Capitalized = safeMvT.charAt(0).toUpperCase() + safeMvT.slice(1);
     if (typeof getItemBoostType === 'function' && getItemBoostType(itemA) === mvT_Capitalized) bpMods.push(0x1333);
@@ -2068,16 +2126,14 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     if (itemA === 'Punching Glove' && (mvData.isPunch || isPhysical)) bpMods.push(0x119A);
     if (itemA === `${mvT_Capitalized} Gem`) bpMods.push(0x14CD);
 
-    if (p.habA === 'transistor' && safeMvT === 'electric') bpMods.push(0x14CD);
-    if (p.habA === 'dragons maw' && safeMvT === 'dragon') bpMods.push(0x1800);
-    if (p.habA === 'fire mane' && safeMvT === 'fire') bpMods.push(0x1800);
-    if ((p.habA === 'steelworker' || p.habA === 'steely spirit') && safeMvT === 'steel') bpMods.push(0x1800);
-    if (p.habA === 'water bubble' && safeMvT === 'water') bpMods.push(0x2000);
+    if (atkAbil === 'transistor' && safeMvT === 'electric') bpMods.push(0x14CD);
+    if (atkAbil === 'dragons maw' && safeMvT === 'dragon') bpMods.push(0x1800);
+    if (atkAbil === 'fire mane' && safeMvT === 'fire') bpMods.push(0x1800);
+    if ((atkAbil === 'steelworker' || atkAbil === 'steely spirit') && safeMvT === 'steel') bpMods.push(0x1800);
+    if (atkAbil === 'water bubble' && safeMvT === 'water') bpMods.push(0x2000);
 
     let intermediateBP = Math.max(1, Math.round((rawBP * chainMods(bpMods)) / 0x1000));
-    if (p.habA === 'technician' && intermediateBP <= 60) {
-        bpMods.push(0x1800);
-    }
+    if (atkAbil === 'technician' && intermediateBP <= 60) bpMods.push(0x1800);
 
     let finalBP = Math.max(1, Math.round((rawBP * chainMods(bpMods)) / 0x1000));
     if (p.campo === 'electric' && mvName === 'Rising Voltage') finalBP *= 2;
@@ -2088,12 +2144,30 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     const results = [];
     const tMult = typeMult(safeMvT, defTs, defTera);
 
+    // --- LÓGICA DE INMUNIDAD (0 DAÑO) ---
+    let isImmune = (tMult === 0);
+    if (!isMoldBreaker) {
+        if (['flash fire', 'well-baked body'].includes(defAbility) && safeMvT === 'fire') isImmune = true;
+        if (['water absorb', 'dry skin', 'storm drain'].includes(defAbility) && safeMvT === 'water') isImmune = true;
+        if (['volt absorb', 'lightning rod', 'motor drive'].includes(defAbility) && safeMvT === 'electric') isImmune = true;
+        if (defAbility === 'sap sipper' && safeMvT === 'grass') isImmune = true;
+        if (['earth eater', 'levitate'].includes(defAbility) && safeMvT === 'ground') isImmune = true;
+        if (defAbility === 'wonder guard' && tMult <= 1 && safeMvT !== 'none') isImmune = true;
+        if (defAbility === 'soundproof' && mvData.isSound) isImmune = true;
+        if (defAbility === 'bulletproof' && mvData.isBomb) isImmune = true;
+        if (defAbility === 'good as gold' && mvSel.cat === 't') isImmune = true;
+    }
+    if (isImmune) {
+        return new Array(16).fill(0); // Forzar daño a 0 absoluto
+    }
+    // ------------------------------------
+
     for (let i = 0; i < 16; i++) {
         let d = Math.floor(baseDamage * (85 + i) / 100);
 
         if (p.spread && mvSel && mvSel.isSpread) d = pokeRound((d * 0x0C00) / 0x1000);
 
-        if (p.clima === 'sun' || p.habA === 'mega sol' || p.habA === 'mega-sol') {
+        if (p.clima === 'sun' || atkAbil === 'mega sol' || atkAbil === 'mega-sol') {
             if (safeMvT === 'fire' || mvName === 'Hydro Steam') d = pokeRound((d * 0x1800) / 0x1000);
             else if (safeMvT === 'water' && p.clima === 'sun') d = pokeRound((d * 0x0800) / 0x1000);
         }
@@ -2102,52 +2176,43 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
             else if (safeMvT === 'fire') d = pokeRound((d * 0x0800) / 0x1000);
         }
 
-        if (p.crit) {
-            d = p.habA === 'sniper' ? pokeRound((d * 0x2400) / 0x1000) : pokeRound((d * 0x1800) / 0x1000);
-        }
+        if (p.crit) d = atkAbil === 'sniper' ? pokeRound((d * 0x2400) / 0x1000) : pokeRound((d * 0x1800) / 0x1000);
 
         const hasSTAB = atkTs.map(t => t.toLowerCase()).includes(safeMvT);
         const isTeraSTAB = (atkTera !== 'none' && atkTera === safeMvT);
         if (hasSTAB || isTeraSTAB) {
-        let multiplier = (isTeraSTAB) ? 2.0 : 1.5;
-        if (p.habA === 'adaptability') multiplier = (isTeraSTAB) ? 2.25 : 2.0;
-
-        d = Math.floor(d * multiplier);
-    }
+            let multiplier = (isTeraSTAB) ? 2.0 : 1.5;
+            if (atkAbil === 'adaptability') multiplier = (isTeraSTAB) ? 2.25 : 2.0;
+            d = Math.floor(d * multiplier);
+        }
 
         d = Math.floor(d * tMult);
 
         let finalMods = [];
-        if (p.burn && isPhysical && p.habA !== 'guts' && mvName !== 'Facade') finalMods.push(0x0800);
+        if (p.burn && isPhysical && atkAbil !== 'guts' && mvName !== 'Facade') finalMods.push(0x0800);
         if (p.pantalla === 'reflect' && isPhysical && !p.crit) finalMods.push(0x0AAC);
         if (p.pantalla === 'ls' && isSpecial && !p.crit) finalMods.push(0x0AAC);
         if (p.compie !== 1) finalMods.push(0x0C00);
-
         if (itemA === 'Life Orb') finalMods.push(0x14CC);
         if (itemA === 'Expert Belt' && tMult > 1) finalMods.push(0x1333);
+        if (atkAbil === 'tinted lens' && tMult < 1) finalMods.push(0x2000);
+        if (atkAbil === 'neuroforce' && tMult > 1) finalMods.push(0x1400);
 
-        if (p.habA === 'tinted lens' && tMult < 1) finalMods.push(0x2000);
-        if (p.habA === 'neuroforce' && tMult > 1) finalMods.push(0x1400);
-        if (['solid rock', 'filter', 'prism armor'].includes(p.habD) && tMult > 1) finalMods.push(0xC00);
-        if (isFirstHit && ['multiscale', 'shadow shield'].includes(p.habD)) finalMods.push(0x800);
-        if (p.habD === 'ice scales' && isSpecial) finalMods.push(0x800);
-        if (p.habD === 'punk rock' && mvData.isSound) finalMods.push(0x800);
-
+        if (['solid rock', 'filter', 'prism armor'].includes(defAbility) && tMult > 1) finalMods.push(0xC00);
+        if (isFirstHit && ['multiscale', 'shadow shield'].includes(defAbility)) finalMods.push(0x800);
+        if (defAbility === 'ice scales' && isSpecial) finalMods.push(0x800);
+        if (defAbility === 'punk rock' && mvData.isSound) finalMods.push(0x800);
         if (defAbility === 'thick fat' && (safeMvT === 'fire' || safeMvT === 'ice')) finalMods.push(0x0800);
         if (defAbility === 'purifying salt' && safeMvT === 'ghost') finalMods.push(0x0800);
         if (defAbility === 'water bubble' && safeMvT === 'fire') finalMods.push(0x0800);
-
-        if (p.habD === 'fluffy') {
+        if (defAbility === 'fluffy') {
             if (safeMvT === 'fire') finalMods.push(0x2000);
             if (isPhysical || mvData.makesContact) finalMods.push(0x800);
         }
         if (defAbility === 'aura guard') {
-            const attackerNegatesContact = p.habA === 'long reach' || itemA === 'Punching Glove';
-            if (mvData.makesContact && !attackerNegatesContact) {
-                finalMods.push(0x0800); 
-            }
+            const attackerNegatesContact = atkAbil === 'long reach' || itemA === 'Punching Glove';
+            if (mvData.makesContact && !attackerNegatesContact) finalMods.push(0x0800);
         }
-
         if (isFirstHit && typeof getBerryResistType === 'function' && getBerryResistType(itemD) === mvT_Capitalized && (tMult > 1 || safeMvT === 'normal')) {
             finalMods.push(0x0800);
         }
@@ -2175,6 +2240,9 @@ function getMultiHitDist(singleHitArr, hits) {
 }
 
 function verdict(dmgNoBerry, dmgWithBerry, hp, hitsPerTurn) {
+  if (dmgWithBerry[15] === 0 && dmgNoBerry[15] === 0) {
+      return { label: 'INMUNE', cls: 'c-safe', vc: 'v-safe' };
+  }
   const nkoLabel = n => n === 1 ? 'OHKO' : `${n}HKO`;
   const nkoCls = (n, sure) => {
     if (n === 1) return sure ? 'c-ohko' : 'c-pohko';
@@ -2275,7 +2343,7 @@ function getAtkStat() {
   const atkHabId = activeSide === 'def' ? 'hab-d' : 'hab-a';
   const defHabId = activeSide === 'def' ? 'hab-a' : 'hab-d';
   const atkItemId = activeSide === 'def' ? 'obj-d' : 'obj-a';
-  
+
   let atkEvId   = activeSide === 'def' ? 'def' : 'atk';
   let atkNatId  = activeSide === 'def' ? 'def-nat' : 'atk-nat';
   let atkLvlId  = activeSide === 'def' ? 'def-lvl' : 'atk-lvl';
@@ -2508,29 +2576,26 @@ function updateResult() {
           document.getElementById('mx-section-title').textContent = '';
           wrap.innerHTML = '<div class="empty-mx"><span class="spin">⟳</span> Esperando movimiento...</div>';
         }
-    } else {
-        updateAtkChart(); 
+    } else if (calcMode === 'atk') {
+        updateAtkChart();
+    } else if (calcMode === 'spe') {
+        updateSpeChart();
     }
-
     const cellDetail = document.getElementById('mx-cell-detail');
     if (cellDetail) cellDetail.style.display = 'none';
     return;
   }
 
+  // Refrescar paneles visuales sin cambiar el calcMode
   document.getElementById('mx-section').style.display = calcMode === 'def' ? 'block' : 'none';
   document.getElementById('atk-chart-section').style.display = calcMode === 'atk' ? 'block' : 'none';
+  document.getElementById('spe-chart-section').style.display = calcMode === 'spe' ? 'block' : 'none';
 
   const isSp = mvSel?.cat === 's';
   const atkSlbl = document.getElementById('atk-slbl');
   const defSlbl = document.getElementById('def-slbl');
   if (atkSlbl) atkSlbl.textContent = isSp ? 'SpA' : 'Atk';
   if (defSlbl) defSlbl.textContent = isSp ? 'SpD' : 'Def';
-
-  const habAEl = document.getElementById('hab-a');
-  if (habAEl && (habAEl.value === 'mega sol')) {
-    const climaSelect = document.getElementById('clima');
-    if (climaSelect) climaSelect.value = 'sun';
-  }
 
   if (mvSel.cat === 't') {
     document.getElementById('r-min').textContent = '0';
@@ -2548,34 +2613,31 @@ function updateResult() {
   const def = getDefStat();
   const hp  = getHP();
 
-  const rAtk = document.getElementById('r-atk');
-  const rDef = document.getElementById('r-def');
-  const rHp  = document.getElementById('r-hp');
-  if (rAtk) rAtk.textContent = atk;
-  if (rDef) rDef.textContent = def;
-  if (rHp)  rHp.textContent  = hp;
+  if (document.getElementById('r-atk')) document.getElementById('r-atk').textContent = atk;
+  if (document.getElementById('r-def')) document.getElementById('r-def').textContent = def;
+  if (document.getElementById('r-hp'))  document.getElementById('r-hp').textContent  = hp;
 
   const atkTs  = activeSide === 'def' ? defPoke.types : atkPoke.types;
   const defTs  = activeSide === 'def' ? atkPoke.types : defPoke.types;
   const atkTera = document.getElementById(activeSide === 'def' ? 'def-tera' : 'atk-tera').value;
   const defTera = document.getElementById(activeSide === 'def' ? 'atk-tera' : 'def-tera').value;
   const bp   = parseInt(document.getElementById(activeSide === 'def' ? 'def-bp' : 'bp').value)||80;
-  const mvT  = mvSel.type;
   const hits = parseInt(document.getElementById(activeSide === 'def' ? 'def-num-hits' : 'num-hits').value)||1;
 
-  const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
-  const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
+  const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvSel.type, defTs, defTera, p, false);
+  const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvSel.type, defTs, defTera, p, true);
 
   const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
-
   const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
   const mx = arrWithBerry[15] + (arrNoBerry[15] * (hits - 1));
 
   document.getElementById('r-min').textContent = mn;
   document.getElementById('r-max').textContent = mx;
-  document.getElementById('r-rng').textContent =
-    `${mn}–${mx} / ${hp} HP  (${(mn/hp*100).toFixed(1)}% ~ ${(mx/hp*100).toFixed(1)}%)`;
-
+  if (mn === 0 && mx === 0) {
+      document.getElementById('r-rng').textContent = `INMUNE (No afecta)`;
+  } else {
+      document.getElementById('r-rng').textContent = `${mn}–${mx} / ${hp} HP  (${(mn/hp*100).toFixed(1)}% ~ ${(mx/hp*100).toFixed(1)}%)`;
+  }
   const vel = document.getElementById('r-verd');
   vel.textContent = v.label;
   vel.className = 'res-val ' + v.vc;
@@ -2658,15 +2720,14 @@ function generateShowdownTitle() {
   return fullTitle;
 }
 function updateLiveMatrix() {
-  if (calcMode === 'atk') {
-    updateAtkChart();
-    return;
-  }
+  if (calcMode === 'atk') updateAtkChart();
+  if (calcMode === 'spe') updateSpeChart();
+
   const sec = document.getElementById('mx-section');
   const wrap = document.getElementById('mx-wrap');
   if (!sec || !wrap) return;
 
-  sec.style.display = 'block';
+  sec.style.display = calcMode === 'def' ? 'block' : 'none';
 
 
   const p = readP();
@@ -2693,7 +2754,7 @@ function updateLiveMatrix() {
   const atkNatId = activeSide === 'def' ? 'def-nat' : 'atk-nat';
   const atkNatName = document.getElementById(atkNatId)?.value || 'Hardy';
   const atkNatMods = NATURE_MODS[atkNatName] || [1,1,1,1,1];
-  const atkNatStatIdx = isSp ? 2 : 0; 
+  const atkNatStatIdx = isSp ? 2 : 0;
   const atkNatSym = atkNatMods[atkNatStatIdx] > 1 ? '+' : atkNatMods[atkNatStatIdx] < 1 ? '-' : '';
 
   const atkBoStatId = isSp
@@ -2713,7 +2774,7 @@ function updateLiveMatrix() {
   const defNatId = activeSide === 'def' ? 'atk-nat' : 'def-nat';
   const defNatName = document.getElementById(defNatId)?.value || 'Hardy';
   const defNatMods = NATURE_MODS[defNatName] || [1,1,1,1,1];
-  const defNatStatIdx = isSp ? 3 : 1; 
+  const defNatStatIdx = isSp ? 3 : 1;
   const defNatSym = defNatMods[defNatStatIdx] > 1 ? '+' : defNatMods[defNatStatIdx] < 1 ? '-' : '';
 
   const defBoStatId = isSp
@@ -2753,13 +2814,19 @@ function updateLiveMatrix() {
   const defNatBoosts = defNatMods[isSp ? 3 : 1] > 1;
   const defLabel = isSp ? 'SpD' : 'Def';
 
+  const defPrefix = activeSide === 'def' ? 'atk' : 'def';
+  const currentDefHpSp = parseInt(document.getElementById(`${defPrefix}-ev-hp`).value) || 0;
+  const currentDefArmorSp = parseInt(document.getElementById(`${defPrefix}-ev-${isSp ? 'spd' : 'def'}`).value) || 0;
+
   const N = 33;
   let h = '<table class="mx"><thead><tr>';
-  h += `<th class="sb2" style="min-width:72px;font-size:8px">HP SP &#9658;<br>DEF SP &#9660;</th>`;
+  // Cabecera Dinámica (DEF SP o SPD SP)
+  h += `<th class="sb2" style="min-width:72px;font-size:8px">HP SP &#9658;<br>${isSp ? 'SPD' : 'DEF'} SP &#9660;</th>`;
   for (let hi = 0; hi < N; hi++) {
     const hp = getHP(hi);
     const isMagic = hp % 16 === 0;
-    h += `<th class="sr2">
+    const lockedAxisH = (hi === currentDefHpSp) ? 'mx-locked-axis' : ''; // Sombreado de columna
+    h += `<th class="sr2 ${lockedAxisH}">
       <div style="color:var(--g);font-weight:${isMagic?'900':'700'};${isMagic?'text-decoration:underline;text-shadow:0 0 6px rgba(0,230,118,0.6)':''}">${hi}</div>
       <div style="font-size:8px;color:${isMagic?'var(--g)':'var(--t2)'};font-weight:${isMagic?'700':'400'}">${hp}</div>
     </th>`;
@@ -2770,40 +2837,39 @@ function updateLiveMatrix() {
     const def = getDefStat(di);
     const defEV = EVS[di];
     const defNatSym = defNatBoosts ? '+' : '';
-    h += `<tr><th class="sc"><div style="color:var(--a);font-weight:700">${di}</div><div style="font-size:8px;color:var(--t2)">${def}</div></th>`;
+    const lockedAxisV = (di === currentDefArmorSp) ? 'mx-locked-axis' : ''; // Sombreado de fila
+
+    h += `<tr><th class="sc ${lockedAxisV}"><div style="color:var(--a);font-weight:700">${di}</div><div style="font-size:8px;color:var(--t2)">${def}</div></th>`;
     for (let hi = 0; hi < N; hi++) {
       if (mvSel.cat === 't') {
-        h += `<td class="c-safe" style="cursor:default; padding: 4px 3px; line-height: 1.2;">
-              <div style="font-weight: bold; font-size: 10px; color: var(--t2);">Estado</div>
-              <div style="font-size: 8px; opacity: 0.5; margin-top: 1px;">No aplica</div>
-            </td>`;
+        h += `<td class="c-safe" style="cursor:default; padding: 4px 3px;">Estado</td>`;
       } else {
         const hp = getHP(hi);
         const hpEV = EVS[hi];
-        const isMagicHP = hp % 16 === 0;
+
+        // Identificar Intersección para la Cruz Fija
+        const isLockedCell = (hi === currentDefHpSp && di === currentDefArmorSp);
+        const isLockedAxis = (hi === currentDefHpSp || di === currentDefArmorSp);
+        const lockedClass = isLockedCell ? 'mx-locked-cell' : (isLockedAxis ? 'mx-locked-axis' : '');
 
         const arrNoBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
         const arrWithBerry = calcDmgArr(atk, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
 
         const v = verdict(arrNoBerry, arrWithBerry, hp, hits);
-        const totalSP = hi + di;
-
         const mn = arrWithBerry[0] + (arrNoBerry[0] * (hits - 1));
         const mx = arrWithBerry[15] + (arrNoBerry[15] * (hits - 1));
 
         const dmgText = `${mn}-${mx}`;
         const pctText = `${(mn/hp*100).toFixed(1)}% - ${(mx/hp*100).toFixed(1)}%`;
+        const tooltipText = `${hi} HP (${hpEV} EVs) | ${di}${defNatSym} ${defLabel} (${defEV} EVs) — ${v.label}: ${dmgText} (${pctText})`;
 
-        const hpTooltip = isMagicHP ? `★${hi} HP (${hpEV} EVs) [×16]` : `${hi} HP (${hpEV} EVs)`;
-        const tooltipText = `${hpTooltip} | ${di}${defNatSym} ${defLabel} (${defEV} EVs) — ${v.label}: ${dmgText} (${pctText})`;
-        const cellBorder = isMagicHP ? 'border-left:2px solid rgba(0,230,118,0.35);' : '';
-
-        h += `<td class="${v.cls}"
-              style="cursor:pointer; padding: 4px 3px; line-height: 1.2;${cellBorder}"
-              onclick="showCellDetail(this, ${hi}, ${di}, '${v.label}', '${dmgText}', '${pctText}')"
+        h += `<td class="${v.cls} ${lockedClass}"
+              style="cursor:pointer; padding: 4px 3px; line-height: 1.2; user-select: none;"
+              onclick="previewCellDetail(this, ${hi}, ${di}, '${v.label}', '${dmgText}', '${pctText}')"
+              ondblclick="applyCellEvs(${hi}, ${di})"
               title="${tooltipText}">
               <div style="font-weight: bold;">${v.label}</div>
-              <div style="font-size: 8px; opacity: 0.75; font-weight: 500; margin-top: 1px;">${totalSP} SP</div>
+              <div style="font-size: 8px; opacity: 0.75; font-weight: 500; margin-top: 1px;">${hi + di} SP</div>
             </td>`;
       }
     }
@@ -2817,7 +2883,8 @@ function calcMatrix() {
   updateResult();
 }
 
-function showCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
+// Función para UN CLICK (Solo previsualiza, no modifica los EVs del Pokémon)
+function previewCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
   const detailBox = document.getElementById('mx-cell-detail');
   const hpEV = EVS[hi];
   const defEV = EVS[di];
@@ -2829,7 +2896,8 @@ function showCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
 
   document.getElementById('det-evs').innerHTML =
     `HP: <b style="color:var(--g)">${hi} SP</b> (${hpEV} EVs)<br>` +
-    `${isSp ? 'SpD' : 'Def'}: <b style="color:var(--a)">${di} SP</b> (${defEV} EVs)`;
+    `${isSp ? 'SpD' : 'Def'}: <b style="color:var(--a)">${di} SP</b> (${defEV} EVs)<br>` +
+    `<span style="color:var(--y); font-size:10px; opacity:0.8;">[Doble Click en la celda para aplicar]</span>`;
 
   document.getElementById('det-stats').innerHTML =
     `HP: <b>${hpStat}</b><br>` +
@@ -2859,6 +2927,24 @@ function showCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
   tdEl.classList.add('hl-active');
 
   detailBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// Función para DOS CLICKS (Aplica permanentemente los EVs y recarga todo)
+function applyCellEvs(hi, di) {
+  const isSp = mvSel?.cat === 's';
+  const realDefStat = mvSel?.dealsPhysicalDamage ? 'def' : (isSp ? 'spd' : 'def');
+  const defPrefix = activeSide === 'def' ? 'atk' : 'def';
+
+  // Inyectar a las cajas
+  document.getElementById(`${defPrefix}-ev-hp`).value = hi;
+  document.getElementById(`${defPrefix}-ev-${realDefStat}`).value = di;
+
+  // Actualizar stats reales
+  if (defPrefix === 'atk') updateAtkStat(); else updateDefStats();
+  updateEvCounter(defPrefix);
+
+  // Refrescar toda la matriz y gráficas con el nuevo estado bloqueado
+  if(calcMode === 'def') updateLiveMatrix();
 }
 
 function pkRenderItem(name) {
@@ -2994,24 +3080,72 @@ function resetCalc() {
   window.location.reload();
 }
 
+function exportShowdown(side) {
+  const p = side === 'atk' ? atkPoke : defPoke;
+  if (!p) return;
+
+  const itemName = document.getElementById(side === 'atk' ? 'obj-a' : 'obj-d').value;
+  const ability = document.getElementById(side === 'atk' ? 'hab-a' : 'hab-d').value;
+  const lvl = document.getElementById(side === 'atk' ? 'atk-lvl' : 'def-lvl').value;
+  const nat = document.getElementById(side === 'atk' ? 'atk-nat' : 'def-nat').value;
+
+  let evs = [];
+  ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach(st => {
+      const val = parseInt(document.getElementById(`${side}-ev-${st}`).value) || 0;
+      // AQUÍ EL CAMBIO: Exportamos 'val' directamente en lugar de EVS[val]
+      if (val > 0) evs.push(`${val} ${st.charAt(0).toUpperCase() + st.slice(1)}`);
+  });
+
+  let moves = [];
+  const mvs = side === 'atk' ? attackerMovesSet : defenderMovesSet;
+  mvs.forEach(m => { if (m) moves.push(`- ${m.name}`); });
+
+  let str = `${p.name.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('-')}`;
+  if (itemName && itemName !== 'none' && itemName !== '.N/A') str += ` @ ${itemName}`;
+  str += `\nAbility: ${ability.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}`;
+  if (lvl != 50) str += `\nLevel: ${lvl}`;
+  if (evs.length) str += `\nEVs: ${evs.join(' / ')}`;
+  str += `\n${nat} Nature`;
+  if (moves.length) str += `\n${moves.join('\n')}`;
+  document.getElementById('import-showdown-text').value = str;
+
+  navigator.clipboard.writeText(str).then(() => {
+      const btn = document.getElementById(`btn-exp-${side}`);
+      const oldTxt = btn.innerHTML;
+      btn.innerHTML = '¡COPIADO!';
+      btn.style.color = '#fff';
+      btn.style.background = 'var(--g)';
+      btn.style.borderColor = 'var(--g)';
+      setTimeout(() => {
+          btn.innerHTML = oldTxt;
+          btn.style.color = 'var(--a)';
+          btn.style.background = 'var(--bg3)';
+          btn.style.borderColor = 'var(--bd)';
+      }, 2000);
+  });
+}
+
 let calcMode = 'def';
 
 function setCalcMode(mode) {
   calcMode = mode;
-
   document.getElementById('btn-mode-def').className = 'mode-btn' + (mode === 'def' ? ' active-def' : '');
   document.getElementById('btn-mode-atk').className = 'mode-btn' + (mode === 'atk' ? ' active-atk' : '');
+  document.getElementById('btn-mode-spe').className = 'mode-btn' + (mode === 'spe' ? ' active-atk' : '');
 
+  // PANELES DEL MEDIO
   document.getElementById('def-res-box').style.display       = mode === 'def' ? 'block' : 'none';
   document.getElementById('atk-slider-panel').style.display  = mode === 'atk' ? 'block' : 'none';
-  document.getElementById('mx-section').style.display        = mode === 'def' ? '' : 'none';
-  document.getElementById('atk-chart-section').style.display = mode === 'atk' ? 'block' : 'none';
+  document.getElementById('spe-slider-panel').style.display  = mode === 'spe' ? 'block' : 'none';
 
-  if (mode === 'atk') {
-    updateAtkChart();
-  } else {
-    updateResult();
-  }
+  // PANELES DE ABAJO
+  document.getElementById('mx-section').style.display        = mode === 'def' ? 'block' : 'none';
+  document.getElementById('atk-chart-section').style.display = mode === 'atk' ? 'block' : 'none';
+  document.getElementById('spe-chart-section').style.display = mode === 'spe' ? 'block' : 'none';
+
+  if (mode === 'atk') updateAtkChart();
+  else if (mode === 'spe') updateSpeChart();
+  else updateResult();
 }
 
 function onAtkSliderChange(spVal) {
@@ -3035,6 +3169,7 @@ function onAtkSliderChange(spVal) {
 }
 
 function syncSliderToCurrentEvs(cat, moveName) {
+    // 1. Sincronizar Slider de ATAQUE
     const isSp = cat === 's';
     const statName = moveName === 'Body Press' ? 'def' : (isSp ? 'spa' : 'atk');
     const evInputId = activeSide === 'def' ? `def-ev-${statName}` : `atk-ev-${statName}`;
@@ -3050,6 +3185,22 @@ function syncSliderToCurrentEvs(cat, moveName) {
 
         const evsEl = document.getElementById('atk-sp-evs');
         if (evsEl) evsEl.textContent = EVS[currentVal] + ' EVs';
+    }
+
+    // 2. Sincronizar Slider de VELOCIDAD
+    const speInputId = activeSide === 'def' ? `def-ev-spe` : `atk-ev-spe`;
+    const speInput = document.getElementById(speInputId);
+
+    const speSldr = document.getElementById('spe-sp-slider');
+    if (speSldr && speInput) {
+        const currentSpeVal = parseInt(speInput.value) || 0;
+        speSldr.value = currentSpeVal;
+
+        const speValEl = document.getElementById('spe-sp-val');
+        if (speValEl) speValEl.textContent = currentSpeVal;
+
+        const speEvsEl = document.getElementById('spe-sp-evs');
+        if (speEvsEl) speEvsEl.textContent = EVS[currentSpeVal] + ' EVs';
     }
 }
 
@@ -3278,7 +3429,7 @@ function updateAtkChart() {
   for (let i = 1; i < N; i++) ctx.lineTo(toX(i), toY(dmgMin[i]));
   for (let i = N-1; i >= 0; i--) ctx.lineTo(toX(i), toY(dmgMax[i]));
   ctx.closePath();
-  ctx.fillStyle = fillStyleArea; 
+  ctx.fillStyle = fillStyleArea;
   ctx.fill();
 
   ctx.strokeStyle = cA;
@@ -3287,7 +3438,7 @@ function updateAtkChart() {
   for (let i = 1; i < N; i++) ctx.lineTo(toX(i), toY(dmgMax[i]));
   ctx.stroke();
 
-  ctx.strokeStyle = strokeStyleFaint; 
+  ctx.strokeStyle = strokeStyleFaint;
   ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(toX(0), toY(dmgMin[0]));
   for (let i = 1; i < N; i++) ctx.lineTo(toX(i), toY(dmgMin[i]));
@@ -3381,6 +3532,357 @@ function updateAtkChart() {
 
 document.getElementById('load-status').textContent = `${pkNames.length} Pokemon · ${Object.keys(MVDB).length} movimientos`;
 changeTheme('gen5');
+// ====== MÓDULO DE VELOCIDAD ======
+
+function onSpeSliderChange(spVal) {
+    const sp = parseInt(spVal);
+    document.getElementById('spe-sp-val').textContent = sp;
+    document.getElementById('spe-sp-evs').textContent = EVS[sp] + ' EVs';
+
+    // Sincronizar el Slider con la caja del bando ACTIVO
+    const evInput = document.getElementById(`${activeSide}-ev-spe`);
+    if (evInput) {
+        evInput.value = sp;
+        if (activeSide === 'atk') updateAtkStat(); else updateDefStats();
+        updateEvCounter(activeSide);
+    }
+    updateSpeChart();
+}
+
+// Calculadora de Velocidad Final (Ya contemplaba la Parálisis correcta)
+function getFinalSpeed(pokeObj, sideStr, spOverride) {
+    if (!pokeObj) return 100;
+    const lvl = parseInt(document.getElementById(`${sideStr}-lvl`).value) || 50;
+    const nat = document.getElementById(`${sideStr}-nat`).value || 'Hardy';
+    const mods = NATURE_MODS[nat] || [1,1,1,1,1];
+    const natMult = mods[4];
+
+    const spIdx = spOverride !== null ? spOverride : (parseInt(document.getElementById(`${sideStr}-ev-spe`).value) || 0);
+    let stat = Math.floor(evStat(spIdx, pokeObj.spe, lvl, natMult, false));
+
+    const bo = parseInt(document.getElementById(`${sideStr}-bo-spe`)?.value) || 0;
+    stat = Math.max(1, Math.floor(stat * bm(bo)));
+
+    const isTailwind = document.getElementById(sideStr === 'atk' ? 'chk-tw-a' : 'chk-tw-d').checked;
+    const isScarf = document.getElementById(sideStr === 'atk' ? 'chk-scarf-a' : 'chk-scarf-d').checked;
+    const isMega = pokeObj.name.toLowerCase().includes('-mega') || pokeObj.name.toLowerCase().includes('-primal');
+
+    if (isScarf && !isMega) stat = Math.floor(stat * 1.5);
+    if (isTailwind) stat *= 2;
+
+    const status = document.getElementById(`${sideStr}-status`).value;
+    if (status === 'Paralyzed') stat = Math.floor(stat * 0.5);
+
+    return stat;
+}
+
+function updateSpeChart() {
+    if (calcMode !== 'spe') return;
+    const canvas = document.getElementById('spe-chart-canvas');
+    const verdictBox = document.getElementById('spe-verdict-box');
+    const statDisplay = document.getElementById('spe-sp-stat');
+
+    if (!atkPoke || !defPoke) {
+        verdictBox.innerHTML = 'Selecciona a ambos Pokémon para comparar.';
+        return;
+    }
+
+    const isActiveAtk = activeSide === 'atk';
+    const activePoke = isActiveAtk ? atkPoke : defPoke;
+    const rivalPoke  = isActiveAtk ? defPoke : atkPoke;
+
+    const activeSideStr = isActiveAtk ? 'atk' : 'def';
+    const rivalSideStr  = isActiveAtk ? 'def' : 'atk';
+
+    const lblTwA = document.getElementById('lbl-tw-a');
+    if (lblTwA) lblTwA.textContent = `Tailwind (${atkPoke.name})`;
+    const lblTwD = document.getElementById('lbl-tw-d');
+    if (lblTwD) lblTwD.textContent = `Tailwind (${defPoke.name})`;
+    const lblScarfA = document.getElementById('lbl-scarf-a');
+    if (lblScarfA) lblScarfA.textContent = `Scarf (${atkPoke.name})`;
+    const lblScarfD = document.getElementById('lbl-scarf-d');
+    if (lblScarfD) lblScarfD.textContent = `Scarf (${defPoke.name})`;
+
+    const currentSp = parseInt(document.getElementById('spe-sp-slider').value) || 0;
+
+    const activeSpe = getFinalSpeed(activePoke, activeSideStr, currentSp);
+    statDisplay.textContent = activeSpe;
+
+    const rivalSpeMin = getFinalSpeed(rivalPoke, rivalSideStr, 0);
+    const rivalSpeMax = getFinalSpeed(rivalPoke, rivalSideStr, 32);
+
+    const rivalNameStr = rivalPoke.name.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('-');
+
+    // Extracción de Colores
+    const cs = getComputedStyle(document.documentElement);
+    const cBg   = cs.getPropertyValue('--bg2').trim()  || '#111622';
+    const cT    = cs.getPropertyValue('--t').trim()    || '#e0e8f0';
+    const cT2   = cs.getPropertyValue('--t2').trim()   || '#7a8fa6';
+    const cA    = cs.getPropertyValue('--a').trim()    || '#00d4ff';
+    const cA2   = cs.getPropertyValue('--a2').trim()   || '#7c4dff';
+    const cG    = cs.getPropertyValue('--g').trim()    || '#00e676';
+    const cR    = cs.getPropertyValue('--r').trim()    || '#ff1744';
+
+    // Evaluación Lógica con texto adaptable (--t en lugar de blanco forzado)
+    if (activeSpe > rivalSpeMax) {
+        verdictBox.style.borderColor = cG;
+        verdictBox.style.backgroundColor = `rgba(${hexToRgb(cG).r}, ${hexToRgb(cG).g}, ${hexToRgb(cG).b}, 0.15)`;
+        verdictBox.innerHTML = `Con <b style="color:${cA}">${currentSp} SP</b>, alcanzas <b style="color:${cA}">${activeSpe}</b> de Velocidad.<br><br><span style="color:${cG}; font-size:18px; font-weight:bold;">¡Superas completamente a ${rivalNameStr}!</span><br><span style="color:${cT}">(Rango rival: ${rivalSpeMin} - ${rivalSpeMax})</span>`;
+    } else if (activeSpe < rivalSpeMin) {
+        verdictBox.style.borderColor = cR;
+        verdictBox.style.backgroundColor = `rgba(${hexToRgb(cR).r}, ${hexToRgb(cR).g}, ${hexToRgb(cR).b}, 0.15)`;
+        verdictBox.innerHTML = `Con <b style="color:${cA}">${currentSp} SP</b>, alcanzas <b style="color:${cA}">${activeSpe}</b> de Velocidad.<br><br><span style="color:${cR}; font-size:18px; font-weight:bold;">No superas nunca a ${rivalNameStr}.</span><br><span style="color:${cT}">(Rango rival: ${rivalSpeMin} - ${rivalSpeMax})</span>`;
+    } else if (activeSpe === rivalSpeMax) {
+         verdictBox.style.borderColor = cA; // Azul principal
+         verdictBox.style.backgroundColor = `rgba(${hexToRgb(cA).r}, ${hexToRgb(cA).g}, ${hexToRgb(cA).b}, 0.15)`;
+         verdictBox.innerHTML = `Con <b style="color:${cA}">${currentSp} SP</b>, alcanzas <b style="color:${cA}">${activeSpe}</b> de Velocidad.<br><br><span style="color:${cA}; font-size:18px; font-weight:bold;">¡EMPATE EXACTO! (Speed Tie)</span><br><span style="color:${cT}">(Rival máximo: ${rivalSpeMax})</span>`;
+    } else {
+        verdictBox.style.borderColor = cT2;
+        verdictBox.style.backgroundColor = `rgba(128, 128, 128, 0.15)`;
+        verdictBox.innerHTML = `Con <b style="color:${cA}">${currentSp} SP</b>, alcanzas <b style="color:${cA}">${activeSpe}</b> de Velocidad.<br><br><span style="color:${cT}; font-size:18px; font-weight:bold;">Superas parcialmente a ${rivalNameStr}.</span><br><span style="color:${cT}">Dependerá de su inversión.</span><br><span style="color:${cT2}">(Rango rival: ${rivalSpeMin} - ${rivalSpeMax})</span>`;
+    }
+
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Padding lateral para que los textos no se salgan
+    const paddingX = 60;
+    const minScale = Math.min(activeSpe, rivalSpeMin) - 15;
+    const maxScale = Math.max(activeSpe, rivalSpeMax) + 15;
+
+    // Función para convertir la velocidad en coordenadas X (Horizontal)
+    function toX(val) {
+        if (maxScale === minScale) return W / 2;
+        return paddingX + ((val - minScale) / (maxScale - minScale)) * (W - 2 * paddingX);
+    }
+
+    const xActive = toX(activeSpe);
+    const xRivalMin = toX(rivalSpeMin);
+    const xRivalMax = toX(rivalSpeMax);
+    const centerY = H / 2;
+
+    // Eje horizontal dinámico
+    ctx.strokeStyle = cT2;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(paddingX, centerY); ctx.lineTo(W - paddingX, centerY);
+    ctx.stroke();
+
+    ctx.fillStyle = cT2;
+    ctx.beginPath(); ctx.arc(paddingX, centerY, 3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(W - paddingX, centerY, 3, 0, Math.PI*2); ctx.fill();
+
+    // Caja del rival (Color secundario) dibujada de izquierda a derecha
+    ctx.fillStyle = `rgba(${hexToRgb(cA2).r}, ${hexToRgb(cA2).g}, ${hexToRgb(cA2).b}, 0.25)`;
+    ctx.fillRect(xRivalMin, centerY - 30, xRivalMax - xRivalMin, 60);
+
+    // Líneas Min y Max Rival (Ahora son líneas verticales)
+    ctx.strokeStyle = cA2;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(xRivalMax, centerY - 45); ctx.lineTo(xRivalMax, centerY + 45); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xRivalMin, centerY - 45); ctx.lineTo(xRivalMin, centerY + 45); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Textos de Min y Max
+    ctx.fillStyle = cA2;
+    ctx.font = 'bold 12px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Max: ${rivalSpeMax}`, xRivalMax, centerY - 55);
+    ctx.fillText(`Min: ${rivalSpeMin}`, xRivalMin, centerY + 65);
+
+    // Tu bolita de velocidad y línea marcadora
+    ctx.strokeStyle = cA;
+    ctx.setLineDash([2, 2]);
+    ctx.beginPath(); ctx.moveTo(xActive, centerY - 45); ctx.lineTo(xActive, centerY + 45); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = cBg;
+    ctx.beginPath(); ctx.arc(xActive, centerY, 7, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = cA;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Texto de "Tú" (Evita salirse del borde derecho)
+    ctx.fillStyle = cT;
+    ctx.font = 'bold 13px monospace';
+    if (xActive > W - 80) {
+        ctx.textAlign = 'right';
+        ctx.fillText(`Tú: ${activeSpe}`, xActive - 15, centerY + 4);
+    } else {
+        ctx.textAlign = 'left';
+        ctx.fillText(`Tú: ${activeSpe}`, xActive + 15, centerY + 4);
+    }
+}
+
+// ====== IMPORTADOR SHOWDOWN ======
+function importShowdown(side, btnEl) {
+    const text = document.getElementById('import-showdown-text').value.trim();
+    if (!text) return;
+
+    const lines = text.split('\n');
+    let nameLine = lines[0].trim();
+
+    // 1. Extraer Nombre y Objeto
+    let itemName = '';
+    if (nameLine.includes('@')) {
+        const parts = nameLine.split('@');
+        nameLine = parts[0].trim();
+        itemName = parts[1].trim();
+    }
+
+    let species = nameLine;
+    let temp = nameLine.replace(/\s*\([MF]\)\s*/i, '');
+    if (temp.includes('(') && temp.includes(')')) {
+        species = temp.substring(temp.lastIndexOf('(') + 1, temp.lastIndexOf(')'));
+    } else {
+        species = temp;
+    }
+    species = species.trim().replace(/ /g, '-').toLowerCase();
+
+    let matchedName = pkNames.find(p => p.toLowerCase() === species);
+    if (!matchedName && species.startsWith('tapu')) matchedName = pkNames.find(p => p.toLowerCase() === species.replace('-',''));
+
+    if (matchedName) {
+        loadPoke(side, matchedName);
+    } else {
+        alert("No se pudo reconocer al Pokémon: " + species);
+        return;
+    }
+
+    // 2. Extraer Objeto
+    const objId = side === 'atk' ? 'obj-a' : 'obj-d';
+    if (itemName) {
+        const itemDb = Object.keys(OBJT);
+        const matchedItem = itemDb.find(i => i.toLowerCase() === itemName.toLowerCase());
+        if (matchedItem) document.getElementById(objId).value = matchedItem;
+    }
+
+    // 3. Procesar el resto del set
+    let moveIdx = 0;
+    const prefix = side === 'atk' ? 'atk' : 'def';
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        if (line.startsWith('Ability:')) {
+            const ab = line.substring(8).trim().toLowerCase();
+            const sel = document.getElementById(`hab-${side === 'atk'?'a':'d'}`);
+            for (let opt of sel.options) {
+                if (opt.value === ab || opt.text.toLowerCase() === ab) {
+                    sel.value = opt.value; break;
+                }
+            }
+        }
+        else if (line.startsWith('Level:')) {
+            document.getElementById(`${prefix}-lvl`).value = parseInt(line.substring(6).trim()) || 50;
+        }
+        else if (line.startsWith('EVs:')) {
+            const evStr = line.substring(4).trim();
+            const evParts = evStr.split('/');
+
+            const maxVal = Math.max(...evParts.map(p => parseInt(p.trim().split(' ')[0]) || 0));
+            const isStandardEVs = maxVal > 32;
+
+            evParts.forEach(part => {
+                const [valStr, statStr] = part.trim().split(' ');
+                const val = parseInt(valStr);
+                let st = statStr.toLowerCase();
+                if (st === 'hp') st = 'hp';
+                else if (st === 'atk') st = 'atk';
+                else if (st === 'def') st = 'def';
+                else if (st === 'spa') st = 'spa';
+                else if (st === 'spd') st = 'spd';
+                else if (st === 'spe') st = 'spe';
+
+                if (st) {
+                    let spValue = val;
+                    if (isStandardEVs) {
+                        spValue = EVS.findIndex(ev => ev >= val);
+                        if (spValue === -1) spValue = 32;
+                    }
+                    document.getElementById(`${prefix}-ev-${st}`).value = spValue;
+                }
+            });
+        }
+        else if (line.endsWith(' Nature')) {
+            const nat = line.split(' ')[0];
+            const sel = document.getElementById(`${prefix}-nat`);
+            for(let opt of sel.options) {
+                if (opt.value.toLowerCase() === nat.toLowerCase()) {
+                    sel.value = opt.value; break;
+                }
+            }
+        }
+        else if (line.startsWith('-')) {
+            const mvName = line.substring(1).trim();
+            const matchedMove = Object.keys(MVDB).find(m => m.toLowerCase() === mvName.toLowerCase().replace('hidden power', 'hidden power'));
+
+            if (matchedMove && moveIdx < 4) {
+                // === INSERCIÓN SILENCIOSA (Evita seleccionar el movimiento) ===
+                const mData = MVDB[matchedMove];
+                const bp = mData.bp || 0;
+                const type = mData.type.toLowerCase();
+                let cat = 't';
+                if (mData.category === 'Physical') cat = 'p';
+                if (mData.category === 'Special') cat = 's';
+
+                const moveObj = { name: matchedMove, bp, type, cat, ...mData };
+                const tc = TPC[type] || '#888';
+                let shortCat = cat === 'p' ? 'Fis' : cat === 's' ? 'Esp' : 'Est';
+                const metaHtml = `<span style="color:${tc}; font-weight: bold; text-transform: uppercase;">${mData.type}</span> · ${shortCat} · BP: ${bp || '—'}`;
+
+                if (side === 'atk') {
+                    attackerMovesSet[moveIdx] = moveObj;
+                    const slotInput = document.getElementById(`mv-slot-${moveIdx}`);
+                    if (slotInput) slotInput.value = matchedMove;
+                    const slotMeta = document.getElementById(`mv-slot-meta-${moveIdx}`);
+                    if (slotMeta) slotMeta.innerHTML = metaHtml;
+                } else {
+                    defenderMovesSet[moveIdx] = moveObj;
+                    const slotInput = document.getElementById(`def-mv-slot-${moveIdx}`);
+                    if (slotInput) slotInput.value = matchedMove;
+                    const slotMeta = document.getElementById(`def-mv-slot-meta-${moveIdx}`);
+                    if (slotMeta) slotMeta.innerHTML = metaHtml;
+                }
+                moveIdx++;
+            }
+        }
+    }
+
+    if (side === 'atk') updateAtkStat(); else updateDefStats();
+    updateEvCounter(prefix);
+
+    // 4. Forzar el estado de "Esperando movimiento..." al finalizar
+    mvSel = null;
+
+    // Desmarcamos visualmente cualquier slot que haya quedado con borde encendido
+    const slots = document.querySelectorAll(side === 'atk' ? '#atk-card .moves-slots-column .move-slot' : '#def-card .moves-slots-column .move-slot');
+    slots.forEach(slot => slot.classList.remove('active', 'open'));
+
+    // Escondemos los datos del ataque
+    document.getElementById(side === 'atk' ? 'mv-detail' : 'def-mv-detail').style.display = 'none';
+
+    updateResult();
+
+    // Limpiar e indicar éxito
+    document.getElementById('import-showdown-text').value = '';
+    const oldText = btnEl.innerHTML;
+    btnEl.innerHTML = '¡IMPORTADO!';
+    btnEl.style.color = '#fff';
+    btnEl.style.backgroundColor = 'var(--g)';
+    btnEl.style.borderColor = 'var(--g)';
+
+    setTimeout(() => {
+        btnEl.innerHTML = oldText;
+        btnEl.style.color = 'var(--t)';
+        btnEl.style.backgroundColor = 'var(--bg3)';
+        btnEl.style.borderColor = 'var(--bd)';
+    }, 1500);
+}
 </script>
 </body>
 </html>
