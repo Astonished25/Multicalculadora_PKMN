@@ -3089,11 +3089,13 @@ function exportShowdown(side) {
   const lvl = document.getElementById(side === 'atk' ? 'atk-lvl' : 'def-lvl').value;
   const nat = document.getElementById(side === 'atk' ? 'atk-nat' : 'def-nat').value;
 
+  // Diccionario con las mayúsculas exactas que exige Showdown
+  const sdStats = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+  
   let evs = [];
   ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach(st => {
       const val = parseInt(document.getElementById(`${side}-ev-${st}`).value) || 0;
-      // AQUÍ EL CAMBIO: Exportamos 'val' directamente en lugar de EVS[val]
-      if (val > 0) evs.push(`${val} ${st.charAt(0).toUpperCase() + st.slice(1)}`);
+      if (val > 0) evs.push(`${val} ${sdStats[st]}`);
   });
 
   let moves = [];
@@ -3107,6 +3109,7 @@ function exportShowdown(side) {
   if (evs.length) str += `\nEVs: ${evs.join(' / ')}`;
   str += `\n${nat} Nature`;
   if (moves.length) str += `\n${moves.join('\n')}`;
+  
   document.getElementById('import-showdown-text').value = str;
 
   navigator.clipboard.writeText(str).then(() => {
@@ -3124,6 +3127,7 @@ function exportShowdown(side) {
       }, 2000);
   });
 }
+
 
 let calcMode = 'def';
 
