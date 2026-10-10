@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Damage Calc v5</title>
+<title>Champions Damage Calc v6</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -347,8 +347,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   -webkit-appearance: none; margin: 0;
 }
 
-
-/* ── MODE BUTTONS ─────────────────────────────────────── */
 .mode-btn-wrap { display: flex; gap: 6px; }
 .mode-btn {
   font-family: var(--mo); font-size: 10px; padding: 5px 14px;
@@ -360,7 +358,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
 .mode-btn.active-atk { border-color: var(--a);  color: var(--a);  background: rgba(0,212,255,0.08); }
 .mode-btn:hover { opacity: 0.8; }
 
-/* ── ATK SLIDER PANEL ─────────────────────────────────── */
 #atk-slider-panel {
   display: none;
   background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px;
@@ -388,7 +385,6 @@ table.mx td{padding:2px 3px;border:1px solid rgba(42,53,80,.4);text-align:center
   color: var(--t2); margin-top: 6px; text-align: center;
 }
 
-/* ── ATK CHART ────────────────────────────────────────── */
 #atk-chart-section {
   display: none;
   background: var(--bg2); border-top: 1px solid var(--bd); padding: 16px 18px;
@@ -408,19 +404,17 @@ table.mx .hl-active {
   position: relative;
   z-index: 10;
 }
-/* Resaltado bloqueado de la matriz (EVs Actuales del Pokémon) */
 table.mx .mx-locked-axis {
-  background-color: rgba(255, 234, 0, 0.15) !important;
-  box-shadow: inset 0 0 0 2px rgba(255, 234, 0, 0.4) !important;
+  background-color: var(--bg2) !important;
+  box-shadow: inset 0 0 0 1px var(--bd) !important;
 }
 table.mx .mx-locked-cell {
-  background-color: rgba(255, 234, 0, 0.4) !important;
-  box-shadow: inset 0 0 0 3px var(--y) !important;
+  background-color: var(--bg3) !important;
+  box-shadow: inset 0 0 0 2px var(--a) !important;
   position: relative;
   z-index: 5;
 }
 
-/* Resaltado temporal (Previsualización de un Click) */
 table.mx .hl-cross {
   box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.45) !important;
   outline: 1px solid rgba(0, 212, 255, 0.3) !important;
@@ -431,13 +425,64 @@ table.mx .hl-active {
   position: relative;
   z-index: 10;
 }
+#atk-card, #def-card {
+    padding: 6px; 
+}
+
+.is-attacking {
+    outline: 2px solid var(--a);
+    outline-offset: -2px;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.is-defending {
+    outline: 2px solid var(--a2);
+    outline-offset: -2px;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.side-badge {
+    font-family: var(--mo);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    float: right;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-weight: bold;
+    margin-right: 8px;
+    margin-top: -3px;
+    letter-spacing: 1px;
+}
+
+.badge-atk {
+    background: var(--a);
+    color: var(--bg);
+    opacity: 1;
+}
+
+.badge-def {
+    background: var(--a2);
+    color: #fff;
+    opacity: 1;
+}
+
+.move-slot { position: relative; }
+.clear-mv { position: absolute; top: 4px; right: 6px; font-size: 10px; color: var(--r); cursor: pointer; display: none; padding: 2px; }
+.move-slot:hover .clear-mv { display: block; }
+.clear-mv:hover { transform: scale(1.2); }
+
+.fab-btn { display: none; position: fixed; bottom: 20px; right: 20px; background: var(--a); color: #000; width: 50px; height: 50px; border-radius: 50%; font-size: 22px; text-align: center; line-height: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 9999; border: none; font-family: var(--ti); }
+@media (max-width: 1000px) { .fab-btn { display: block; } }
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-left">
-    <div class="hdr-t">CHAMPIONS DAMAGE CALC v5.0</div>
+    <div class="hdr-t">CHAMPIONS DAMAGE CALC v6.0</div>
     <div class="theme-selector">
       <label class="theme-check t-gen1" title="Gen 1: Rojo/Verde"><input type="radio" name="theme" onclick="changeTheme('gen1')" ><span></span></label>
       <label class="theme-check t-gen2" title="Gen 2: Oro/Plata"><input type="radio" name="theme" onclick="changeTheme('gen2')"><span></span></label>
@@ -468,7 +513,7 @@ table.mx .hl-active {
 <div class="wrap">
 
 <div class="col">
-  <div class="sec-title">Pokemon 1</div>
+  <div class="sec-title" id="title-atk-container">POKEMON 1 <span id="badge-atk" class="side-badge"></span></div>
 
   <div class="fg">
     <div class="fl">Seleccionar Pokemon</div>
@@ -584,27 +629,27 @@ table.mx .hl-active {
 
       <div class="moves-container-split">
         <div class="moves-slots-column">
-    <div class="move-slot active" onclick="setActiveMoveSlot(0)">
-      <div class="slot-label">MOV 1</div>
-      <input type="text" id="mv-slot-0" class="slot-input" placeholder="Ninguno" readonly>
-      <div id="mv-slot-meta-0" style="font-size: 10px; color: var(--t2); margin-top: 2px; font-family: var(--mo);"></div>
-    </div>
-    <div class="move-slot" onclick="setActiveMoveSlot(1)">
-      <div class="slot-label">MOV 2</div>
-      <input type="text" id="mv-slot-1" class="slot-input" placeholder="Ninguno" readonly>
-      <div id="mv-slot-meta-1" style="font-size: 10px; color: var(--t2); margin-top: 2px; font-family: var(--mo);"></div>
-    </div>
-    <div class="move-slot" onclick="setActiveMoveSlot(2)">
-      <div class="slot-label">MOV 3</div>
-      <input type="text" id="mv-slot-2" class="slot-input" placeholder="Ninguno" readonly>
-      <div id="mv-slot-meta-2" style="font-size: 10px; color: var(--t2); margin-top: 2px; font-family: var(--mo);"></div>
-    </div>
-    <div class="move-slot" onclick="setActiveMoveSlot(3)">
-      <div class="slot-label">MOV 4</div>
-      <input type="text" id="mv-slot-3" class="slot-input" placeholder="Ninguno" readonly>
-      <div id="mv-slot-meta-3" style="font-size: 10px; color: var(--t2); margin-top: 2px; font-family: var(--mo);"></div>
-    </div>
-  </div>
+          <div class="move-slot active" onclick="setActiveMoveSlot(0)">
+            <span class="clear-mv" onclick="clearMoveSlot(0, 'atk', event)">✖</span>
+            <div class="slot-label">MOV 1</div><input type="text" id="mv-slot-0" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="mv-slot-meta-0" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+          <div class="move-slot" onclick="setActiveMoveSlot(1)">
+            <span class="clear-mv" onclick="clearMoveSlot(1, 'atk', event)">✖</span>
+            <div class="slot-label">MOV 2</div><input type="text" id="mv-slot-1" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="mv-slot-meta-1" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+          <div class="move-slot" onclick="setActiveMoveSlot(2)">
+            <span class="clear-mv" onclick="clearMoveSlot(2, 'atk', event)">✖</span>
+            <div class="slot-label">MOV 3</div><input type="text" id="mv-slot-2" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="mv-slot-meta-2" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+          <div class="move-slot" onclick="setActiveMoveSlot(3)">
+            <span class="clear-mv" onclick="clearMoveSlot(3, 'atk', event)">✖</span>
+            <div class="slot-label">MOV 4</div><input type="text" id="mv-slot-3" class="slot-input" placeholder="Ninguno" readonly>
+            <div id="mv-slot-meta-3" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
+          </div>
+        </div>
 
         <div class="moves-pool-column">
           <input type="text" id="move-pool-filter" placeholder="Filtrar movimiento del catálogo..." autocomplete="off">
@@ -641,62 +686,63 @@ table.mx .hl-active {
 </div>
 
 <div class="mid">
-  <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px">DATOS COMBATE</div>
+  <div onclick="toggleCombatData()" style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px; cursor:pointer; user-select:none;">
+    DATOS COMBATE <span id="combat-toggle-icon" style="float:right; font-size:10px; margin-top:2px;">▼</span>
+  </div>
 
-  <div class="g2">
-    <div class="fg"><div class="fl">Clima</div>
-      <select id="clima"><option value="none">N/A</option><option value="sun">Sol</option><option value="rain">Lluvia</option><option value="sand">Arena</option><option value="snow">Nieve</option></select>
-    </div>
-    <div class="fg"><div class="fl">Campo</div>
-      <select id="campo"><option value="none">N/A</option><option value="electric">Electrico</option><option value="grassy">Hierba</option><option value="psychic">Psiquico</option><option value="misty">Niebla</option></select>
-    </div>
-  </div>
-  <div class="g2">
-  <div class="fg">
-    <div class="fl">Pantalla</div>
-    <select id="pantalla">
-      <option value="none">N/A</option>
-      <option value="reflect">Reflejo (Fis)</option>
-      <option value="ls">Pantalla Luz (Esp)</option>
-    </select>
-  </div>
-  <div class="fg">
-    <div class="fl">Compiescolta (Aliado)</div>
-    <select id="compie">
-      <option value="1">N/A</option>
-      <option value="0.75">Activo (Daño x0.75)</option>
-    </select>
-  </div>
-</div>
-  <div class="g2">
-    <div class="fg">
-      <div class="fl">Aura Activa</div>
-      <select id="aura-activa">
-        <option value="none">N/A</option>
-        <option value="fairy">Fairy Aura (Hada x1.33)</option>
-        <option value="dark">Dark Aura (Siniestro x1.33)</option>
-        <option value="break">Aura Break (Invierte Auras)</option>
-      </select>
-    </div>
-    <div class="fg">
-      <div class="fl">Ruina Activa</div>
-      <select id="ruina-activa">
-        <option value="none">N/A</option>
-        <option value="sword">Sword of Ruin (Def -25%)</option>
-        <option value="beads">Beads of Ruin (SpD -25%)</option>
-        <option value="tablets">Tablets of Ruin (Atk -25%)</option>
-        <option value="vessel">Vessel of Ruin (SpA -25%)</option>
-      </select>
-    </div>
-  </div>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin: 10px 0;">
-      <div class="cr"><input type="checkbox" id="chk-hh"><span>Helping Hand x1.5</span></div>
-      <div class="cr"><input type="checkbox" id="chk-crit"><span>Critico</span></div>
-      <div class="cr"><input type="checkbox" id="chk-spread"><span>Spread x0.75</span></div>
-      <div class="cr" style="opacity: 0.5; font-size: 11px; font-family: var(--mo);"></div>
-    </div>
+  <!-- CONTENEDOR COLAPSABLE -->
+  <div id="combat-data-wrap">
+      <div class="g2" style="margin-top: 10px;">
+        <div class="fg"><div class="fl">Clima</div>
+          <select id="clima"><option value="none">N/A</option><option value="sun">Sol</option><option value="rain">Lluvia</option><option value="sand">Arena</option><option value="snow">Nieve</option></select>
+        </div>
+        <div class="fg"><div class="fl">Campo</div>
+          <select id="campo"><option value="none">N/A</option><option value="electric">Electrico</option><option value="grassy">Hierba</option><option value="psychic">Psiquico</option><option value="misty">Niebla</option></select>
+        </div>
+      </div>
 
-  <!-- MODO DEF: caja de stats normal -->
+      <div class="g2">
+        <div class="fg">
+          <div class="fl">Pantalla</div>
+          <select id="pantalla"><option value="none">N/A</option><option value="reflect">Reflejo (Fis)</option><option value="ls">Pantalla Luz (Esp)</option></select>
+        </div>
+        <div class="fg">
+          <div class="fl">Compiescolta (Aliado)</div>
+          <select id="compie"><option value="1">N/A</option><option value="0.75">Activo (Daño x0.75)</option></select>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="fg">
+          <div class="fl">Aura Activa</div>
+          <select id="aura-activa"><option value="none">N/A</option><option value="fairy">Fairy Aura</option><option value="dark">Dark Aura</option><option value="break">Aura Break</option></select>
+        </div>
+        <div class="fg">
+          <div class="fl">Ruina Activa</div>
+          <select id="ruina-activa"><option value="none">N/A</option><option value="sword">Sword (Def-25%)</option><option value="beads">Beads (SpD-25%)</option><option value="tablets">Tablets (Atk-25%)</option><option value="vessel">Vessel (SpA-25%)</option></select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin: 10px 0;">
+          <div class="cr"><input type="checkbox" id="chk-hh"><span>Helping Hand x1.5</span></div>
+          <div class="cr"><input type="checkbox" id="chk-crit"><span>Critico</span></div>
+          <div class="cr"><input type="checkbox" id="chk-spread"><span>Spread x0.75</span></div>
+          <div class="cr" style="opacity: 0.5; font-size: 11px; font-family: var(--mo);"></div>
+      </div>
+  </div>
+
+  <div style="background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px; padding: 12px 14px; margin-top: 10px;">
+    <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;">IMPORTAR / GUARDAR SHOWDOWN</div>
+    <textarea id="import-showdown-text" placeholder="Pega uno o varios sets exportados de Showdown aquí (Pokepaste)..." style="width: 100%; height: 90px; background: var(--bg3); border: 1px solid var(--bd); color: var(--t); font-family: var(--mo); font-size: 11px; padding: 8px; border-radius: 4px; resize: none; outline: none; margin-bottom: 10px;"></textarea>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button onclick="importShowdown('atk', this)" style="background:var(--bg3); border:1px solid var(--bd); color:var(--t); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">⬅ IMPORTAR POKE 1</button>
+
+      <button onclick="saveSetFromText(this)" style="background:var(--bg3); border:1px solid var(--a); color:var(--a); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">⭐ GUARDAR SET(S)</button>
+
+      <button onclick="importShowdown('def', this)" style="background:var(--bg3); border:1px solid var(--bd); color:var(--t); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">IMPORTAR POKE 2 ➡</button>
+    </div>
+  </div>
+
   <div id="def-res-box" class="res-box">
     <div class="res-grid" style="margin-bottom:6px">
       <div><div class="res-lbl">Stat <span id="atk-slbl" style="color:var(--a)">Atk</span></div><div class="res-val" id="r-atk" style="color:var(--a);font-size:14px">—</div></div>
@@ -711,7 +757,6 @@ table.mx .hl-active {
     <div class="res-range" id="r-rng"></div>
   </div>
 
-  <!-- MODO ATK: slider de SP ofensivos -->
   <div id="atk-slider-panel">
     <div class="sldr-row">
       <span class="sldr-label">SP Ataque</span>
@@ -726,7 +771,6 @@ table.mx .hl-active {
     </div>
   </div>
 
-  <!-- MODO SPE: slider de SP velocidad (Va en la columna del medio) -->
   <div id="spe-slider-panel" style="display:none; background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px; padding: 12px 14px;">
     <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;">COMPARATIVA DE VELOCIDAD</div>
 
@@ -749,20 +793,10 @@ table.mx .hl-active {
     </div>
   </div>
 
-  <!-- MÓDULO IMPORTADOR SHOWDOWN -->
-  <div style="background: var(--bg2); border: 1px solid var(--bd); border-radius: 5px; padding: 12px 14px; margin-top: 10px;">
-    <div style="font-family:var(--ti);font-size:11px;color:var(--a);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--bd);padding-bottom:7px;margin-bottom:10px;">IMPORTAR SHOWDOWN</div>
-    <textarea id="import-showdown-text" placeholder="Pega el set exportado de Showdown aquí..." style="width: 100%; height: 90px; background: var(--bg3); border: 1px solid var(--bd); color: var(--t); font-family: var(--mo); font-size: 11px; padding: 8px; border-radius: 4px; resize: none; outline: none; margin-bottom: 10px;"></textarea>
-    <div style="display: flex; justify-content: space-between;">
-      <button onclick="importShowdown('atk', this)" style="background:var(--bg3); border:1px solid var(--bd); color:var(--t); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">⬅ IMPORTAR POKE 1</button>
-      <button onclick="importShowdown('def', this)" style="background:var(--bg3); border:1px solid var(--bd); color:var(--t); font-family:var(--mo); font-size:10px; padding:6px 12px; border-radius:3px; cursor:pointer; transition:all 0.2s;">IMPORTAR POKE 2 ➡</button>
-    </div>
-  </div>
-
 </div>
 
 <div class="col">
-  <div class="sec-title">Pokemon 2</div>
+  <div class="sec-title" id="title-def-container">POKEMON 2 <span id="badge-def" class="side-badge"></span></div>
 
   <div class="fg">
     <div class="fl">Seleccionar Pokemon</div>
@@ -877,23 +911,23 @@ table.mx .hl-active {
       <div class="moves-container-split">
         <div class="moves-slots-column">
           <div class="move-slot active" onclick="setDefActiveMoveSlot(0)">
-            <div class="slot-label">MOV 1</div>
-            <input type="text" id="def-mv-slot-0" class="slot-input" placeholder="Ninguno" readonly>
+            <span class="clear-mv" onclick="clearMoveSlot(0, 'def', event)">✖</span>
+            <div class="slot-label">MOV 1</div><input type="text" id="def-mv-slot-0" class="slot-input" placeholder="Ninguno" readonly>
             <div id="def-mv-slot-meta-0" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
           </div>
           <div class="move-slot" onclick="setDefActiveMoveSlot(1)">
-            <div class="slot-label">MOV 2</div>
-            <input type="text" id="def-mv-slot-1" class="slot-input" placeholder="Ninguno" readonly>
+            <span class="clear-mv" onclick="clearMoveSlot(1, 'def', event)">✖</span>
+            <div class="slot-label">MOV 2</div><input type="text" id="def-mv-slot-1" class="slot-input" placeholder="Ninguno" readonly>
             <div id="def-mv-slot-meta-1" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
           </div>
           <div class="move-slot" onclick="setDefActiveMoveSlot(2)">
-            <div class="slot-label">MOV 3</div>
-            <input type="text" id="def-mv-slot-2" class="slot-input" placeholder="Ninguno" readonly>
+            <span class="clear-mv" onclick="clearMoveSlot(2, 'def', event)">✖</span>
+            <div class="slot-label">MOV 3</div><input type="text" id="def-mv-slot-2" class="slot-input" placeholder="Ninguno" readonly>
             <div id="def-mv-slot-meta-2" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
           </div>
           <div class="move-slot" onclick="setDefActiveMoveSlot(3)">
-            <div class="slot-label">MOV 4</div>
-            <input type="text" id="def-mv-slot-3" class="slot-input" placeholder="Ninguno" readonly>
+            <span class="clear-mv" onclick="clearMoveSlot(3, 'def', event)">✖</span>
+            <div class="slot-label">MOV 4</div><input type="text" id="def-mv-slot-3" class="slot-input" placeholder="Ninguno" readonly>
             <div id="def-mv-slot-meta-3" style="font-size:10px;color:var(--t2);margin-top:2px;font-family:var(--mo);"></div>
           </div>
         </div>
@@ -973,7 +1007,6 @@ table.mx .hl-active {
     <button onclick="document.getElementById('atk-chart-section').style.display='none'"
             style="background:var(--bg3);border:1px solid var(--bd);color:var(--t2);font-family:var(--mo);font-size:10px;padding:3px 8px;border-radius:3px;cursor:pointer">✕ Cerrar</button>
   </div>
-  <!-- Contenedor añadido para permitir Scroll al hacer zoom en móviles o pantallas chicas -->
   <div id="atk-chart-wrapper" style="overflow-x: auto; width: 100%; border-radius: 4px;">
     <canvas id="atk-chart-canvas" style="min-width: 800px; display: block; cursor: crosshair;"></canvas>
   </div>
@@ -984,16 +1017,13 @@ table.mx .hl-active {
     <button onclick="document.getElementById('spe-chart-section').style.display='none'" style="background:var(--bg3);border:1px solid var(--bd);color:var(--t2);font-family:var(--mo);font-size:10px;padding:3px 8px;border-radius:3px;cursor:pointer">✕ Cerrar</button>
   </div>
 
-  <!-- Contenedor Flex en Fila (Lado a lado) -->
   <div style="display:flex; flex-wrap:wrap; gap:30px; align-items:center; justify-content:center; max-width: 1050px; margin: 0 auto; padding-top: 10px;">
 
-      <!-- Gráfica Horizontal (Izquierda) -->
       <div style="flex: 1 1 500px; display:flex; justify-content: center; overflow-x: auto;">
-          <!-- Canvas adaptado a un ancho cómodo para convivir con la caja -->
+
           <canvas id="spe-chart-canvas" width="600" height="180" style="max-width: 100%;"></canvas>
       </div>
 
-      <!-- Caja de Veredicto (Derecha) -->
       <div style="flex: 1 1 350px; display:flex; justify-content: center;">
           <div id="spe-verdict-box" style="width:100%; max-width: 400px; border:2px solid var(--bd); background:var(--bg3); padding:20px; border-radius:8px; text-align:center; font-family:var(--mo); font-size:15px; color:var(--t); line-height:1.6;">
               Esperando datos...
@@ -1196,37 +1226,107 @@ let atkPoke=null, defPoke=null, mvSel=null, bpOvr=false;
 window.onload = () => {
   if (typeof PKDB !== 'undefined') {
     pkNames = Object.keys(PKDB).sort();
-    buildDropdown('atk-dd','atk-search', pkNames, pkRenderItem, name => loadPoke('atk', name));
-    buildDropdown('def-dd','def-search', pkNames, pkRenderItem, name => loadPoke('def', name));
+
+    buildDropdown('atk-dd','atk-search', pkNames, 'atk');
+    buildDropdown('def-dd','def-search', pkNames, 'def');
 
     setupItemDropdown('atk');
     setupItemDropdown('def');
-
     document.getElementById('load-status').textContent = `${pkNames.length} Pokemon cargados`;
   }
   changeTheme('gen5');
 };
 
-function buildDropdown(ddId, inputId, items, renderItem, onSelect) {
+function buildDropdown(ddId, inputId, items, side) {
   const dd = document.getElementById(ddId);
   const inp = document.getElementById(inputId);
   let hiIdx = -1;
 
-  function show(list) {
+  function getSetsBySpecies() {
+      const customSets = JSON.parse(localStorage.getItem('pkvgc_custom_sets') || '{}');
+      const setsBySpecies = {};
+
+      for (let uniqueKey in customSets) {
+          const str = customSets[uniqueKey];
+          let nameLine = str.split('\n')[0].split('@')[0].trim();
+          let species = nameLine.replace(/\s*\([MF]\)\s*/i, '');
+          if (species.includes('(') && species.includes(')')) {
+              species = species.substring(species.lastIndexOf('(') + 1, species.lastIndexOf(')'));
+          }
+          species = species.trim().replace(/ /g, '-').toLowerCase();
+
+          let matchedName = pkNames.find(p => p.toLowerCase() === species);
+          if(!matchedName) matchedName = pkNames.find(p => p.toLowerCase() === species.replace('-',''));
+
+          const visualName = uniqueKey.includes('|||') ? uniqueKey.split('|||')[1] : uniqueKey;
+
+          if(matchedName) {
+              if(!setsBySpecies[matchedName]) setsBySpecies[matchedName] = [];
+              setsBySpecies[matchedName].push({ key: uniqueKey, label: visualName });
+          }
+      }
+      return setsBySpecies;
+  }
+
+  function show(q) {
     dd.innerHTML = '';
     hiIdx = -1;
-    if (!list.length) {
+
+    const setsBySpecies = getSetsBySpecies();
+    let displayList = [];
+
+    items.forEach(pk => {
+        const pkMatch = q.length === 0 || pk.replace(/-/g, ' ').includes(q);
+        const pkSets = setsBySpecies[pk] || [];
+        const matchingSets = pkSets.filter(s => s.label.toLowerCase().includes(q));
+
+        if (pkMatch || matchingSets.length > 0) {
+            if (pkMatch) {
+                displayList.push({ type: 'blank', species: pk, label: 'Blank Set' });
+            }
+            pkSets.forEach(setObj => {
+                const setMatch = setObj.label.toLowerCase().includes(q);
+                if (pkMatch || setMatch) {
+                    displayList.push({ type: 'custom', species: pk, label: setObj.label, key: setObj.key });
+                }
+            });
+        }
+    });
+
+    if (displayList.length === 0) {
       dd.innerHTML = '<div class="dd-empty">Sin resultados</div>';
     } else {
-      list.forEach((item, i) => {
+      displayList.forEach((itemObj) => {
         const el = document.createElement('div');
         el.className = 'dd-item';
-        el.innerHTML = renderItem(item);
+
+        const pk = itemObj.species;
+        const types = PKDB[pk][7];
+        const sprId = PKDB[pk][8];
+
+        const labelColor = itemObj.type === 'custom' ? 'var(--a)' : 'var(--t2)';
+
+        el.innerHTML = `
+          <img src="${spriteUrl(sprId, pk)}" loading="lazy" alt="">
+          <div class="dd-info" style="flex:1">
+            <div class="dd-name" style="font-weight:bold;">${pk} <span style="font-size:10px; font-weight:normal; color:${labelColor}">(${itemObj.label})</span></div>
+            <div class="dd-types">${typeBadges(types)}</div>
+          </div>
+          ${itemObj.type === 'custom' ? `<div onmousedown="deleteCustomSet('${itemObj.key}', event)" style="color:var(--r); font-size:14px; padding:0 5px; cursor:pointer;" title="Eliminar Set">🗑</div>` : ''}
+        `;
+
         el.addEventListener('mousedown', e => {
           e.preventDefault();
-          onSelect(item);
+          if (e.target.innerText === '🗑') return;
+
+          if (itemObj.type === 'custom') {
+              loadCustomSet(side, itemObj.key);
+          } else {
+              loadPoke(side, pk);
+          }
           dd.classList.remove('open');
         });
+
         dd.appendChild(el);
       });
     }
@@ -1235,20 +1335,13 @@ function buildDropdown(ddId, inputId, items, renderItem, onSelect) {
 
   inp.addEventListener('click', () => {
     const q = inp.value.toLowerCase().replace(/-/g,' ');
-    const filtered = q.length > 0
-      ? items.filter(n => n.replace(/-/g,' ').includes(q))
-      : items;
-    show(filtered);
+    show(q);
   });
 
   inp.addEventListener('input', () => {
     inp.readOnly = false;
     const q = inp.value.toLowerCase().replace(/-/g,' ');
-    const filtered = q.length === 0
-      ? items
-      : items.filter(n => n.replace(/-/g,' ').startsWith(q))
-          .concat(items.filter(n => !n.replace(/-/g,' ').startsWith(q) && n.replace(/-/g,' ').includes(q)));
-    show(filtered);
+    show(q);
   });
 
   inp.addEventListener('keydown', e => {
@@ -1339,7 +1432,14 @@ function fillTera(selId, types) {
   sel.innerHTML = '<option value="none">N/A</option>';
   ALLTY.forEach(t => {
     const o = document.createElement('option');
-    o.value = t; o.textContent = t.charAt(0).toUpperCase()+t.slice(1);
+    o.value = t;
+    o.textContent = t.charAt(0).toUpperCase()+t.slice(1);
+
+    const color = TPC[t] || '#fff';
+    o.style.color = color;
+    o.style.fontWeight = 'bold';
+    o.style.backgroundColor = 'var(--bg3)';
+
     sel.appendChild(o);
   });
 }
@@ -1393,7 +1493,6 @@ function loadPoke(side, name, isFormChange = false) {
       updateEvCounter(pref);
   }
 
-  // ---- PRESERVAR MOVIMIENTOS ----
   if (side === 'atk') {
     if (!isFormChange) {
         attackerMovesSet = [null, null, null, null];
@@ -2144,7 +2243,6 @@ function calcDmgArr(atk, def, hp, basePower, atkTs, atkTera, mvT, defTs, defTera
     const results = [];
     const tMult = typeMult(safeMvT, defTs, defTera);
 
-    // --- LÓGICA DE INMUNIDAD (0 DAÑO) ---
     let isImmune = (tMult === 0);
     if (!isMoldBreaker) {
         if (['flash fire', 'well-baked body'].includes(defAbility) && safeMvT === 'fire') isImmune = true;
@@ -2586,7 +2684,6 @@ function updateResult() {
     return;
   }
 
-  // Refrescar paneles visuales sin cambiar el calcMode
   document.getElementById('mx-section').style.display = calcMode === 'def' ? 'block' : 'none';
   document.getElementById('atk-chart-section').style.display = calcMode === 'atk' ? 'block' : 'none';
   document.getElementById('spe-chart-section').style.display = calcMode === 'spe' ? 'block' : 'none';
@@ -2643,6 +2740,7 @@ function updateResult() {
   vel.className = 'res-val ' + v.vc;
 
   updateLiveMatrix();
+  updateSideIndicators();
 }
 function generateShowdownTitle() {
   if (!mvSel || !atkPoke || !defPoke) return "";
@@ -2820,7 +2918,7 @@ function updateLiveMatrix() {
 
   const N = 33;
   let h = '<table class="mx"><thead><tr>';
-  // Cabecera Dinámica (DEF SP o SPD SP)
+
   h += `<th class="sb2" style="min-width:72px;font-size:8px">HP SP &#9658;<br>${isSp ? 'SPD' : 'DEF'} SP &#9660;</th>`;
   for (let hi = 0; hi < N; hi++) {
     const hp = getHP(hi);
@@ -2847,7 +2945,6 @@ function updateLiveMatrix() {
         const hp = getHP(hi);
         const hpEV = EVS[hi];
 
-        // Identificar Intersección para la Cruz Fija
         const isLockedCell = (hi === currentDefHpSp && di === currentDefArmorSp);
         const isLockedAxis = (hi === currentDefHpSp || di === currentDefArmorSp);
         const lockedClass = isLockedCell ? 'mx-locked-cell' : (isLockedAxis ? 'mx-locked-axis' : '');
@@ -2883,7 +2980,6 @@ function calcMatrix() {
   updateResult();
 }
 
-// Función para UN CLICK (Solo previsualiza, no modifica los EVs del Pokémon)
 function previewCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
   const detailBox = document.getElementById('mx-cell-detail');
   const hpEV = EVS[hi];
@@ -2929,21 +3025,17 @@ function previewCellDetail(tdEl, hi, di, resultLabel, dmgRange, pctRange) {
   detailBox.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
-// Función para DOS CLICKS (Aplica permanentemente los EVs y recarga todo)
 function applyCellEvs(hi, di) {
   const isSp = mvSel?.cat === 's';
   const realDefStat = mvSel?.dealsPhysicalDamage ? 'def' : (isSp ? 'spd' : 'def');
   const defPrefix = activeSide === 'def' ? 'atk' : 'def';
 
-  // Inyectar a las cajas
   document.getElementById(`${defPrefix}-ev-hp`).value = hi;
   document.getElementById(`${defPrefix}-ev-${realDefStat}`).value = di;
 
-  // Actualizar stats reales
   if (defPrefix === 'atk') updateAtkStat(); else updateDefStats();
   updateEvCounter(defPrefix);
 
-  // Refrescar toda la matriz y gráficas con el nuevo estado bloqueado
   if(calcMode === 'def') updateLiveMatrix();
 }
 
@@ -3079,19 +3171,17 @@ function changeTheme(theme) {
 function resetCalc() {
   window.location.reload();
 }
-
-function exportShowdown(side) {
+function getShowdownString(side) {
   const p = side === 'atk' ? atkPoke : defPoke;
-  if (!p) return;
+  if (!p) return null;
 
   const itemName = document.getElementById(side === 'atk' ? 'obj-a' : 'obj-d').value;
   const ability = document.getElementById(side === 'atk' ? 'hab-a' : 'hab-d').value;
   const lvl = document.getElementById(side === 'atk' ? 'atk-lvl' : 'def-lvl').value;
   const nat = document.getElementById(side === 'atk' ? 'atk-nat' : 'def-nat').value;
 
-  // Diccionario con las mayúsculas exactas que exige Showdown
   const sdStats = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
-  
+
   let evs = [];
   ['hp', 'atk', 'def', 'spa', 'spd', 'spe'].forEach(st => {
       const val = parseInt(document.getElementById(`${side}-ev-${st}`).value) || 0;
@@ -3109,7 +3199,12 @@ function exportShowdown(side) {
   if (evs.length) str += `\nEVs: ${evs.join(' / ')}`;
   str += `\n${nat} Nature`;
   if (moves.length) str += `\n${moves.join('\n')}`;
-  
+  return str;
+}
+function exportShowdown(side) {
+  const str = getShowdownString(side);
+  if (!str) return;
+
   document.getElementById('import-showdown-text').value = str;
 
   navigator.clipboard.writeText(str).then(() => {
@@ -3128,6 +3223,87 @@ function exportShowdown(side) {
   });
 }
 
+function saveSetFromText(btnEl) {
+    const text = document.getElementById('import-showdown-text').value.trim();
+    if (!text) {
+        alert("La caja está vacía. Pega un set o dale a 'Exportar Showdown' en algún Pokémon primero.");
+        return;
+    }
+
+    const sets = text.split(/\n\s*\n/);
+    let savedCount = 0;
+    const customSets = JSON.parse(localStorage.getItem('pkvgc_custom_sets') || '{}');
+
+    for (let setBlock of sets) {
+        const lines = setBlock.trim().split('\n');
+        if (lines.length === 0 || !lines[0]) continue;
+
+        let nameLine = lines[0].trim();
+        if (nameLine.includes('@')) {
+            nameLine = nameLine.split('@')[0].trim();
+        }
+
+        let species = nameLine.replace(/\s*\([MF]\)\s*/i, '');
+        if (species.includes('(') && species.includes(')')) {
+            species = species.substring(species.lastIndexOf('(') + 1, species.lastIndexOf(')'));
+        }
+
+        let setName = prompt(`Guardando: ${species.trim()}\nIngresa un nombre identificador para este set:`, "Custom Set");
+
+        if (setName && setName.trim() !== '') {
+
+            const uniqueKey = `${species.trim()}|||${setName.trim()}`;
+            customSets[uniqueKey] = setBlock.trim();
+            savedCount++;
+        }
+    }
+
+    if (savedCount > 0) {
+        localStorage.setItem('pkvgc_custom_sets', JSON.stringify(customSets));
+
+        document.getElementById('atk-dd').classList.remove('open');
+        document.getElementById('def-dd').classList.remove('open');
+
+        const oldTxt = btnEl.innerHTML;
+        btnEl.innerHTML = `¡${savedCount} SET(S) GUARDADO(S)!`;
+        btnEl.style.color = '#fff';
+        btnEl.style.backgroundColor = 'var(--a)';
+
+        setTimeout(() => {
+            btnEl.innerHTML = oldTxt;
+            btnEl.style.color = 'var(--a)';
+            btnEl.style.backgroundColor = 'var(--bg3)';
+        }, 2000);
+    }
+}
+
+function loadCustomSet(side, setName) {
+    const customSets = JSON.parse(localStorage.getItem('pkvgc_custom_sets') || '{}');
+    const str = customSets[setName];
+    if (!str) return;
+
+    const importBox = document.getElementById('import-showdown-text');
+    if (importBox) importBox.value = str;
+
+    const dummyBtn = { innerHTML: '', style: {} };
+    importShowdown(side, dummyBtn);
+}
+
+function deleteCustomSet(uniqueKey, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const visualName = uniqueKey.includes('|||') ? uniqueKey.split('|||')[1] : uniqueKey;
+
+    if (confirm(`¿Estás seguro de eliminar el set "${visualName}" de forma permanente?`)) {
+        const customSets = JSON.parse(localStorage.getItem('pkvgc_custom_sets') || '{}');
+        delete customSets[uniqueKey];
+        localStorage.setItem('pkvgc_custom_sets', JSON.stringify(customSets));
+
+        document.getElementById('atk-dd').classList.remove('open');
+        document.getElementById('def-dd').classList.remove('open');
+    }
+}
 
 let calcMode = 'def';
 
@@ -3137,12 +3313,10 @@ function setCalcMode(mode) {
   document.getElementById('btn-mode-atk').className = 'mode-btn' + (mode === 'atk' ? ' active-atk' : '');
   document.getElementById('btn-mode-spe').className = 'mode-btn' + (mode === 'spe' ? ' active-atk' : '');
 
-  // PANELES DEL MEDIO
   document.getElementById('def-res-box').style.display       = mode === 'def' ? 'block' : 'none';
   document.getElementById('atk-slider-panel').style.display  = mode === 'atk' ? 'block' : 'none';
   document.getElementById('spe-slider-panel').style.display  = mode === 'spe' ? 'block' : 'none';
 
-  // PANELES DE ABAJO
   document.getElementById('mx-section').style.display        = mode === 'def' ? 'block' : 'none';
   document.getElementById('atk-chart-section').style.display = mode === 'atk' ? 'block' : 'none';
   document.getElementById('spe-chart-section').style.display = mode === 'spe' ? 'block' : 'none';
@@ -3173,7 +3347,7 @@ function onAtkSliderChange(spVal) {
 }
 
 function syncSliderToCurrentEvs(cat, moveName) {
-    // 1. Sincronizar Slider de ATAQUE
+
     const isSp = cat === 's';
     const statName = moveName === 'Body Press' ? 'def' : (isSp ? 'spa' : 'atk');
     const evInputId = activeSide === 'def' ? `def-ev-${statName}` : `atk-ev-${statName}`;
@@ -3191,7 +3365,6 @@ function syncSliderToCurrentEvs(cat, moveName) {
         if (evsEl) evsEl.textContent = EVS[currentVal] + ' EVs';
     }
 
-    // 2. Sincronizar Slider de VELOCIDAD
     const speInputId = activeSide === 'def' ? `def-ev-spe` : `atk-ev-spe`;
     const speInput = document.getElementById(speInputId);
 
@@ -3306,17 +3479,31 @@ function updateAtkChart() {
 
   const hpMin = getHP(0);
   const hpMax = getHP(32);
+  const targetHpActual = getHP();
+
+  const defPrefix = activeSide === 'def' ? 'atk' : 'def';
+  const realDefStat = mvSel?.dealsPhysicalDamage ? 'def' : (isSp ? 'spd' : 'def');
+  const currentDefArmorSp = parseInt(document.getElementById(`${defPrefix}-ev-${realDefStat}`)?.value) || 0;
+  const currentDefHpSp = parseInt(document.getElementById(`${defPrefix}-ev-hp`)?.value) || 0;
 
   const N = 33;
   const dmgMin = [];
   const dmgMax = [];
+  const hoverVerdicts = [];
 
   for (let di = 0; di < N; di++) {
     const def = getDefStat(di);
-    const hp = getHP();
-    const arr = calcDmgArr(atkStatNow, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
-    dmgMin.push(arr[0] * hits);
-    dmgMax.push(arr[15] * hits);
+    const hp = targetHpActual;
+
+    const arrNoB = calcDmgArr(atkStatNow, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, false);
+    const arrWB = calcDmgArr(atkStatNow, def, hp, bp, atkTs, atkTera, mvT, defTs, defTera, p, true);
+
+    const mn = arrWB[0] + (arrNoB[0] * (hits - 1));
+    const mx = arrWB[15] + (arrNoB[15] * (hits - 1));
+    dmgMin.push(mn);
+    dmgMax.push(mx);
+
+    hoverVerdicts.push(verdict(arrNoB, arrWB, hp, hits));
   }
 
   const titleStr = generateShowdownTitle();
@@ -3329,6 +3516,7 @@ function updateAtkChart() {
   const cT    = cs.getPropertyValue('--t').trim()    || '#e0e8f0';
   const cA    = cs.getPropertyValue('--a').trim()    || '#00d4ff';
   const cA2   = cs.getPropertyValue('--a2').trim()   || '#7c4dff';
+  const cG    = cs.getPropertyValue('--g').trim()    || '#00e676';
 
   const rgbA = hexToRgb(cA);
   const fillStyleArea = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.18)`;
@@ -3352,7 +3540,7 @@ function updateAtkChart() {
   const cW  = W - PAD.left - PAD.right;
   const cH  = H - PAD.top  - PAD.bottom;
 
-  const allVals = [...dmgMin, ...dmgMax, hpMin, hpMax];
+  const allVals = [...dmgMin, ...dmgMax, hpMin, hpMax, targetHpActual];
   let yMin = Math.max(0, Math.min(...allVals) - 15);
   let yMax = Math.max(...allVals) + 25;
   if (yMax - yMin < 50) yMax = yMin + 50;
@@ -3412,6 +3600,8 @@ function updateAtkChart() {
 
   const hpYMax = toY(hpMax);
   const hpYMin = toY(hpMin);
+  const yTargetHp = toY(targetHpActual);
+  const xTargetDef = toX(currentDefArmorSp);
 
   ctx.fillStyle = 'rgba(124,77,255,0.18)';
   ctx.fillRect(PAD.left, hpYMax, cW, hpYMin - hpYMax);
@@ -3426,6 +3616,13 @@ function updateAtkChart() {
   ctx.strokeStyle = 'rgba(124,77,255,0.8)';
   ctx.beginPath(); ctx.moveTo(PAD.left, hpYMin); ctx.lineTo(PAD.left + cW, hpYMin); ctx.stroke();
 
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = cG; // Verde
+  ctx.setLineDash([4, 4]);
+
+  ctx.beginPath(); ctx.moveTo(PAD.left, yTargetHp); ctx.lineTo(PAD.left + cW, yTargetHp); ctx.stroke();
+
+  ctx.beginPath(); ctx.moveTo(xTargetDef, PAD.top); ctx.lineTo(xTargetDef, PAD.top + cH); ctx.stroke();
   ctx.setLineDash([]);
 
   ctx.beginPath();
@@ -3450,28 +3647,47 @@ function updateAtkChart() {
 
   ctx.restore();
 
+  ctx.fillStyle = cG;
+  ctx.font = 'bold 10px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(`HP actual ${targetHpActual} (${currentDefHpSp} SP)`, PAD.left + 6, yTargetHp - 5);
+
+  ctx.textAlign = 'center';
+  ctx.fillText(`Def actual`, xTargetDef + 35, PAD.top + cH - 14);
+  ctx.fillText(`(${currentDefArmorSp} SP)`, xTargetDef + 35, PAD.top + cH - 4);
+
+
   ctx.font = '10px monospace';
   ctx.textAlign = 'right';
   const legX = W - PAD.right - 10;
-  const legY = PAD.top + 10;
+  let legY = PAD.top + 10;
 
   ctx.lineWidth = 2.5; ctx.strokeStyle = cA;
   ctx.beginPath(); ctx.moveTo(legX - 160, legY - 3); ctx.lineTo(legX - 140, legY - 3); ctx.stroke();
   ctx.fillStyle = cA; ctx.fillText('Daño máx roll (100%)', legX, legY);
 
+  legY += 14;
   ctx.lineWidth = 1.5; ctx.strokeStyle = strokeStyleFaint;
-  ctx.beginPath(); ctx.moveTo(legX - 160, legY + 11); ctx.lineTo(legX - 140, legY + 11); ctx.stroke();
-  ctx.fillStyle = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.8)`; ctx.fillText('Daño mín roll (85%)', legX, legY + 14);
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY - 3); ctx.lineTo(legX - 140, legY - 3); ctx.stroke();
+  ctx.fillStyle = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.8)`; ctx.fillText('Daño mín roll (85%)', legX, legY);
 
+  legY += 14;
   ctx.lineWidth = 3; ctx.strokeStyle = cA2; ctx.setLineDash([10, 5]);
-  ctx.beginPath(); ctx.moveTo(legX - 160, legY + 25); ctx.lineTo(legX - 140, legY + 25); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY - 3); ctx.lineTo(legX - 140, legY - 3); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = cA2; ctx.fillText(`HP máx ${hpMax} (32 SP)`, legX, legY + 28);
+  ctx.fillStyle = cA2; ctx.fillText(`HP máx ${hpMax} (32 SP)`, legX, legY);
 
+  legY += 14;
   ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(124,77,255,0.8)'; ctx.setLineDash([2, 4]);
-  ctx.beginPath(); ctx.moveTo(legX - 160, legY + 39); ctx.lineTo(legX - 140, legY + 39); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY - 3); ctx.lineTo(legX - 140, legY - 3); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(124,77,255,0.8)'; ctx.fillText(`HP mín ${hpMin} (0 SP)`, legX, legY + 42);
+  ctx.fillStyle = 'rgba(124,77,255,0.8)'; ctx.fillText(`HP mín ${hpMin} (0 SP)`, legX, legY);
+
+  legY += 14;
+  ctx.lineWidth = 2; ctx.strokeStyle = cG; ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(legX - 160, legY - 3); ctx.lineTo(legX - 140, legY - 3); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = cG; ctx.fillText(`Stats reales predet.`, legX, legY);
 
   if (atkChartHoveredSP !== null) {
     const hX = toX(atkChartHoveredSP);
@@ -3482,19 +3698,17 @@ function updateAtkChart() {
 
     const yMaxDmg = toY(dmgMax[atkChartHoveredSP]);
     const yMinDmg = toY(dmgMin[atkChartHoveredSP]);
-    const hHpMax = toY(hpMax);
-    const hHpMin = toY(hpMin);
 
     ctx.fillStyle = '#fff';
     ctx.strokeStyle = cA;
     ctx.lineWidth = 2;
-    [yMaxDmg, yMinDmg, hHpMax, hHpMin].forEach(y => {
+    [yMaxDmg, yMinDmg, yTargetHp].forEach(y => {
       if (y >= PAD.top && y <= PAD.top + cH) {
          ctx.beginPath(); ctx.arc(hX, y, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke();
       }
     });
 
-    const boxW = 205, boxH = 68;
+    const boxW = 235, boxH = 82;
     let boxX = hX + 12;
     let boxY = PAD.top + 20;
     if (boxX + boxW > W - PAD.right) boxX = hX - boxW - 12;
@@ -3516,34 +3730,45 @@ function updateAtkChart() {
     ctx.fillStyle = '#ddd';
     ctx.fillText(`HP MÁX: ${hpMax} - HP MÍN: ${hpMin}`, boxX + 8, boxY + 34);
 
-    ctx.fillStyle = '#ffea00';
-    ctx.fillText(`DAÑO MÁX: ${dmgMax[atkChartHoveredSP]}`, boxX + 8, boxY + 50);
+    ctx.fillStyle = cA;
+    ctx.fillText(`DAÑO MÁX: ${dmgMax[atkChartHoveredSP]}`, boxX + 8, boxY + 48);
 
     const wMax = ctx.measureText(`DAÑO MÁX: ${dmgMax[atkChartHoveredSP]}`).width;
     ctx.fillStyle = '#fff';
-    ctx.fillText(` - `, boxX + 8 + wMax, boxY + 50);
+    ctx.fillText(` - `, boxX + 8 + wMax, boxY + 48);
 
     const wGuion = ctx.measureText(` - `).width;
-    ctx.fillStyle = '#00e5ff';
-    ctx.fillText(`DAÑO MÍN: ${dmgMin[atkChartHoveredSP]}`, boxX + 8 + wMax + wGuion, boxY + 50);
+    ctx.fillStyle = `rgba(${rgbA.r}, ${rgbA.g}, ${rgbA.b}, 0.7)`;
+    ctx.fillText(`DAÑO MÍN: ${dmgMin[atkChartHoveredSP]}`, boxX + 8 + wMax + wGuion, boxY + 48);
+
+    const ver = hoverVerdicts[atkChartHoveredSP];
+    let vCol = '#fff';
+    if(ver.cls.includes('ohko')) vCol = '#ff1744';
+    else if(ver.cls.includes('2hko')) vCol = '#ffea00';
+    else if(ver.cls.includes('3hko')) vCol = '#00e676';
+    else if(ver.cls.includes('4hko')) vCol = '#00d4ff';
+    else vCol = '#aaa';
+
+    ctx.fillStyle = vCol;
+    ctx.font = 'bold 11px monospace';
+    ctx.fillText(`vs HP Actual (${targetHpActual}): ${ver.label}`, boxX + 8, boxY + 62);
 
     ctx.fillStyle = '#999';
     ctx.font = '9px monospace';
     const fixText = isAtkChartTooltipLocked ? "(Click para soltar)" : "(Click para fijar)";
-    ctx.fillText(fixText, boxX + 8, boxY + 62);
+    ctx.fillText(fixText, boxX + 8, boxY + 76);
   }
 }
 
 document.getElementById('load-status').textContent = `${pkNames.length} Pokemon · ${Object.keys(MVDB).length} movimientos`;
 changeTheme('gen5');
-// ====== MÓDULO DE VELOCIDAD ======
+
 
 function onSpeSliderChange(spVal) {
     const sp = parseInt(spVal);
     document.getElementById('spe-sp-val').textContent = sp;
     document.getElementById('spe-sp-evs').textContent = EVS[sp] + ' EVs';
 
-    // Sincronizar el Slider con la caja del bando ACTIVO
     const evInput = document.getElementById(`${activeSide}-ev-spe`);
     if (evInput) {
         evInput.value = sp;
@@ -3553,7 +3778,6 @@ function onSpeSliderChange(spVal) {
     updateSpeChart();
 }
 
-// Calculadora de Velocidad Final (Ya contemplaba la Parálisis correcta)
 function getFinalSpeed(pokeObj, sideStr, spOverride) {
     if (!pokeObj) return 100;
     const lvl = parseInt(document.getElementById(`${sideStr}-lvl`).value) || 50;
@@ -3617,7 +3841,6 @@ function updateSpeChart() {
 
     const rivalNameStr = rivalPoke.name.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('-');
 
-    // Extracción de Colores
     const cs = getComputedStyle(document.documentElement);
     const cBg   = cs.getPropertyValue('--bg2').trim()  || '#111622';
     const cT    = cs.getPropertyValue('--t').trim()    || '#e0e8f0';
@@ -3627,7 +3850,6 @@ function updateSpeChart() {
     const cG    = cs.getPropertyValue('--g').trim()    || '#00e676';
     const cR    = cs.getPropertyValue('--r').trim()    || '#ff1744';
 
-    // Evaluación Lógica con texto adaptable (--t en lugar de blanco forzado)
     if (activeSpe > rivalSpeMax) {
         verdictBox.style.borderColor = cG;
         verdictBox.style.backgroundColor = `rgba(${hexToRgb(cG).r}, ${hexToRgb(cG).g}, ${hexToRgb(cG).b}, 0.15)`;
@@ -3651,12 +3873,10 @@ function updateSpeChart() {
     const H = canvas.height;
     ctx.clearRect(0, 0, W, H);
 
-    // Padding lateral para que los textos no se salgan
     const paddingX = 60;
     const minScale = Math.min(activeSpe, rivalSpeMin) - 15;
     const maxScale = Math.max(activeSpe, rivalSpeMax) + 15;
 
-    // Función para convertir la velocidad en coordenadas X (Horizontal)
     function toX(val) {
         if (maxScale === minScale) return W / 2;
         return paddingX + ((val - minScale) / (maxScale - minScale)) * (W - 2 * paddingX);
@@ -3667,7 +3887,6 @@ function updateSpeChart() {
     const xRivalMax = toX(rivalSpeMax);
     const centerY = H / 2;
 
-    // Eje horizontal dinámico
     ctx.strokeStyle = cT2;
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -3678,11 +3897,9 @@ function updateSpeChart() {
     ctx.beginPath(); ctx.arc(paddingX, centerY, 3, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(W - paddingX, centerY, 3, 0, Math.PI*2); ctx.fill();
 
-    // Caja del rival (Color secundario) dibujada de izquierda a derecha
     ctx.fillStyle = `rgba(${hexToRgb(cA2).r}, ${hexToRgb(cA2).g}, ${hexToRgb(cA2).b}, 0.25)`;
     ctx.fillRect(xRivalMin, centerY - 30, xRivalMax - xRivalMin, 60);
 
-    // Líneas Min y Max Rival (Ahora son líneas verticales)
     ctx.strokeStyle = cA2;
     ctx.lineWidth = 2;
     ctx.setLineDash([5, 3]);
@@ -3690,14 +3907,12 @@ function updateSpeChart() {
     ctx.beginPath(); ctx.moveTo(xRivalMin, centerY - 45); ctx.lineTo(xRivalMin, centerY + 45); ctx.stroke();
     ctx.setLineDash([]);
 
-    // Textos de Min y Max
     ctx.fillStyle = cA2;
     ctx.font = 'bold 12px monospace';
     ctx.textAlign = 'center';
     ctx.fillText(`Max: ${rivalSpeMax}`, xRivalMax, centerY - 55);
     ctx.fillText(`Min: ${rivalSpeMin}`, xRivalMin, centerY + 65);
 
-    // Tu bolita de velocidad y línea marcadora
     ctx.strokeStyle = cA;
     ctx.setLineDash([2, 2]);
     ctx.beginPath(); ctx.moveTo(xActive, centerY - 45); ctx.lineTo(xActive, centerY + 45); ctx.stroke();
@@ -3709,7 +3924,6 @@ function updateSpeChart() {
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Texto de "Tú" (Evita salirse del borde derecho)
     ctx.fillStyle = cT;
     ctx.font = 'bold 13px monospace';
     if (xActive > W - 80) {
@@ -3721,7 +3935,6 @@ function updateSpeChart() {
     }
 }
 
-// ====== IMPORTADOR SHOWDOWN ======
 function importShowdown(side, btnEl) {
     const text = document.getElementById('import-showdown-text').value.trim();
     if (!text) return;
@@ -3729,7 +3942,6 @@ function importShowdown(side, btnEl) {
     const lines = text.split('\n');
     let nameLine = lines[0].trim();
 
-    // 1. Extraer Nombre y Objeto
     let itemName = '';
     if (nameLine.includes('@')) {
         const parts = nameLine.split('@');
@@ -3756,7 +3968,6 @@ function importShowdown(side, btnEl) {
         return;
     }
 
-    // 2. Extraer Objeto
     const objId = side === 'atk' ? 'obj-a' : 'obj-d';
     if (itemName) {
         const itemDb = Object.keys(OBJT);
@@ -3764,7 +3975,6 @@ function importShowdown(side, btnEl) {
         if (matchedItem) document.getElementById(objId).value = matchedItem;
     }
 
-    // 3. Procesar el resto del set
     let moveIdx = 0;
     const prefix = side === 'atk' ? 'atk' : 'def';
 
@@ -3826,7 +4036,7 @@ function importShowdown(side, btnEl) {
             const matchedMove = Object.keys(MVDB).find(m => m.toLowerCase() === mvName.toLowerCase().replace('hidden power', 'hidden power'));
 
             if (matchedMove && moveIdx < 4) {
-                // === INSERCIÓN SILENCIOSA (Evita seleccionar el movimiento) ===
+
                 const mData = MVDB[matchedMove];
                 const bp = mData.bp || 0;
                 const type = mData.type.toLowerCase();
@@ -3860,19 +4070,15 @@ function importShowdown(side, btnEl) {
     if (side === 'atk') updateAtkStat(); else updateDefStats();
     updateEvCounter(prefix);
 
-    // 4. Forzar el estado de "Esperando movimiento..." al finalizar
     mvSel = null;
 
-    // Desmarcamos visualmente cualquier slot que haya quedado con borde encendido
     const slots = document.querySelectorAll(side === 'atk' ? '#atk-card .moves-slots-column .move-slot' : '#def-card .moves-slots-column .move-slot');
     slots.forEach(slot => slot.classList.remove('active', 'open'));
 
-    // Escondemos los datos del ataque
     document.getElementById(side === 'atk' ? 'mv-detail' : 'def-mv-detail').style.display = 'none';
 
     updateResult();
 
-    // Limpiar e indicar éxito
     document.getElementById('import-showdown-text').value = '';
     const oldText = btnEl.innerHTML;
     btnEl.innerHTML = '¡IMPORTADO!';
@@ -3887,6 +4093,73 @@ function importShowdown(side, btnEl) {
         btnEl.style.borderColor = 'var(--bd)';
     }, 1500);
 }
+function clearMoveSlot(idx, side, event) {
+    event.stopPropagation(); // Evita que se seleccione el slot al intentar borrarlo
+
+    if (side === 'atk') {
+        attackerMovesSet[idx] = null;
+        document.getElementById(`mv-slot-${idx}`).value = '';
+        document.getElementById(`mv-slot-meta-${idx}`).innerHTML = '';
+        if (activeMoveSlotIdx === idx) {
+            mvSel = null;
+            document.getElementById('mv-detail').style.display = 'none';
+        }
+    } else {
+        defenderMovesSet[idx] = null;
+        document.getElementById(`def-mv-slot-${idx}`).value = '';
+        document.getElementById(`def-mv-slot-meta-${idx}`).innerHTML = '';
+        if (defActiveMoveSlotIdx === idx) {
+            mvSel = null;
+            document.getElementById('def-mv-detail').style.display = 'none';
+        }
+    }
+    updateResult();
+}
+
+function toggleCombatData() {
+    const wrap = document.getElementById('combat-data-wrap');
+    const icon = document.getElementById('combat-toggle-icon');
+    if (wrap.style.display === 'none') {
+        wrap.style.display = 'block';
+        icon.textContent = '▼';
+    } else {
+        wrap.style.display = 'none';
+        icon.textContent = '▶';
+    }
+}
+
+function updateSideIndicators() {
+    const atkCard = document.getElementById('atk-card');
+    const defCard = document.getElementById('def-card');
+    const badgeAtk = document.getElementById('badge-atk');
+    const badgeDef = document.getElementById('badge-def');
+
+    if (!atkCard || !defCard) return;
+
+    atkCard.classList.remove('is-attacking', 'is-defending');
+    defCard.classList.remove('is-attacking', 'is-defending');
+    if(badgeAtk) badgeAtk.className = 'side-badge';
+    if(badgeDef) badgeDef.className = 'side-badge';
+
+    if (activeSide === 'atk') {
+        atkCard.classList.add('is-attacking');
+        defCard.classList.add('is-defending');
+        if(badgeAtk) { badgeAtk.classList.add('badge-atk'); badgeAtk.innerHTML = '⚔️ ATACANDO'; }
+        if(badgeDef) { badgeDef.classList.add('badge-def'); badgeDef.innerHTML = '🛡️ DEFENDIENDO'; }
+    } else {
+        atkCard.classList.add('is-defending');
+        defCard.classList.add('is-attacking');
+        if(badgeAtk) { badgeAtk.classList.add('badge-def'); badgeAtk.innerHTML = '🛡️ DEFENDIENDO'; }
+        if(badgeDef) { badgeDef.classList.add('badge-atk'); badgeDef.innerHTML = '⚔️ ATACANDO'; }
+    }
+}
+
+function scrollToResults() {
+    if (calcMode === 'def') document.getElementById('mx-section').scrollIntoView({behavior: 'smooth'});
+    else if (calcMode === 'atk') document.getElementById('atk-chart-section').scrollIntoView({behavior: 'smooth'});
+    else document.getElementById('spe-chart-section').scrollIntoView({behavior: 'smooth'});
+}
 </script>
+<button class="fab-btn" onclick="scrollToResults()" title="Ver Resultados">📊</button>
 </body>
 </html>
